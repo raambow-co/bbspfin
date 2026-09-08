@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9353018855"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-9353018855');
+  </script>
+
+  <title>Build Bharat Synergy Partners | Multi-Industry Business Ecosystem</title>
+  <meta name="description" content="Build Bharat Synergy Partners is a connected ecosystem of industry-leading businesses in Solar Renewable Energy, Financial Loans, Real Estate, and EdTech." />
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./favicon-192x192.png" />
+  <link rel="apple-touch-icon" href="./favicon-192x192.png" />
+  <link rel="shortcut icon" href="./favicon.png" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Outfit', 'sans-serif'],
+            body: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brandGold: '#D57530',
+            solar: '#D57530',
+            loans: '#9FB768',
+            realty: '#FFBC92',
+            edtech: '#FBF8E0',
+            darkBase: '#FAF9F6',
+            darkSurface: '#FFFFFF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React & Babel Core -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      background-color: #FAF9F6;
+      color: #1C1917;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    .heading-font { font-family: 'Outfit', sans-serif; }
+    
+    .bg-grid-pattern {
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(226, 176, 73, 0.08) 0%, transparent 60%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 100% 100%, 45px 45px, 45px 45px;
+    }
+    
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(28, 25, 23, 0.08);
+    }
+    
+    .discovery-wrapper {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(213, 117, 48, 0.20);
+      box-shadow: 0 10px 40px rgba(28, 25, 23, 0.06), 0 0 25px rgba(213, 117, 48, 0.04);
+      transition: all 0.3s ease;
+    }
+    .discovery-wrapper:focus-within {
+      border-color: #D57530;
+      box-shadow: 0 12px 50px rgba(28, 25, 23, 0.10), 0 0 35px rgba(213, 117, 48, 0.15);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #D57530 0%, #A04D15 100%);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
+      box-shadow: 0 4px 18px rgba(213, 117, 48, 0.20);
+      transition: all 0.2s ease;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(213, 117, 48, 0.35);
+    }
+
+    .gradient-gold {
+      background: linear-gradient(135deg, #1C1917 30%, #D57530 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // --- DATA LAYER ---
+    const PILLARS = {
+      solar: {
+        id: 'solar',
+        title: 'Solar / Renewable Energy',
+        subtitle: 'Sustainable Energy Solutions',
+        emoji: '☀️',
+        accentColor: '#D57530',
+        accentGlow: 'rgba(213, 117, 48, 0.25)',
+        bgGradient: 'linear-gradient(135deg, rgba(213, 117, 48, 0.12) 0%, rgba(255, 255, 255, 0.9) 100%)',
+        banner: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1200&q=80',
+        description: 'Empowering communities and enterprises with clean energy, solar installations, and smart power infrastructure.',
+        intentKeywords: ['solar', 'renewable', 'energy', 'sun', 'panel', 'panels', 'electricity', 'power', 'rooftop', 'bill', 'reduce bill', 'clean energy'],
+        suggestedQueries: ['I want to install solar panels', 'I want to reduce my electricity bill'],
+        company: {
+          name: 'BuildBharat Solar Infrastructure',
+          badge: 'Renewable Pillar',
+          tagline: 'Powering the Future with Clean Solar Energy',
+          fullDescription: 'BuildBharat Solar Infrastructure delivers end-to-end clean energy projects across South India. From solar audit to grid integration, we help businesses and homeowners transition to clean power.',
+          websiteUrl: 'https://example.com/solar-infrastructure',
+          services: ['Rooftop Solar Solutions', 'Commercial Energy Audits', 'Microgrid & Battery Storage', 'Solar Farm Development'],
+          metrics: [{ label: 'Clean Power', value: '45+ MW' }, { label: 'CO2 Avoided', value: '62,000 Tons' }, { label: 'Grid Efficiency', value: '99.4%' }],
+          synergy: 'Partners with Financial Services for 0% down solar equipment financing.'
+        }
+      },
+      loans: {
+        id: 'loans',
+        title: 'Loans / Financial Services',
+        subtitle: 'Capital & Credit Ecosystem',
+        emoji: '💰',
+        accentColor: '#9FB768',
+        accentGlow: 'rgba(159, 183, 104, 0.25)',
+        bgGradient: 'linear-gradient(135deg, rgba(159, 183, 104, 0.12) 0%, rgba(255, 255, 255, 0.9) 100%)',
+        banner: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80',
+        description: 'Providing accessible financial capital, business growth loans, property financing, and education credit with transparent terms.',
+        intentKeywords: ['loan', 'loans', 'finance', 'financial', 'capital', 'money', 'credit', 'borrow', 'funding', 'business loan', 'mortgage'],
+        suggestedQueries: ['I need a business loan', 'I need financial support for expansion'],
+        company: {
+          name: 'BuildBharat Capital & Credit',
+          badge: 'Finance Pillar',
+          tagline: 'Accessible Financial Growth for Ambitions',
+          fullDescription: 'BuildBharat Capital & Credit simplifies lending with fast digital approvals, tailored repayment structures, and transparent interest rates.',
+          websiteUrl: 'https://example.com/capital-credit',
+          services: ['MSME Business Capital', 'Green Infrastructure Loans', 'Residential Home Mortgages', 'Skill Education Financing'],
+          metrics: [{ label: 'Disbursed', value: '₹350+ Cr' }, { label: 'Approval Rate', value: '94%' }, { label: 'Processing', value: '24-48 Hrs' }],
+          synergy: 'Provides direct financing pathways for Real Estate buyers & Solar adoption.'
+        }
+      },
+      'real-estate': {
+        id: 'real-estate',
+        title: 'Real Estate',
+        subtitle: 'Property & Space Development',
+        emoji: '🏢',
+        accentColor: '#FFBC92',
+        accentGlow: 'rgba(255, 188, 146, 0.25)',
+        bgGradient: 'linear-gradient(135deg, rgba(255, 188, 146, 0.12) 0%, rgba(255, 255, 255, 0.9) 100%)',
+        banner: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+        description: 'Developing sustainable residential complexes, high-grade commercial hubs, and strategic land investments.',
+        intentKeywords: ['house', 'home', 'flat', 'apartment', 'real estate', 'property', 'buy property', 'land', 'commercial space', 'plots', 'realty'],
+        suggestedQueries: ['I want to buy a property', 'Looking for modern residential flats'],
+        company: {
+          name: 'BuildBharat Spaces & Realty',
+          badge: 'Realty Pillar',
+          tagline: 'Designing Workspaces & Living Ecosystems of Tomorrow',
+          fullDescription: 'BuildBharat Spaces & Realty creates thoughtfully engineered developments across major growth cities, integrated with solar energy.',
+          websiteUrl: 'https://example.com/spaces-realty',
+          services: ['Eco Residential Gated Communities', 'Commercial Grade-A Office Spaces', 'Integrated Urban Plotted Layouts', 'Property Asset Management'],
+          metrics: [{ label: 'Area Developed', value: '3.2M Sq Ft' }, { label: 'Happy Families', value: '4,500+' }, { label: 'Green Certified', value: '100%' }],
+          synergy: 'All developments integrate Solar Power infrastructure and pre-approved home loan pathways.'
+        }
+      },
+      education: {
+        id: 'education',
+        title: 'Education / EdTech',
+        subtitle: 'Knowledge & Skill Transformation',
+        emoji: '🎓',
+        accentColor: '#FBF8E0',
+        accentGlow: 'rgba(251, 248, 224, 0.25)',
+        bgGradient: 'linear-gradient(135deg, rgba(251, 248, 224, 0.25) 0%, rgba(255, 255, 255, 0.9) 100%)',
+        banner: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
+        description: 'Empowering future-ready talent through industry-aligned tech bootcamps, executive learning, and career placement.',
+        intentKeywords: ['learn', 'education', 'course', 'coding', 'skill', 'upskill', 'degree', 'edtech', 'study', 'train', 'training', 'school'],
+        suggestedQueries: ['I want to learn coding', 'I want to upskill my technical career'],
+        company: {
+          name: 'BuildBharat Learning Academy',
+          badge: 'EdTech Pillar',
+          tagline: 'Bridging Industry Demand & Next-Gen Talent',
+          fullDescription: 'BuildBharat Learning Academy delivers practical, outcome-driven education designed by tech industry leaders.',
+          websiteUrl: 'https://example.com/learning-academy',
+          services: ['Full-Stack Software Engineering', 'AI & Data Science Accelerators', 'Clean Tech & Solar Engineering', 'Enterprise Workforce Upskilling'],
+          metrics: [{ label: 'Learners Trained', value: '18,000+' }, { label: 'Placement Rate', value: '92%' }, { label: 'Industry Partners', value: '140+' }],
+          synergy: 'Trains qualified talent for ecosystem businesses and offers zero-upfront cost student financing.'
+        }
+      }
+    };
+
+    const REGIONS = [
+      { id: 'telangana', state: 'Telangana', city: 'Hyderabad Hub', projects: '28 Active Projects', role: 'Central Ecosystem Headquarters & Technology Operations Hub. Located at 5-76/03, Surya Vamsi Nagar, Hayath Nagar, Hyderabad. MD: D Sudheer Reddy.' },
+      { id: 'ap', state: 'Andhra Pradesh', city: 'Vijayawada & Vizag Hub', projects: '23 Active Projects', role: 'Solar Grid Installations & Coastal Port Infrastructure corridors.' },
+      { id: 'karnataka', state: 'Karnataka', city: 'Bengaluru & Hubli Hub', projects: '34 Active Projects', role: 'EdTech Skill Centers & Commercial Hubli-Bengaluru Capital Financing corridors.' },
+      { id: 'goa', state: 'Goa', city: 'Goa Hub', projects: '12 Active Projects', role: 'Eco-Hospitality Real Estate developments & Micro-Solar Microgrids.' },
+      { id: 'tamil-nadu', state: 'Tamil Nadu', city: 'Chennai Hub', projects: '15 Active Projects', role: 'Advanced solar cell manufacturing partnership corridors, smart microgrids, and vocational technical education.' }
+    ];
+
+    function matchQuery(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) return null;
+      let best = null, maxScore = 0;
+      Object.values(PILLARS).forEach(p => {
+        let score = 0;
+        p.suggestedQueries.forEach(sq => {
+          if (q.includes(sq.toLowerCase())) score += 10;
+        });
+        p.intentKeywords.forEach(kw => {
+          if (q.includes(kw)) score += 3;
+        });
+        if (score > maxScore) { maxScore = score; best = p; }
+      });
+      return maxScore > 0 ? best : null;
+    }
+
+    // --- MAIN APP COMPONENT ---
+    function App() {
+      const [query, setQuery] = useState('');
+      const [selectedCat, setSelectedCat] = useState('all');
+      const [matchedPillar, setMatchedPillar] = useState(null);
+      const [modalCompany, setModalCompany] = useState(null);
+      const [partnerModal, setPartnerModal] = useState(false);
+      const [activeRegion, setActiveRegion] = useState(REGIONS[0]);
+      const [formSubmitted, setFormSubmitted] = useState(false);
+
+      useEffect(() => {
+        const res = matchQuery(query);
+        setMatchedPillar(res);
+        if (res) setSelectedCat(res.id);
+      }, [query]);
+
+      const handleQueryChip = (text, catId) => {
+        setQuery(text);
+        setSelectedCat(catId);
+        document.getElementById('pathways').scrollIntoView({ behavior: 'smooth' });
+      };
+
+      const displayedPillars = selectedCat === 'all' 
+        ? Object.values(PILLARS) 
+        : Object.values(PILLARS).filter(p => p.id === selectedCat);
+
+      return (
+        <div className="min-h-screen flex flex-col bg-[#070A11]">
+          {/* HEADER */}
+          <header className="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10 py-4 px-6">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+                <img 
+                  src="./build-bharat-logo.png" 
+                  alt="Build Bharat Synergy Partners" 
+                  className="h-11 sm:h-13 w-auto object-contain hover:scale-[1.03] transition-transform duration-300" 
+                />
+              </div>
+
+              <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+                <a href="#discovery" className="hover:text-[#E2B049]">Discovery</a>
+                <a href="#pathways" className="hover:text-[#E2B049]">Business Pillars</a>
+                <a href="#synergy" className="hover:text-[#E2B049]">Synergy Concept</a>
+                <a href="#regional" className="hover:text-[#E2B049]">Regional Reach</a>
+              </nav>
+
+              <button onClick={() => setPartnerModal(true)} className="btn-gold px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider">
+                Partner With Us
+              </button>
+            </div>
+          </header>
+
+          {/* HERO DISCOVERY */}
+          <section id="discovery" className="pt-36 pb-20 px-6 bg-grid-pattern text-center relative">
+            <div className="max-w-4xl mx-auto">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-wider text-[#E2B049] mb-4">
+                ⚡ MULTI-BRAND BUSINESS DISCOVERY GATEWAY
+              </span>
+              
+              <h1 className="mb-6 flex justify-center">
+                <span className="sr-only">Build Bharat Synergy Partners</span>
+                <div className="bg-white/95 backdrop-blur-md px-8 py-5 rounded-3xl border border-white/20 shadow-xl inline-block max-w-xs sm:max-w-md">
+                  <img 
+                    src="./build-bharat-logo.png" 
+                    alt="Build Bharat Synergy Partners Logo" 
+                    className="h-44 sm:h-64 w-auto object-contain mx-auto" 
+                  />
+                </div>
+              </h1>
+              <p className="text-2xl sm:text-4xl font-bold gradient-gold heading-font mb-8">
+                “What are you looking for?”
+              </p>
+
+              {/* Natural Language Input */}
+              <div className="max-w-2xl mx-auto mb-6">
+                <div className="discovery-wrapper flex items-center px-5 py-4 rounded-full">
+                  <span className="text-xl mr-3">🔍</span>
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="e.g. 'I want to install solar panels' or 'I need a business loan'..."
+                    className="w-full bg-transparent border-none outline-none text-white placeholder-slate-500 text-sm sm:text-base font-medium"
+                  />
+                  {query && (
+                    <button onClick={() => { setQuery(''); setSelectedCat('all'); }} className="text-slate-400 hover:text-white px-2">
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                {/* Match Banner */}
+                {query.trim() && (
+                  <div className="mt-4 text-left">
+                    {matchedPillar ? (
+                      <div className="glass-panel p-4 rounded-xl border border-[#E2B049] flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="text-3xl">{matchedPillar.emoji}</span>
+                          <div>
+                            <span className="text-[10px] font-bold uppercase text-[#E2B049] bg-[#E2B049]/10 px-2 py-0.5 rounded-full">
+                              Matched Pathway
+                            </span>
+                            <h4 className="text-white font-bold heading-font text-base mt-1">{matchedPillar.title}</h4>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => { setSelectedCat(matchedPillar.id); document.getElementById('pathways').scrollIntoView({behavior: 'smooth'}); }}
+                          className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
+                        >
+                          Explore Pathway →
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="glass-panel p-4 rounded-xl border border-white/10 text-slate-300 text-xs">
+                        No direct match for "{query}". Select one of the 4 business categories below to explore.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Quick Pillar Triggers */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mt-8">
+                {Object.values(PILLARS).map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => { setSelectedCat(p.id); document.getElementById('pathways').scrollIntoView({behavior: 'smooth'}); }}
+                    className={`glass-panel p-4 rounded-xl flex flex-col items-center gap-2 border transition-all ${
+                      selectedCat === p.id ? 'border-[#E2B049] bg-slate-800 shadow-lg scale-105' : 'border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    <span className="text-3xl">{p.emoji}</span>
+                    <span className="text-xs font-bold heading-font text-white">{p.title.split('/')[0]}</span>
+                    <span className="text-[10px] text-slate-400">{p.subtitle}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Suggested queries */}
+              <div className="mt-8 text-xs text-slate-400 flex flex-wrap justify-center gap-2">
+                <span className="font-semibold text-slate-300">Try asking:</span>
+                {Object.values(PILLARS).map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => handleQueryChip(p.suggestedQueries[0], p.id)}
+                    className="bg-white/5 hover:bg-white/10 text-slate-300 px-3 py-1 rounded-full border border-white/10"
+                  >
+                    {p.emoji} "{p.suggestedQueries[0]}"
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ECOSYSTEM PATHWAYS */}
+          <section id="pathways" className="py-20 px-6 bg-[#090D16]">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-4 border-b border-white/10 gap-4">
+                <div>
+                  <span className="text-[#E2B049] text-xs font-bold uppercase tracking-widest block mb-1">
+                    THE FOUR BUSINESS PILLARS
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold heading-font text-white">
+                    Ecosystem Pathways
+                  </h2>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button 
+                    onClick={() => setSelectedCat('all')}
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold ${selectedCat === 'all' ? 'bg-[#E2B049] text-black' : 'bg-white/5 text-slate-400'}`}
+                  >
+                    All (4)
+                  </button>
+                  {Object.values(PILLARS).map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => setSelectedCat(p.id)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 ${selectedCat === p.id ? 'bg-white text-black' : 'bg-white/5 text-slate-400'}`}
+                    >
+                      <span>{p.emoji}</span>
+                      <span>{p.title.split('/')[0]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grid Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {displayedPillars.map(p => (
+                  <div key={p.id} className="glass-panel p-6 sm:p-8 rounded-2xl border border-white/10 relative overflow-hidden flex flex-col justify-between" style={{ background: p.bgGradient }}>
+                    <div>
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="text-4xl p-2 bg-white/5 rounded-xl border border-white/10">{p.emoji}</span>
+                        <div>
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-white">
+                            {p.company.badge}
+                          </span>
+                          <h3 className="text-2xl font-bold text-white heading-font mt-1">{p.title}</h3>
+                        </div>
+                      </div>
+
+                      <p className="text-slate-300 text-sm mb-6">{p.description}</p>
+
+                      <div className="bg-slate-950/80 p-4 rounded-xl border border-white/10 mb-6 space-y-3">
+                        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                          <h4 className="text-white font-bold text-sm heading-font">{p.company.name}</h4>
+                          <span className="text-xs text-slate-400 font-mono">ENTERPRISE</span>
+                        </div>
+                        <p className="text-xs text-slate-400 italic">"{p.company.tagline}"</p>
+                        <div className="grid grid-cols-2 gap-2 text-xs text-slate-200">
+                          {p.company.services.map((s, idx) => (
+                            <div key={idx} className="flex items-center gap-1.5">
+                              <span className="text-[#E2B049]">✓</span> <span>{s}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                      <button 
+                        onClick={() => setModalCompany(p.company)} 
+                        className="bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-4 py-2.5 rounded-full border border-white/10"
+                      >
+                        View Enterprise Profile
+                      </button>
+                      <a 
+                        href={p.company.websiteUrl} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        onClick={(e) => { e.preventDefault(); alert(`[Build Bharat Gateway]\n\nNavigating to official website placeholder for:\n"${p.company.name}"\nURL: ${p.company.websiteUrl}`); }}
+                        className="text-xs text-slate-300 hover:text-white border border-white/10 px-4 py-2.5 rounded-full"
+                      >
+                        Official Website ↗
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* SYNERGY CONCEPT */}
+          <section id="synergy" className="py-20 px-6 bg-[#070A11] border-t border-white/10 text-center">
+            <div className="max-w-4xl mx-auto">
+              <span className="text-[#E2B049] text-xs font-bold uppercase tracking-widest block mb-2">INTEGRATED VALUE CHAIN</span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold heading-font text-white mb-2">The Synergy Concept</h2>
+              <p className="text-xl font-bold gradient-gold heading-font mb-8">“Different strengths. One shared direction.”</p>
+              
+              <div className="glass-panel p-8 rounded-2xl border border-[#E2B049]/30 text-left grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div>
+                  <h3 className="text-white font-bold heading-font text-xl mb-3">Interconnected Ecosystem</h3>
+                  <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                    Solar energy powers Real Estate projects, Financial Services fund Solar equipment, and EdTech academies train the technical workforce across all sectors.
+                  </p>
+                  <ul className="space-y-2 text-xs text-slate-300">
+                    <li>⚡ <strong>Solar + Real Estate:</strong> Zero-carbon rooftop powered communities</li>
+                    <li>💰 <strong>Loans + Solar:</strong> 0% down equipment financing</li>
+                    <li>🎓 <strong>Education + Finance:</strong> Student income-share credit models</li>
+                  </ul>
+                </div>
+                <div className="bg-slate-950 p-6 rounded-xl border border-white/10 text-center space-y-4">
+                  <div className="text-4xl">☀️ ↔ 💰 ↔ 🏢 ↔ 🎓</div>
+                  <div className="text-xs text-[#E2B049] font-bold">100% COLLABORATIVE NETWORK</div>
+                  <p className="text-slate-400 text-xs">Four independent industry leaders sharing technology, infrastructure, and vision.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* REGIONAL REACH */}
+          <section id="regional" className="py-20 px-6 bg-[#090D16] border-t border-white/10">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-8">
+                <span className="text-[#E2B049] text-xs font-bold uppercase tracking-widest block mb-1">GEOGRAPHIC FOOTPRINT</span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold heading-font text-white">Regional Operations</h2>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-5 space-y-3">
+                  {REGIONS.map(r => (
+                    <button
+                      key={r.id}
+                      onClick={() => setActiveRegion(r)}
+                      className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between ${
+                        activeRegion.id === r.id ? 'bg-slate-800 border-[#E2B049] text-white' : 'glass-panel border-white/10 text-slate-400'
+                      }`}
+                    >
+                      <div>
+                        <h4 className="font-bold text-sm text-white heading-font">{r.state}</h4>
+                        <span className="text-xs text-slate-400">{r.city}</span>
+                      </div>
+                      <span className="text-xs font-semibold text-[#E2B049] bg-[#E2B049]/10 px-2.5 py-1 rounded-full">
+                        {r.projects}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="lg:col-span-7 glass-panel p-8 rounded-2xl border border-white/15 bg-slate-900/90 flex flex-col justify-between">
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-bold block mb-1">STATE HUB HIGHLIGHT</span>
+                    <h3 className="text-2xl font-bold text-white heading-font mb-4">{activeRegion.state} - {activeRegion.city}</h3>
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/10 text-slate-300 text-sm leading-relaxed mb-6">
+                      {activeRegion.role}
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-400 pt-4 border-t border-white/10 flex justify-between">
+                    <span>Verified Operational Hub</span>
+                    <span className="text-[#E2B049] font-semibold">{activeRegion.projects}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* PARTNERSHIP CTA */}
+          <section className="py-20 px-6 text-center bg-grid-pattern">
+            <div className="max-w-4xl mx-auto glass-panel p-10 rounded-3xl border border-[#E2B049]/30">
+              <h2 className="text-3xl sm:text-5xl font-extrabold heading-font text-white mb-2">“Build something bigger.”</h2>
+              <p className="text-xl font-bold gradient-gold heading-font mb-6">Find your path. Build your future.</p>
+              <button onClick={() => setPartnerModal(true)} className="btn-gold px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wider">
+                Partner With Build Bharat
+              </button>
+            </div>
+          </section>
+
+          {/* FOOTER */}
+          <footer className="bg-[#05070D] text-slate-400 py-12 px-6 border-t border-white/10 text-sm">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+              {/* Brand Col */}
+              <div className="space-y-4">
+                <div className="flex justify-center md:justify-start items-center">
+                  <img 
+                    src="./build-bharat-logo.png" 
+                    alt="Build Bharat Synergy Partners" 
+                    className="h-16 w-auto object-contain brightness-0 invert opacity-80" 
+                  />
+                </div>
+                <p className="text-slate-500 leading-relaxed text-sm sm:text-base max-w-sm">
+                  Build Bharat Synergy Partners is a multi-brand corporate ecosystem bringing together specialized industry leaders across Renewable Energy, Financial Services, Real Estate, and EdTech.
+                </p>
+              </div>
+
+              {/* Corporate Office */}
+              <div className="space-y-4">
+                <h4 className="text-[#E2B049] font-extrabold uppercase tracking-wider text-xs sm:text-sm">Corporate Office</h4>
+                <p className="leading-relaxed text-sm sm:text-base">
+                  5-76/03, Surya Vamsi Nagar,<br />
+                  Hayath Nagar, Hyderabad
+                </p>
+                <div className="flex flex-col gap-2 font-bold text-slate-300 text-sm sm:text-base">
+                  <a href="tel:+919353018855" className="hover:text-[#E2B049] flex items-center justify-center md:justify-start gap-2 transition-colors">
+                    📞 <span>+91 93530 18855</span>
+                  </a>
+                  <a href="mailto:sudheer@buildbharatsp.com" className="hover:text-[#E2B049] flex items-center justify-center md:justify-start gap-2 transition-colors">
+                    ✉️ <span>sudheer@buildbharatsp.com</span>
+                  </a>
+                  <a href="https://www.buildbharatsp.com" target="_blank" rel="noreferrer" className="hover:text-[#E2B049] flex items-center justify-center md:justify-start gap-2 transition-colors">
+                    🌐 <span>www.buildbharatsp.com</span>
+                  </a>
+                </div>
+                <div className="text-xs sm:text-sm text-slate-500 pt-1">
+                  <strong>MD:</strong> D Sudheer Reddy
+                </div>
+              </div>
+
+              {/* Active Hubs */}
+              <div className="space-y-4">
+                <h4 className="text-[#E2B049] font-extrabold uppercase tracking-wider text-xs sm:text-sm">Active Hubs</h4>
+                <div className="space-y-2 text-slate-400 font-semibold text-sm sm:text-base">
+                  <span className="block text-slate-200 font-bold">Hyderabad, TS (HQ)</span>
+                  <span className="block">Bengaluru & Hubli, KA</span>
+                  <span className="block">Goa</span>
+                  <span className="block">Tamil Nadu</span>
+                  <span className="block">Vijayawada & Vizag, AP</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="max-w-6xl mx-auto mt-10 pt-6 border-t border-white/5 text-center text-slate-500 text-xs sm:text-sm">
+              <p>© {new Date().getFullYear()} Build Bharat Synergy Partners. All operating entities remain independent corporate brands.</p>
+            </div>
+          </footer>
+
+          {/* COMPANY MODAL */}
+          {modalCompany && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+              <div className="glass-panel max-w-xl w-full p-8 rounded-2xl border border-white/20 relative bg-[#0F1626]">
+                <button onClick={() => setModalCompany(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+                <span className="text-xs font-bold text-[#E2B049] uppercase block mb-1">ENTERPRISE PROFILE</span>
+                <h3 className="text-2xl font-bold text-white heading-font mb-2">{modalCompany.name}</h3>
+                <p className="text-slate-300 text-sm mb-4">{modalCompany.fullDescription}</p>
+                <div className="bg-slate-950 p-4 rounded-xl border border-white/10 mb-6 space-y-2">
+                  <span className="text-xs font-bold text-slate-400 block uppercase">Ecosystem Synergy:</span>
+                  <p className="text-xs text-[#E2B049]">{modalCompany.synergy}</p>
+                </div>
+                <button 
+                  onClick={() => { alert(`Official Website Link: ${modalCompany.websiteUrl}`); }}
+                  className="btn-gold w-full py-3 rounded-full text-xs font-bold"
+                >
+                  Visit Official Website ↗
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* PARTNER FORM MODAL */}
+          {partnerModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+              <div className="glass-panel max-w-md w-full p-8 rounded-2xl border border-white/20 relative bg-[#0F1626]">
+                <button onClick={() => { setPartnerModal(false); setFormSubmitted(false); }} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+                
+                {formSubmitted ? (
+                  <div className="text-center py-6">
+                    <div className="text-4xl mb-2">✅</div>
+                    <h3 className="text-xl font-bold text-white heading-font mb-2">Inquiry Submitted!</h3>
+                    <p className="text-xs text-slate-300 mb-4">Our Build Bharat representative will respond to your email shortly.</p>
+                    <button onClick={() => { setPartnerModal(false); setFormSubmitted(false); }} className="btn-gold px-6 py-2 rounded-full text-xs">Done</button>
+                  </div>
+                ) : (
+                  <div>
+                    <h3 className="text-xl font-bold text-white heading-font mb-1">Partner With Build Bharat</h3>
+                    <p className="text-xs text-slate-400 mb-4">Initiate business collaboration or enterprise partnership.</p>
+                    <form onSubmit={(e) => { e.preventDefault(); setFormSubmitted(true); }} className="space-y-3">
+                      <input required type="text" placeholder="Full Name *" className="w-full bg-slate-950 border border-white/15 rounded-xl px-4 py-2 text-white text-xs" />
+                      <input required type="email" placeholder="Email Address *" className="w-full bg-slate-950 border border-white/15 rounded-xl px-4 py-2 text-white text-xs" />
+                      <select className="w-full bg-slate-950 border border-white/15 rounded-xl px-3 py-2 text-white text-xs">
+                        <option value="solar">☀️ Solar / Renewable Energy</option>
+                        <option value="loans">💰 Loans / Financial Services</option>
+                        <option value="real-estate">🏢 Real Estate</option>
+                        <option value="education">🎓 Education / EdTech</option>
+                      </select>
+                      <textarea placeholder="Describe your requirement..." rows="3" className="w-full bg-slate-950 border border-white/15 rounded-xl px-4 py-2 text-white text-xs resize-none"></textarea>
+                      <button type="submit" className="btn-gold w-full py-2.5 rounded-full text-xs font-bold">Submit Inquiry</button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

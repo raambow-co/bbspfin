@@ -1,0 +1,428 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  position: relative;
+}
+
+/* Build Bharat Synergy Partners Design System */
+
+:root {
+  --bg-dark: #EBEBEB; /* Primary light grey background */
+  --bg-card: #FFFFFF; /* High contrast white surfaces */
+  --bg-card-hover: #FAF9F6;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --border-color: rgba(16, 54, 125, 0.12);
+  --border-highlight: rgba(165, 206, 224, 0.6);
+  
+  --text-main: #10367D; /* Primary deep blue text */
+  --text-muted: #1A4594; /* Secondary deep blue text */
+  --text-dim: rgba(16, 54, 125, 0.6);
+  
+  --brand-gold: #10367D; /* Deep Blue Accent */
+  --brand-gold-glow: rgba(16, 54, 125, 0.05);
+  
+  --solar-color: #10367D;
+  --solar-glow: rgba(165, 206, 224, 0.15);
+  
+  --loans-color: #10367D;
+  --loans-glow: rgba(128, 181, 206, 0.15);
+  
+  --realty-color: #10367D;
+  --realty-glow: rgba(90, 156, 190, 0.15);
+  
+  --edtech-color: #10367D;
+  --edtech-glow: rgba(59, 126, 159, 0.15);
+ 
+  --font-heading: 'Sora', sans-serif;
+  --font-subheading: 'Sora', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* Background Grid & Glow FX */
+.bg-grid-pattern {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(16, 54, 125, 0.08) 0%, transparent 60%),
+    linear-gradient(to right, rgba(16, 54, 125, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 54, 125, 0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 45px 45px, 45px 45px;
+}
+
+.bg-grainy {
+  position: relative;
+}
+
+.bg-grainy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Glassmorphism / Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 54, 125, 0.1);
+}
+ 
+.discovery-wrapper {
+  background: #FFFFFF;
+  border: 1px solid rgba(16, 54, 125, 0.15);
+  box-shadow: 0 10px 40px rgba(16, 54, 125, 0.06);
+  transition: all 0.3s ease;
+}
+.discovery-wrapper:focus-within {
+  border-color: #A5CEE0;
+  box-shadow: 0 12px 50px rgba(16, 54, 125, 0.12);
+}
+
+.btn-gold {
+  background: #10367D;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  box-shadow: 0 4px 18px rgba(16, 54, 125, 0.15);
+  transition: all 0.2s ease;
+}
+.btn-gold:hover {
+  background: #A5CEE0;
+  color: #10367D;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(165, 206, 224, 0.25);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, #1C1917 30%, #D57530 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(61, 34, 20, 0.05);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(44, 34, 30, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(44, 34, 30, 0.3);
+}
+
+/* Typography Utilities */
+.heading-font {
+  font-family: var(--font-heading);
+}
+
+.subheading-font {
+  font-family: var(--font-subheading);
+}
+
+.gradient-text-gold {
+  color: var(--brand-gold);
+}
+
+.gradient-text-solar {
+  color: var(--solar-color);
+}
+
+.gradient-text-loans {
+  color: var(--loans-color);
+}
+
+.gradient-text-realty {
+  color: var(--realty-color);
+}
+
+.gradient-text-edtech {
+  color: var(--edtech-color);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--brand-gold);
+  color: #070A11;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--brand-gold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+ 
+.btn-primary:hover {
+  background: transparent;
+  color: var(--brand-gold);
+  border-color: var(--brand-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(226, 176, 73, 0.15);
+}
+ 
+.btn-secondary {
+  background: transparent;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  padding: 12px 26px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-highlight);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+ 
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Input Bar FX */
+.discovery-input-wrapper {
+  position: relative;
+  border-radius: var(--radius-sm);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(61, 34, 20, 0.02);
+  transition: all var(--transition-normal);
+}
+
+.discovery-input-wrapper:focus-within {
+  border-color: var(--brand-gold);
+  box-shadow: 0 4px 24px rgba(61, 34, 20, 0.05);
+}
+
+/* Pulse Animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 6s infinite ease-in-out;
+}
+
+/* Pillar Accent Highlights */
+.pillar-card-solar {
+  border-top: 2px solid var(--solar-color);
+}
+.pillar-card-solar:hover {
+  box-shadow: 0 8px 30px rgba(178, 123, 30, 0.05);
+}
+
+.pillar-card-loans {
+  border-top: 2px solid var(--loans-color);
+}
+.pillar-card-loans:hover {
+  box-shadow: 0 8px 30px rgba(47, 107, 82, 0.05);
+}
+
+.pillar-card-real-estate {
+  border-top: 2px solid var(--realty-color);
+}
+.pillar-card-real-estate:hover {
+  box-shadow: 0 8px 30px rgba(56, 94, 138, 0.05);
+}
+
+.pillar-card-education {
+  border-top: 2px solid var(--edtech-color);
+}
+.pillar-card-education:hover {
+  box-shadow: 0 8px 30px rgba(93, 75, 138, 0.05);
+}
+
+/* Badge tags */
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(44, 34, 30, 0.06);
+}
+
+/* Responsive Container */
+.container-custom {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+@media (max-width: 768px) {
+  .container-custom {
+    padding: 0 20px;
+  }
+}
+
+/* Premium Floating Animations */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes float-medium {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-6px) translateX(4px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 6s ease-in-out infinite;
+}
+
+/* Curved Path Pulse Animation */
+@keyframes dash-pulse {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-dash-pulse {
+  stroke-dasharray: 6 12;
+  animation: dash-pulse 2.5s linear infinite;
+}
+
+/* Bento Grid Keyframes Animation for Build Bharat Premium Center Card */
+@keyframes elegantFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-elegant-flow {
+  background-size: 200% 200%;
+  animation: elegantFlow 12s ease infinite;
+}
+ 
+/* Global custom stone typography fallback utilities */
+.text-stone-550 { color: #78716c !important; }
+.text-stone-605 { color: #57534e !important; }
+.text-stone-650 { color: #514d4a !important; }
+.text-stone-750 { color: #2d2a29 !important; }
+.text-stone-805 { color: #22201f !important; }
+.text-stone-850 { color: #1d1b1a !important; }
+.text-stone-905 { color: #100e0d !important; }
+
+/* India map float and shadow depth animation */
+@keyframes mapFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes shadowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.16;
+  }
+  50% {
+    transform: scale(0.78);
+    opacity: 0.06;
+  }
+}
+
+.animate-map-float {
+  animation: mapFloat 4s ease-in-out infinite;
+}
+
+.animate-shadow-pulse {
+  animation: shadowPulse 4s ease-in-out infinite;
+}
+
+
