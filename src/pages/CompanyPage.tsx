@@ -285,19 +285,38 @@ const SolarHomepage: React.FC<{
 }> = ({ onNavigate, onOpenPartnerModal, company, pillar }) => {
   return (
     <div className="min-h-screen bg-[#F7F5F0] text-[#1A1A1A] selection:bg-[#E8963C]/20 selection:text-[#1A1A1A] font-sans">
+      {/* Sub-Header Navigation Banner */}
+      <div className="bg-[#FFFFFF]/90 border-b border-stone-200 py-3 sticky top-0 z-40 backdrop-blur-md">
+        <div className="container-custom flex items-center justify-between">
+          <button 
+            onClick={() => onNavigate('/')}
+            className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-900 transition-colors bg-transparent border-none cursor-pointer p-0"
+          >
+            <ArrowLeft size={14} />
+            <span>Back to Build Bharat</span>
+          </button>
+          
+          <div className="flex items-center gap-2 text-xs text-stone-500 font-medium font-sans">
+            <ShieldCheck size={14} className="text-[#E8963C]" />
+            <span className="hidden sm:inline">Ecosystem Member:</span>
+            <span className="font-bold text-[#E8963C]">{company.name}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative py-16 md:py-20 border-b border-stone-200/80 overflow-hidden bg-[#F7F5F0]">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-[#E8963C]/10 via-[#10367D]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <section className="relative py-16 md:py-20 border-b border-stone-200 overflow-hidden bg-[#F7F5F0]">
+        <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
         
         <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Hero Content */}
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="space-y-3">
-              <span className="border-[#E8963C]/30 text-[#E8963C] bg-[#E8963C]/10 badge-tag font-bold rounded-full inline-block px-3.5 py-1 text-xs border shadow-sm">
+              <span className="border-[#E8963C]/30 text-[#E8963C] bg-[#E8963C]/10 badge-tag font-bold rounded-full inline-block px-3 py-1 text-xs border">
                 {pillar.title}
               </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold heading-font tracking-tight leading-[1.1] text-[#1A1A1A] uppercase">
-                Clean Renewable<br /><span className="text-[#E8963C]">Limitless Energy</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold heading-font tracking-tight leading-tight text-[#1A1A1A] uppercase">
+                Clean Renewable<br />Limitless Energy
               </h1>
             </div>
             
@@ -312,10 +331,10 @@ const SolarHomepage: React.FC<{
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
                <button 
                  onClick={onOpenPartnerModal}
-                 className="luxury-btn-gold justify-center rounded-full px-8 py-3.5 flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wider font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all border-none"
+                 className="bg-[#E8963C] hover:bg-[#1A1A1A] text-white justify-center rounded-full px-6 py-3 flex items-center gap-1.5 cursor-pointer text-xs uppercase tracking-wider font-bold transition-all shadow-md border-none"
                >
                  <span>Get Free Consultation</span>
-                 <ArrowRight size={15} />
+                 <ArrowRight size={14} />
                </button>
             </div>
 

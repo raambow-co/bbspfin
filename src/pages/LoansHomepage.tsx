@@ -236,25 +236,44 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 font-sans selection:bg-[#10367D]/15 selection:text-[#10367D]">
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 font-sans selection:bg-[#D57530]/20 selection:text-stone-900">
       
+      {/* 1. Sub-Header Navigation Banner */}
+      <div className="bg-[#FFFFFF]/90 border-b border-stone-200 py-3 sticky top-0 z-40 backdrop-blur-md">
+        <div className="container-custom flex items-center justify-between">
+          <button 
+            onClick={() => onNavigate('/')}
+            className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-900 transition-colors bg-transparent border-none cursor-pointer p-0"
+          >
+            <ArrowLeft size={14} />
+            <span>Back to Build Bharat</span>
+          </button>
+          
+          <div className="flex items-center gap-2 text-xs text-stone-500 font-medium">
+            <ShieldCheck size={14} className="text-[#D57530]" />
+            <span className="hidden sm:inline">Ecosystem Member:</span>
+            <span className="font-bold text-[#10367D]">BuildBharat Loans (Credit & Capital)</span>
+          </div>
+        </div>
+      </div>
+
       {/* 2. Hero Banner Section */}
-      <section className="relative py-12 lg:py-20 bg-white border-b border-stone-200/80 overflow-hidden text-left">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-[#10367D]/10 via-[#A5CEE0]/15 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#D57530]/5 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative py-16 lg:py-24 bg-white border-b border-stone-200 overflow-hidden text-left">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#10367D]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#D57530]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container-custom relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Copy (7 Cols) */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 text-[#10367D] text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 bg-[#10367D]/5 border border-[#10367D]/15 rounded-full font-sans shadow-sm">
-                <Coins size={14} className="text-[#D57530]" />
+              <div className="inline-flex items-center gap-2 text-[#D57530] text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 bg-stone-100 border border-stone-200 rounded-full font-sans shadow-sm">
+                <Coins size={13} />
                 <span>MULTI-BANK SYNERGY CREDIT PORTAL</span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 heading-font tracking-tight leading-[1.15] uppercase">
-                Fast, Transparent & <span className="luxury-gradient-text">Flexible Capital.</span>
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 heading-font tracking-tight leading-tight uppercase">
+                Fast, Transparent & Flexible Capital.
               </h1>
 
               <p className="text-stone-600 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl font-normal">
@@ -263,20 +282,20 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
 
               {/* Key Trust Badges */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                <div className="p-3.5 bg-gradient-to-b from-stone-50 to-white border border-stone-200/90 rounded-2xl shadow-sm hover:border-[#10367D]/30 transition-all">
-                  <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Rates Starting</span>
+                <div className="p-3 bg-stone-50 border border-stone-200 rounded-2xl">
+                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Rates Starting</span>
                   <span className="text-lg sm:text-xl font-extrabold text-[#10367D] heading-font">8.35% p.a.</span>
                 </div>
-                <div className="p-3.5 bg-gradient-to-b from-stone-50 to-white border border-stone-200/90 rounded-2xl shadow-sm hover:border-[#10367D]/30 transition-all">
-                  <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Approval Speed</span>
+                <div className="p-3 bg-stone-50 border border-stone-200 rounded-2xl">
+                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Approval Speed</span>
                   <span className="text-lg sm:text-xl font-extrabold text-emerald-600 heading-font">24-48 Hrs</span>
                 </div>
-                <div className="p-3.5 bg-gradient-to-b from-stone-50 to-white border border-stone-200/90 rounded-2xl shadow-sm hover:border-[#10367D]/30 transition-all">
-                  <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Max Capital</span>
+                <div className="p-3 bg-stone-50 border border-stone-200 rounded-2xl">
+                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Max Capital</span>
                   <span className="text-lg sm:text-xl font-extrabold text-[#10367D] heading-font">₹25 Crore</span>
                 </div>
-                <div className="p-3.5 bg-gradient-to-b from-stone-50 to-white border border-stone-200/90 rounded-2xl shadow-sm hover:border-[#10367D]/30 transition-all">
-                  <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">Foreclosure</span>
+                <div className="p-3 bg-stone-50 border border-stone-200 rounded-2xl">
+                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Foreclosure</span>
                   <span className="text-lg sm:text-xl font-extrabold text-[#D57530] heading-font">ZERO Fee</span>
                 </div>
               </div>
@@ -285,9 +304,9 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
                 <button
                   onClick={() => handleOpenFormalLoanModal('home', 2500000)}
-                  className="luxury-btn-primary w-full sm:w-auto justify-center text-xs px-8 py-4 rounded-full cursor-pointer uppercase tracking-wider font-bold flex items-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  className="btn-gold w-full sm:w-auto justify-center text-xs px-8 py-3.5 rounded-full cursor-pointer uppercase tracking-wider font-bold flex items-center gap-2 shadow-lg animate-pulse"
                 >
-                  <FileText size={16} />
+                  <FileText size={15} />
                   <span>Apply for Loan (7-Stage Form)</span>
                 </button>
 
@@ -296,9 +315,9 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
                     const el = document.getElementById('loan-calculator');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 w-full sm:w-auto justify-center text-xs px-8 py-4 rounded-full cursor-pointer uppercase tracking-wider font-bold flex items-center gap-2 shadow-sm hover:shadow transition-all"
+                  className="bg-stone-100 hover:bg-stone-200 text-stone-850 border border-stone-200 w-full sm:w-auto justify-center text-xs px-8 py-3.5 rounded-full cursor-pointer uppercase tracking-wider font-bold flex items-center gap-2 shadow-sm transition-all"
                 >
-                  <Calculator size={16} className="text-[#10367D]" />
+                  <Calculator size={15} />
                   <span>Calculate Loan EMI</span>
                 </button>
               </div>

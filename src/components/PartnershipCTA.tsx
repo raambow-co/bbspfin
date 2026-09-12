@@ -1,3 +1,4 @@
+import { submitToFirestore } from '../lib/firebase';
 import React, { useState } from 'react';
 import {
   ArrowRight,
@@ -17,7 +18,13 @@ import {
   Building2,
   Sun,
   Coins,
-  GraduationCap
+  GraduationCap,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Navigation,
+  MessageSquare
 } from 'lucide-react';
 
 interface PartnershipCTAProps {
@@ -43,6 +50,108 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
   const [step, setStep] = useState(1);
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+
+  // Map Section Quick Enquiry State
+  const [mapEnquiry, setMapEnquiry] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    category: 'loans',
+    city: '',
+    message: ''
+  });
+  const [mapEnquiryErrors, setMapEnquiryErrors] = useState<Record<string, string>>({});
+  const [mapEnquiryLoading, setMapEnquiryLoading] = useState(false);
+  const [mapEnquirySuccess, setMapEnquirySuccess] = useState(false);
+  const [mapEnquiryId, setMapEnquiryId] = useState('');
+
+  const validateMapEnquiry = () => {
+    const errors: Record<string, string> = {};
+    if (!mapEnquiry.fullName.trim()) errors.fullName = 'Full Name is required';
+    if (!mapEnquiry.phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (!/^[6-9]\d{9}$/.test(mapEnquiry.phone.replace(/[^0-9]/g, '').slice(-10))) {
+      errors.phone = 'Enter valid 10-digit mobile number';
+    }
+    if (!mapEnquiry.email.trim()) {
+      errors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(mapEnquiry.email)) {
+      errors.email = 'Enter valid email address';
+    }
+    if (!mapEnquiry.message.trim()) {
+      errors.message = 'Please describe your requirement';
+    }
+    setMapEnquiryErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleMapEnquirySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateMapEnquiry()) return;
+
+    setMapEnquiryLoading(true);
+
+    try {
+      const generatedId = 'ENQ-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      const payload = {
+        id: generatedId,
+        formType: 'map-enquiry',
+        mapServiceInterest: mapEnquiry.category,
+        mapEnquiryMessage: mapEnquiry.message,
+        timestamp: new Date().toISOString(),
+        fullName: mapEnquiry.fullName,
+        applicantName: mapEnquiry.fullName,
+        phone: mapEnquiry.phone,
+        email: mapEnquiry.email,
+        category: mapEnquiry.category,
+        city: mapEnquiry.city || 'Hyderabad',
+        message: mapEnquiry.message,
+        status: 'received'
+      };
+
+      // Try sending to backend API if available
+      try {
+        await submitToFirestore(payload, 'submissions');
+        await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } catch (err) {
+        console.warn('API sync fallback to local storage', err);
+      }
+
+      // Persist in localStorage for admin panel & real-time sync
+      try {
+        const existing = JSON.parse(localStorage.getItem('bbsp_enquiries') || '[]');
+        localStorage.setItem('bbsp_enquiries', JSON.stringify([payload, ...existing]));
+      } catch (storageErr) {
+        console.warn('LocalStorage save error', storageErr);
+      }
+
+      setMapEnquiryId(generatedId);
+      setMapEnquirySuccess(true);
+    } catch (error) {
+      console.error('Error submitting enquiry', error);
+      alert('Failed to submit enquiry. Please try again or call our hotline.');
+    } finally {
+      setMapEnquiryLoading(false);
+    }
+  };
+
+  const handleResetMapEnquiry = () => {
+    setMapEnquiry({
+      fullName: '',
+      phone: '',
+      email: '',
+      category: 'loans',
+      city: '',
+      message: ''
+    });
+    setMapEnquiryErrors({});
+    setMapEnquirySuccess(false);
+    setMapEnquiryId('');
+  };
 
   // Form State
   const [formData, setFormData] = useState({
@@ -258,6 +367,9 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
       }
 
       const payload = {
+        formType: 'map-enquiry',
+        mapServiceInterest: mapEnquiry.category,
+        mapEnquiryMessage: mapEnquiry.message,
         fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
@@ -273,6 +385,14 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
         attachments: attachmentsPayload,
       };
 
+      const firestorePayload = {
+        ...payload,
+        formType: 'partner-registration',
+        amountPaid: '₹5,000',
+        status: 'Pending',
+        timestamp: new Date().toLocaleDateString('en-GB')
+      };
+      await submitToFirestore(firestorePayload, 'submissions');
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: {
@@ -444,7 +564,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                   Whether you operate in Solar Power, Financial Capital & Loans, Real Estate Development, or EdTech Training—Build Bharat provides a unified verified partnership framework and guaranteed referral payouts.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
                   <button
                     onClick={onOpenModal}
                     className="btn-gold w-full sm:w-auto justify-center text-xs px-8 py-3.5 rounded-full cursor-pointer uppercase tracking-wider font-bold flex items-center gap-2 animate-pulse shadow-lg"
@@ -463,21 +583,313 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                     <span>Explore Pathways</span>
                   </button>
                 </div>
-
-                <div className="mt-8 rounded-2xl overflow-hidden shadow-lg border border-stone-200 max-w-4xl mx-auto bg-white p-2">
-                  <iframe
-                    src="https://maps.google.com/maps?q=17.320444,78.627167&hl=en&z=15&output=embed"
-                    width="100%"
-                    height="360"
-                    style={{ border: 0, borderRadius: '12px' }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Build Bharat Synergy Partners Location"
-                  ></iframe>
-                </div>
               </div>
             )}
+
+            {/* INTERACTIVE HEADQUARTERS MAP & DIRECT ENQUIRY FORM SECTION (FULL WIDTH) */}
+            <div id="map-enquiry-section" className="mt-12 pt-10 border-t border-stone-200 text-left w-full">
+              <div className="text-center max-w-3xl mx-auto mb-10">
+                <div className="inline-flex items-center gap-2 text-[#D57530] text-[11px] font-extrabold uppercase tracking-widest px-4 py-1.5 bg-[#FAF9F6] border border-stone-200 rounded-full shadow-sm mb-3">
+                  <MapPin size={13} className="text-[#D57530]" />
+                  <span>REGIONAL HEADQUARTERS & FAST ENQUIRY DESK</span>
+                </div>
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-stone-900 heading-font uppercase tracking-tight">
+                  Visit Us or Send an Instant Enquiry
+                </h3>
+                <p className="text-stone-600 text-xs sm:text-sm mt-2 max-w-2xl mx-auto leading-relaxed font-normal">
+                  Locate our corporate headquarters in Hayath Nagar, Hyderabad, or send a direct query to our regional branch specialists.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch w-full">
+                
+                {/* LEFT COLUMN: INTERACTIVE MAP & OFFICE INFO (5 Cols) */}
+                <div className="lg:col-span-5 bg-[#FAF9F6] border border-stone-200 rounded-3xl p-6 sm:p-7 shadow-md flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between pb-4 border-b border-stone-200 mb-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2.5 bg-[#10367D]/10 text-[#10367D] rounded-2xl">
+                          <MapPin size={20} />
+                        </span>
+                        <div>
+                          <h4 className="font-extrabold text-stone-900 text-base heading-font uppercase tracking-wide">
+                            Corporate Headquarters
+                          </h4>
+                          <span className="text-xs text-stone-500 font-sans">Hayath Nagar, Hyderabad</span>
+                        </div>
+                      </div>
+                      <a
+                        href="https://maps.google.com/?q=17.320444,78.627167"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-bold text-[#10367D] bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3.5 py-2 rounded-full flex items-center gap-1.5 transition-all text-decoration-none shadow-sm"
+                      >
+                        <Navigation size={13} />
+                        <span>Directions</span>
+                      </a>
+                    </div>
+
+                    {/* Embedded Responsive Map */}
+                    <div className="rounded-2xl overflow-hidden border border-stone-200 shadow-inner h-64 sm:h-72 lg:h-[300px] w-full relative bg-white mb-5">
+                      <iframe
+                        src="https://maps.google.com/maps?q=17.320444,78.627167&hl=en&z=15&output=embed"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Build Bharat Synergy Partners Location"
+                      ></iframe>
+                    </div>
+
+                    {/* Address & Quick Contacts */}
+                    <div className="space-y-3 text-xs text-stone-700">
+                      <div className="flex items-start gap-3 bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
+                        <MapPin size={18} className="text-[#D57530] shrink-0 mt-0.5" />
+                        <span className="leading-relaxed text-xs sm:text-[13px]">
+                          <strong className="text-stone-900">Address:</strong> 5-76/03, Surya Vamsi Nagar, Hayath Nagar, Hyderabad, Telangana - 501505
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a
+                          href="tel:+919353018855"
+                          className="flex items-center gap-3 bg-white hover:bg-stone-50 p-3.5 rounded-2xl border border-stone-200 text-stone-800 transition-all text-decoration-none shadow-sm"
+                        >
+                          <span className="p-2 bg-blue-50 text-[#10367D] rounded-xl shrink-0">
+                            <Phone size={16} />
+                          </span>
+                          <div className="truncate">
+                            <span className="text-[10px] text-stone-500 uppercase font-bold block">Hotline</span>
+                            <span className="font-bold text-xs sm:text-sm text-stone-900">+91 93530 18855</span>
+                          </div>
+                        </a>
+
+                        <a
+                          href="mailto:sudheer@buildbharatsp.com"
+                          className="flex items-center gap-3 bg-white hover:bg-stone-50 p-3.5 rounded-2xl border border-stone-200 text-stone-800 transition-all text-decoration-none shadow-sm"
+                        >
+                          <span className="p-2 bg-blue-50 text-[#10367D] rounded-xl shrink-0">
+                            <Mail size={16} />
+                          </span>
+                          <div className="truncate">
+                            <span className="text-[10px] text-stone-500 uppercase font-bold block">Email Desk</span>
+                            <span className="font-bold text-xs sm:text-[13px] text-stone-900 truncate">sudheer@buildbharatsp.com</span>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 pt-4 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
+                    <span className="flex items-center gap-1.5 font-sans">
+                      <Clock size={14} className="text-emerald-600" /> Mon - Sat: 9:30 AM - 6:30 PM
+                    </span>
+                    <span className="font-bold text-stone-800 font-sans">Verified TS Hub</span>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN: QUICK ENQUIRY FORM (7 Cols) */}
+                <div className="lg:col-span-7 bg-white border border-stone-200 rounded-3xl p-6 sm:p-9 shadow-md flex flex-col justify-between">
+                  {mapEnquirySuccess ? (
+                    <div className="h-full flex flex-col items-center justify-center text-center py-8">
+                      <div className="w-16 h-16 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full flex items-center justify-center mb-4 shadow-sm animate-bounce">
+                        <CheckCircle2 size={36} />
+                      </div>
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full mb-2">
+                        Enquiry Successfully Logged
+                      </span>
+                      <h4 className="text-2xl sm:text-3xl font-extrabold text-stone-900 heading-font uppercase">
+                        Thank You, {mapEnquiry.fullName}!
+                      </h4>
+                      <p className="text-stone-600 text-xs sm:text-sm max-w-md mt-2 mb-6 leading-relaxed">
+                        Your enquiry has been routed to our regional desk for <strong>{mapEnquiry.category.toUpperCase()}</strong>. We will contact you at <strong>{mapEnquiry.phone}</strong> shortly.
+                      </p>
+
+                      <div className="bg-stone-50 border border-stone-200 rounded-2xl p-5 w-full max-w-md text-xs sm:text-sm space-y-2.5 mb-6 text-left shadow-sm">
+                        <div className="flex justify-between">
+                          <span className="text-stone-500 font-semibold">Tracking Reference:</span>
+                          <span className="font-mono font-bold text-[#10367D]">{mapEnquiryId}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-stone-500 font-semibold">Contact Number:</span>
+                          <span className="font-bold text-stone-800">{mapEnquiry.phone}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-stone-500 font-semibold">Location:</span>
+                          <span className="font-bold text-stone-800">{mapEnquiry.city || 'Hyderabad'}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-center gap-3">
+                        <a
+                          href={`https://wa.me/919353018855?text=${encodeURIComponent(`Hello Build Bharat Team, I submitted an enquiry (Ref: ${mapEnquiryId}) regarding ${mapEnquiry.category}. Name: ${mapEnquiry.fullName}, Phone: ${mapEnquiry.phone}.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider px-7 py-3.5 rounded-full flex items-center gap-2 shadow-md text-decoration-none"
+                        >
+                          <span>Connect on WhatsApp</span>
+                          <ArrowRight size={14} />
+                        </a>
+
+                        <button
+                          type="button"
+                          onClick={handleResetMapEnquiry}
+                          className="bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-full border border-stone-200 cursor-pointer"
+                        >
+                          Submit Another Enquiry
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleMapEnquirySubmit} className="space-y-4">
+                      <div className="border-b border-stone-150 pb-4">
+                        <div className="flex items-center gap-2 text-[#D57530] text-[11px] font-extrabold uppercase tracking-wider mb-1">
+                          <MessageSquare size={14} />
+                          <span>DIRECT INQUIRY FORM</span>
+                        </div>
+                        <h4 className="text-2xl sm:text-3xl font-extrabold text-stone-900 heading-font uppercase">
+                          Quick Service & Partnership Enquiry
+                        </h4>
+                        <p className="text-stone-500 text-xs sm:text-sm mt-1">
+                          Fill in your details below to receive priority assistance and customized proposals.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                            Full Name <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={mapEnquiry.fullName}
+                            onChange={(e) => setMapEnquiry({ ...mapEnquiry, fullName: e.target.value })}
+                            placeholder="e.g. Rajesh Kumar"
+                            className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl px-4 py-3 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all"
+                          />
+                          {mapEnquiryErrors.fullName && (
+                            <span className="text-xs text-red-500 font-semibold block mt-1">{mapEnquiryErrors.fullName}</span>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                            Mobile Number <span className="text-red-500">*</span>
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3.5 top-3 text-xs sm:text-sm text-stone-400 font-semibold">+91</span>
+                            <input
+                              type="tel"
+                              maxLength={10}
+                              value={mapEnquiry.phone}
+                              onChange={(e) => setMapEnquiry({ ...mapEnquiry, phone: e.target.value.replace(/[^0-9]/g, '') })}
+                              placeholder="98765 43210"
+                              className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl pl-12 pr-4 py-3 text-stone-900 text-xs sm:text-sm font-mono focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all"
+                            />
+                          </div>
+                          {mapEnquiryErrors.phone && (
+                            <span className="text-xs text-red-500 font-semibold block mt-1">{mapEnquiryErrors.phone}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                            Email Address <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            value={mapEnquiry.email}
+                            onChange={(e) => setMapEnquiry({ ...mapEnquiry, email: e.target.value })}
+                            placeholder="rajesh@company.com"
+                            className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl px-4 py-3 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all"
+                          />
+                          {mapEnquiryErrors.email && (
+                            <span className="text-xs text-red-500 font-semibold block mt-1">{mapEnquiryErrors.email}</span>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                            Service / Ecosystem Vertical <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            value={mapEnquiry.category}
+                            onChange={(e) => setMapEnquiry({ ...mapEnquiry, category: e.target.value })}
+                            className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl px-4 py-3 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all cursor-pointer"
+                          >
+                            <option value="loans">BuildBharat Loans (Project Finance & Capital)</option>
+                            <option value="solar">BuildBharat Solar (Commercial / Rooftop PV)</option>
+                            <option value="real-estate">BuildBharat Real Estate (Realty & IT Parks)</option>
+                            <option value="education">BuildBharat EduTech (Vocational & Skill)</option>
+                            <option value="partner-franchise">Synergy Franchise / Partner Registration</option>
+                            <option value="general-inquiry">Corporate / Other Inquiry</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                          Your City / Location
+                        </label>
+                        <input
+                          type="text"
+                          value={mapEnquiry.city}
+                          onChange={(e) => setMapEnquiry({ ...mapEnquiry, city: e.target.value })}
+                          placeholder="e.g. Hyderabad, Bengaluru, Vijayawada, Warangal"
+                          className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl px-4 py-3 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                          Enquiry Details / Requirements <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={mapEnquiry.message}
+                          onChange={(e) => setMapEnquiry({ ...mapEnquiry, message: e.target.value })}
+                          placeholder="Briefly describe your loan requirement, solar capacity, real estate needs, or franchise inquiry..."
+                          className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl p-3.5 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all resize-none"
+                        />
+                        {mapEnquiryErrors.message && (
+                          <span className="text-xs text-red-500 font-semibold block mt-1">{mapEnquiryErrors.message}</span>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3">
+                        <span className="text-xs text-stone-500 flex items-center gap-1.5">
+                          <ShieldCheck size={15} className="text-[#10367D]" />
+                          End-to-End SSL Encrypted & Verified
+                        </span>
+
+                        <button
+                          type="submit"
+                          disabled={mapEnquiryLoading}
+                          className="w-full sm:w-auto bg-[#10367D] hover:bg-[#10367D]/90 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider px-9 py-3.5 rounded-full flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+                        >
+                          {mapEnquiryLoading ? (
+                            <>
+                              <Loader2 className="animate-spin" size={15} />
+                              <span>Submitting...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>Submit Quick Enquiry</span>
+                              <ArrowRight size={15} />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+
+              </div>
+            </div>
           </div>
         </div>
       </section>

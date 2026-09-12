@@ -151,7 +151,7 @@ export function App() {
       <GoogleAnalytics currentPath={currentPath} />
       <SmoothCursor />
       
-      <div className="min-h-screen bg-[#FAF9F6] text-stone-900 flex flex-col font-sans selection:bg-[#10367D]/15 selection:text-[#10367D] bg-grainy">
+      <div className="min-h-screen bg-[#070A11] text-white flex flex-col font-sans selection:bg-[#E2B049]/20 selection:text-white bg-grainy">
         {/* Header Navigation */}
         <Header
           onOpenPartnerModal={() => setIsPartnerModalOpen(true)}

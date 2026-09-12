@@ -1,3 +1,4 @@
+import { submitToFirestore } from '../lib/firebase';
 import React, { useState } from 'react';
 import {
   X,
@@ -292,6 +293,28 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
         attachments: attachmentsPayload,
       };
 
+      const firestorePayload = {
+        id: applicationId,
+        formType: 'formal-loan',
+        formName: '7-Stage Formal Loan Dossier',
+        sourceFile: 'src/components/FormalLoanModal.tsx',
+        applicantName: `${formData.firstName} ${formData.lastName}`,
+        phone: formData.contact,
+        email: formData.email,
+        city: formData.presentAddress || 'Hyderabad',
+        requiredAmount: `₹${Number(formData.requiredAmount).toLocaleString('en-IN')}`,
+        loanPurpose: formData.purpose,
+        motherName: formData.motherName,
+        dob: formData.dob,
+        gender: formData.gender,
+        nomineeName: `${formData.nomineeFirstName} ${formData.nomineeLastName}`,
+        nomineeRelation: formData.nomineeRelation,
+        branchName: formData.branchName,
+        uplineIdCode: formData.uplineIdCode,
+        status: 'Underwriting',
+        timestamp: new Date().toLocaleDateString('en-GB')
+      };
+      await submitToFirestore(firestorePayload, 'submissions');
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

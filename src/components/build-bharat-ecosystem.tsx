@@ -197,11 +197,10 @@ export function BuildBharatEcosystem({
               return (
                 <div
                   key={card.id}
-                  className={`group flex flex-col justify-between p-8 rounded-2xl bg-gradient-to-br from-[#08152B] via-[#0D2654] to-[#10367D] border border-white/10 shadow-xl transition-all duration-300 min-h-[280px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none relative overflow-hidden ${
+                  className={`group flex flex-col justify-between p-7 rounded-[12px] bg-gradient-to-br from-[#16305c] to-[#1f4fa0] border border-white/5 shadow-sm transition-all duration-300 min-h-[260px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none ${
                     selectedHub ? "h-full" : card.className
                   }`}
                 >
-                  <div className="absolute top-0 right-0 w-36 h-36 bg-[#A5CEE0]/10 rounded-full blur-2xl pointer-events-none" />
                   {cardContent}
                 </div>
               );
@@ -212,11 +211,10 @@ export function BuildBharatEcosystem({
                 key={card.id}
                 href={card.href}
                 onClick={(e) => handleCardClick(e, card.href)}
-                className={`group flex flex-col justify-between p-8 rounded-2xl bg-gradient-to-br from-[#0B1E3D] via-[#10367D] to-[#17489E] border border-white/10 hover:border-[#A5CEE0]/40 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl cursor-pointer min-h-[280px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none relative overflow-hidden ${
+                className={`group flex flex-col justify-between p-7 rounded-[12px] bg-gradient-to-br from-[#16305c] to-[#1f4fa0] border border-white/5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer min-h-[260px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none ${
                   selectedHub ? "h-full" : card.className
                 }`}
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#A5CEE0]/10 rounded-full blur-2xl pointer-events-none group-hover:bg-[#A5CEE0]/20 transition-all duration-500" />
                 {cardContent}
               </a>
             );

@@ -30,13 +30,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
           <div className="flex flex-col justify-between space-y-4">
             <div className="space-y-3">
               <div 
-                className="flex items-center cursor-pointer group"
+                className="inline-flex items-center cursor-pointer group bg-white p-3 sm:p-3.5 rounded-2xl border border-white/30 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-lg w-fit"
                 onClick={() => onNavigate('/')}
               >
                 <img 
                   src="/build-bharat-logo.png" 
                   alt="Build Bharat Synergy Partners" 
-                  className="h-16 sm:h-20 w-auto object-contain transition-transform group-hover:scale-[1.02]" 
+                  className="h-12 sm:h-16 w-auto object-contain" 
                 />
               </div>
               <p className="text-[#b9c6d6] text-xs sm:text-sm leading-relaxed max-w-xl">
@@ -163,9 +163,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
         {/* Bottom Bar */}
         <div className="pt-6 mt-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[#7d8ea3] text-xs font-medium">
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-            <div className="flex items-center gap-2.5 bg-[#0a2440] px-3.5 py-1.5 rounded-full border border-[#2c4a6b]/60 shadow-sm hover:border-[#f0a951]/50 transition-colors">
-              <img src="/build-bharat-logo.png" alt="Build Bharat Logo" className="h-5 w-auto object-contain" />
-              <span className="text-[#b9c6d6]"><strong className="text-[#f0a951] tracking-wider uppercase font-bold text-[10px]">Build Bharat Synergy Partners</strong></span>
+            <div className="flex items-center gap-2.5 bg-white px-4 py-1.5 rounded-full border border-white/40 shadow-sm transition-all hover:shadow-md">
+              <img src="/build-bharat-logo.png" alt="Build Bharat Logo" className="h-4 sm:h-5 w-auto object-contain" />
+              <span className="text-[#10367D] font-extrabold tracking-wider uppercase text-[10px] sm:text-[11px] font-sans">
+                Build Bharat Synergy Partners
+              </span>
             </div>
             <span>© {new Date().getFullYear()} Build Bharat Synergy Partners. All rights reserved.</span>
           </div>
