@@ -22,7 +22,6 @@ import { CompanyProfilePage } from './pages/CompanyProfilePage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { ContactPage } from './pages/ContactPage';
-import { LoansPage } from './pages/LoansPage';
  
 export function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -89,7 +88,8 @@ export function App() {
         );
       case '/loans':
         return (
-          <LoansPage 
+          <CompanyPage 
+            category="loans" 
             onNavigate={navigate} 
             onOpenPartnerModal={() => setIsPartnerModalOpen(true)} 
           />
@@ -151,7 +151,7 @@ export function App() {
       <GoogleAnalytics currentPath={currentPath} />
       <SmoothCursor />
       
-      <div className="min-h-screen bg-[#070A11] text-white flex flex-col font-sans selection:bg-[#E2B049]/20 selection:text-white bg-grainy">
+      <div className="min-h-screen bg-[#FAF9F6] text-stone-900 flex flex-col font-sans selection:bg-[#10367D]/15 selection:text-[#10367D] bg-grainy">
         {/* Header Navigation */}
         <Header
           onOpenPartnerModal={() => setIsPartnerModalOpen(true)}

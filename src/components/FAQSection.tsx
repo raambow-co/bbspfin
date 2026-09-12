@@ -43,11 +43,11 @@ export function FAQSection() {
   const visibleFaqs = showAll ? faqData : faqData.slice(0, 5);
 
   const states = [
-    { id: 'karnataka',  label: 'KARNATAKA',       fill: '#C62828', hover: '#8B0000', d: KARNATAKA_PATH, lx: 56,  ly: 250 },
-    { id: 'telangana',  label: 'TELANGANA',        fill: '#E53935', hover: '#B71C1C', d: TELANGANA_PATH, lx: 250, ly: 160 },
-    { id: 'andhra',     label: 'ANDHRA PRADESH',   fill: '#EF5350', hover: '#D32F2F', d: ANDHRA_PATH,    lx: 340, ly: 210 },
-    { id: 'tn',         label: 'TAMIL NADU',       fill: '#FB8C00', hover: '#E65100', d: TAMILNADU_PATH, lx: 190, ly: 430 },
-    { id: 'kerala',     label: 'KERALA',           fill: '#43A047', hover: '#2E7D32', d: KERALA_PATH,    lx: 68,  ly: 430 },
+    { id: 'karnataka',  label: 'KARNATAKA',       fill: '#10367D', hover: '#0B2556', d: KARNATAKA_PATH, lx: 56,  ly: 250 },
+    { id: 'telangana',  label: 'TELANGANA',        fill: '#1E40AF', hover: '#10367D', d: TELANGANA_PATH, lx: 250, ly: 160 },
+    { id: 'andhra',     label: 'ANDHRA PRADESH',   fill: '#2563EB', hover: '#1D4ED8', d: ANDHRA_PATH,    lx: 340, ly: 210 },
+    { id: 'tn',         label: 'TAMIL NADU',       fill: '#D57530', hover: '#B85E1E', d: TAMILNADU_PATH, lx: 190, ly: 430 },
+    { id: 'kerala',     label: 'KERALA',           fill: '#0D9488', hover: '#0F766E', d: KERALA_PATH,    lx: 68,  ly: 430 },
   ];
 
   return (
@@ -156,19 +156,19 @@ export function FAQSection() {
                     <feDropShadow dx="2" dy="3" stdDeviation="3.5" floodColor="rgba(0,0,0,.20)" />
                   </filter>
                   <linearGradient id="gKarnataka" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#D32F2F"/><stop offset="100%" stopColor="#9A0007"/>
+                    <stop offset="0%" stopColor="#1E4F9E"/><stop offset="100%" stopColor="#10367D"/>
                   </linearGradient>
                   <linearGradient id="gTelangana" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#F44336"/><stop offset="100%" stopColor="#B71C1C"/>
+                    <stop offset="0%" stopColor="#2563EB"/><stop offset="100%" stopColor="#1E40AF"/>
                   </linearGradient>
                   <linearGradient id="gAndhra" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#EF5350"/><stop offset="100%" stopColor="#C62828"/>
+                    <stop offset="0%" stopColor="#3B82F6"/><stop offset="100%" stopColor="#1D4ED8"/>
                   </linearGradient>
                   <linearGradient id="gTN" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFA726"/><stop offset="100%" stopColor="#E65100"/>
+                    <stop offset="0%" stopColor="#E88B44"/><stop offset="100%" stopColor="#D57530"/>
                   </linearGradient>
                   <linearGradient id="gKerala" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#66BB6A"/><stop offset="100%" stopColor="#2E7D32"/>
+                    <stop offset="0%" stopColor="#14B8A6"/><stop offset="100%" stopColor="#0F766E"/>
                   </linearGradient>
                 </defs>
 

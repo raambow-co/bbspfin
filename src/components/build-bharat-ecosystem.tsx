@@ -32,7 +32,7 @@ const features = [
     description: "India's premier multi-brand B2B partnership platform. We align sustainable infrastructure, corporate capital solutions, prime real estate developments, and industrial skill training under one unified verification framework.",
     stat: "",
     href: "/about",
-    cta: "Explore Build Bharat",
+    cta: "",
     className: "lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-3 hidden lg:flex",
   },
   {
@@ -75,7 +75,11 @@ export function BuildBharatEcosystem({
     ? features.filter(f => f.id !== "about" && selectedHub.pillarsActive.includes(f.id))
     : features;
 
-  const handleCardClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleCardClick = (e: React.MouseEvent<HTMLElement>, href: string) => {
+    if (!href || href === '/about') {
+      e.preventDefault();
+      return;
+    }
     if (!e.defaultPrevented && e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
       e.preventDefault();
       window.history.pushState({}, '', href);
@@ -152,45 +156,71 @@ export function BuildBharatEcosystem({
           className="flex lg:grid overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory scroll-smooth pb-6 lg:pb-0 gap-4 scrollbar-none lg:grid-cols-3 lg:grid-rows-2 auto-rows-fr"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {filteredFeatures.map((card) => (
-            <a
-              key={card.id}
-              href={card.href}
-              onClick={(e) => handleCardClick(e, card.href)}
-              className={`group flex flex-col justify-between p-7 rounded-[12px] bg-gradient-to-br from-[#16305c] to-[#1f4fa0] border border-white/5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg min-h-[260px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none ${
-                selectedHub ? "h-full" : card.className
-              }`}
-            >
-              <div>
-                {/* White Logo Badge (64x64px) */}
-                <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center p-2 mb-5 group-hover:scale-[1.02] transition-transform duration-300">
-                  <img 
-                    src={card.logo} 
-                    alt={card.name} 
-                    className="max-h-full max-w-full object-contain"
-                  />
+          {filteredFeatures.map((card) => {
+            const isCenterCard = card.id === "about";
+            const cardContent = (
+              <>
+                <div>
+                  {/* White Logo Badge (64x64px) */}
+                  <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center p-2 mb-5 group-hover:scale-[1.02] transition-transform duration-300">
+                    <img 
+                      src={card.logo} 
+                      alt={card.name} 
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+
+                  {/* Body Text */}
+                  <p className="text-[#cdd9ec] text-[13px] leading-relaxed mb-4 max-w-[420px]">
+                    {card.description}
+                  </p>
+
+                  {/* Translucent Stat Pill */}
+                  {card.stat && (
+                    <span className="inline-block text-[10px] font-bold text-white px-2.5 py-1 bg-white/12 rounded-full uppercase tracking-wider select-none mb-4">
+                      {card.stat}
+                    </span>
+                  )}
                 </div>
 
-                {/* Body Text */}
-                <p className="text-[#cdd9ec] text-[13px] leading-relaxed mb-4 max-w-[420px]">
-                  {card.description}
-                </p>
+                {/* Bottom Explore Link */}
+                {card.cta ? (
+                  <div className="flex items-center gap-1 text-white font-semibold text-xs group-hover:underline">
+                    <span>{card.cta}</span>
+                    <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+                ) : null}
+              </>
+            );
 
-                {/* Translucent Stat Pill */}
-                {card.stat && (
-                  <span className="inline-block text-[10px] font-bold text-white px-2.5 py-1 bg-white/12 rounded-full uppercase tracking-wider select-none mb-4">
-                    {card.stat}
-                  </span>
-                )}
-              </div>
+            if (isCenterCard) {
+              return (
+                <div
+                  key={card.id}
+                  className={`group flex flex-col justify-between p-8 rounded-2xl bg-gradient-to-br from-[#08152B] via-[#0D2654] to-[#10367D] border border-white/10 shadow-xl transition-all duration-300 min-h-[280px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none relative overflow-hidden ${
+                    selectedHub ? "h-full" : card.className
+                  }`}
+                >
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-[#A5CEE0]/10 rounded-full blur-2xl pointer-events-none" />
+                  {cardContent}
+                </div>
+              );
+            }
 
-              {/* Bottom Explore Link */}
-              <div className="flex items-center gap-1 text-white font-semibold text-xs group-hover:underline">
-                <span>{card.cta}</span>
-                <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
-            </a>
-          ))}
+            return (
+              <a
+                key={card.id}
+                href={card.href}
+                onClick={(e) => handleCardClick(e, card.href)}
+                className={`group flex flex-col justify-between p-8 rounded-2xl bg-gradient-to-br from-[#0B1E3D] via-[#10367D] to-[#17489E] border border-white/10 hover:border-[#A5CEE0]/40 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl cursor-pointer min-h-[280px] text-left no-underline w-[280px] sm:w-[320px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-start lg:snap-align-none relative overflow-hidden ${
+                  selectedHub ? "h-full" : card.className
+                }`}
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#A5CEE0]/10 rounded-full blur-2xl pointer-events-none group-hover:bg-[#A5CEE0]/20 transition-all duration-500" />
+                {cardContent}
+              </a>
+            );
+          })}
         </div>
 
       </div>

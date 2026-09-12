@@ -283,81 +283,21 @@ const SolarHomepage: React.FC<{
   company: CompanyData;
   pillar: any;
 }> = ({ onNavigate, onOpenPartnerModal, company, pillar }) => {
-  const [activeProjectIdx, setActiveProjectIdx] = useState(0);
-
-  const solarProjects = [
-    {
-      capacity: "450 kWp",
-      category: "Residential Microgrid",
-      title: "120-Villa Gated Community Microgrid",
-      location: "Srikanya Enclave, Hyderabad",
-      desc: "A fully integrated hybrid microgrid featuring 450 kWp rooftop solar arrays paired with battery energy storage (BESS) and intelligent load management, achieving 85% grid independence for 120 luxury villas.",
-      tags: ["Residential Microgrid", "BESS Storage", "Grid Independent"],
-      image: "/solar_hero_premium.png"
-    },
-    {
-      capacity: "2.5 MWp",
-      category: "Commercial Solar",
-      title: "Solar-Powered Retail & Logistics Hub",
-      location: "GMR Logistics Park, Hyderabad",
-      desc: "A massive 2.5 MWp net-metered rooftop installation engineered for a high-throughput distribution hub, offsetting 3,200 metric tons of CO₂ annually with active grid export.",
-      tags: ["Commercial Retail", "Net Metering", "Logistics Hub"],
-      image: "/pm-surya-ghar.png"
-    },
-    {
-      capacity: "15.0 MWp",
-      category: "Utility Scale",
-      title: "Off-Grid Utility Solar Farm",
-      location: "Deccan Plains, Medchal",
-      desc: "A 15 MWp utility-scale ground-mounted plant utilizing single-axis bifacial tracking to boost energy yield by 22%, feeding directly into the regional transmission substation.",
-      tags: ["Utility Scale", "Bifacial Trackers", "Clean Generation"],
-      image: "/solar-panels.png"
-    },
-    {
-      capacity: "850 kWp",
-      category: "Smart BIPV",
-      title: "Smart Urban Solar Infrastructure",
-      location: "Cyber Gateway IT Park, Gachibowli",
-      desc: "Custom Building Integrated Photovoltaics (BIPV) glass facade arrays and solar carports integrated with EV charging stations, powering the common grid of a grade-A corporate park.",
-      tags: ["Smart Infrastructure", "EV Charging Carports", "BIPV Facade"],
-      image: "/inverters.png"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-[#F7F5F0] text-[#1A1A1A] selection:bg-[#E8963C]/20 selection:text-[#1A1A1A] font-sans">
-      {/* Sub-Header Navigation Banner */}
-      <div className="bg-[#FFFFFF]/90 border-b border-stone-200 py-3 sticky top-0 z-40 backdrop-blur-md">
-        <div className="container-custom flex items-center justify-between">
-          <button 
-            onClick={() => onNavigate('/')}
-            className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-900 transition-colors bg-transparent border-none cursor-pointer p-0"
-          >
-            <ArrowLeft size={14} />
-            <span>Back to Build Bharat</span>
-          </button>
-          
-          <div className="flex items-center gap-2 text-xs text-stone-500 font-medium font-sans">
-            <ShieldCheck size={14} className="text-[#E8963C]" />
-            <span className="hidden sm:inline">Ecosystem Member:</span>
-            <span className="font-bold text-[#E8963C]">{company.name}</span>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Section */}
-      <section className="relative py-16 md:py-20 border-b border-stone-200 overflow-hidden bg-[#F7F5F0]">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
+      <section className="relative py-16 md:py-20 border-b border-stone-200/80 overflow-hidden bg-[#F7F5F0]">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-[#E8963C]/10 via-[#10367D]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
         
         <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Hero Content */}
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="space-y-3">
-              <span className="border-[#E8963C]/30 text-[#E8963C] bg-[#E8963C]/10 badge-tag font-bold rounded-full inline-block px-3 py-1 text-xs border">
+              <span className="border-[#E8963C]/30 text-[#E8963C] bg-[#E8963C]/10 badge-tag font-bold rounded-full inline-block px-3.5 py-1 text-xs border shadow-sm">
                 {pillar.title}
               </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold heading-font tracking-tight leading-tight text-[#1A1A1A] uppercase">
-                Clean Renewable<br />Limitless Energy
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold heading-font tracking-tight leading-[1.1] text-[#1A1A1A] uppercase">
+                Clean Renewable<br /><span className="text-[#E8963C]">Limitless Energy</span>
               </h1>
             </div>
             
@@ -372,10 +312,10 @@ const SolarHomepage: React.FC<{
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
                <button 
                  onClick={onOpenPartnerModal}
-                 className="bg-[#E8963C] hover:bg-[#1A1A1A] text-white justify-center rounded-full px-6 py-3 flex items-center gap-1.5 cursor-pointer text-xs uppercase tracking-wider font-bold transition-all shadow-md border-none"
+                 className="luxury-btn-gold justify-center rounded-full px-8 py-3.5 flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wider font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all border-none"
                >
                  <span>Get Free Consultation</span>
-                 <ArrowRight size={14} />
+                 <ArrowRight size={15} />
                </button>
             </div>
 
@@ -575,103 +515,6 @@ const SolarHomepage: React.FC<{
               </div>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* Case Studies / Projects Section */}
-      <section className="py-16 md:py-20 bg-[#F7F5F0] text-[#1A1A1A] relative text-left border-b border-stone-200">
-        <div className="container-custom max-w-5xl">
-          <div className="text-center mb-12 space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8963C] block font-sans">PORTFOLIO SHOTS</span>
-            <h2 className="text-2xl md:text-4xl font-extrabold heading-font uppercase tracking-wide text-center">
-              Our Completed Projects
-            </h2>
-            <div className="w-12 h-px bg-[#E8963C] mx-auto mt-3" />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Numbered expandable list */}
-            <div className="lg:col-span-6 space-y-4">
-              {solarProjects.map((proj, idx) => {
-                const isActive = activeProjectIdx === idx;
-                return (
-                  <div 
-                    key={idx}
-                    onClick={() => setActiveProjectIdx(idx)}
-                    className={`p-5 rounded-xl border transition-all duration-300 cursor-pointer ${
-                      isActive 
-                        ? 'bg-white border-[#E8963C] shadow-sm' 
-                        : 'bg-transparent border-stone-200/60 hover:border-[#E8963C]/50 hover:bg-white/50'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-4 select-none">
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        {/* Typographically native capacity badge carrying real engineering data */}
-                        <span className={`font-mono text-xs font-extrabold tracking-tight px-2.5 py-1 rounded border min-w-[80px] text-center transition-colors ${
-                          isActive 
-                            ? 'bg-[#E8963C]/10 border-[#E8963C]/30 text-[#E8963C]' 
-                            : 'bg-stone-100 border-stone-200 text-stone-600'
-                        }`}>
-                          {proj.capacity}
-                        </span>
-                        
-                        {/* Title: Clickable target with weight/color shift on hover */}
-                        <h4 className={`font-bold text-sm sm:text-base text-stone-900 transition-colors tracking-wide heading-font uppercase truncate hover:text-[#E8963C] ${
-                          isActive ? 'text-[#E8963C] font-extrabold' : ''
-                        }`}>
-                          {proj.title}
-                        </h4>
-                      </div>
-                      
-                      {/* Tailored SVG Chevron instead of default emoji/triangle disclosure carets */}
-                      <span className="flex-shrink-0">
-                        <svg 
-                          className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                            isActive ? 'rotate-180 text-[#E8963C]' : 'text-stone-400'
-                          }`} 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor" 
-                          strokeWidth="3"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                      </span>
-                    </div>
-                    {isActive && (
-                      <div className="mt-3.5 pl-[96px] space-y-2 text-xs sm:text-sm text-stone-600 font-sans leading-relaxed transition-all">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">Location:</span>
-                          <span className="font-semibold text-stone-700 text-xs">{proj.location}</span>
-                        </div>
-                        <p className="text-stone-500 font-normal leading-relaxed">{proj.desc}</p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Big Active Image Panel */}
-            <div className="lg:col-span-6 relative">
-              <div className="border border-stone-200 p-2 bg-white rounded-2xl shadow-xl overflow-hidden relative">
-                <img 
-                  src={solarProjects[activeProjectIdx].image} 
-                  alt={solarProjects[activeProjectIdx].title}
-                  className="w-full h-80 object-cover rounded-xl"
-                />
-                
-                {/* Expandable active image tags */}
-                <div className="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2">
-                  {solarProjects[activeProjectIdx].tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="bg-black/60 text-[#F7F5F0] text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-sm shadow-sm border border-white/10">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>

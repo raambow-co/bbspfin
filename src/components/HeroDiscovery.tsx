@@ -206,6 +206,11 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
 
             {/* Simplified Hero Heading & Brand Intro */}
             <div className="space-y-4 text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#10367D]/5 border border-[#10367D]/15 text-[#10367D] text-[11px] font-bold uppercase tracking-widest shadow-sm">
+                <Sparkles size={13} className="text-[#D57530]" />
+                <span>UNIFIED ENTERPRISE GATEWAY · 4 CORE PILLARS</span>
+              </div>
+
               <img
                 src="/build-bharat-logo.png"
                 alt="Build Bharat Synergy Partners Logo"
@@ -220,8 +225,8 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
                 </div>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl sm:whitespace-nowrap font-extrabold text-[#10367D] tracking-tight leading-tight heading-font">
-                &ldquo;What are you looking for?&rdquo;
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#10367D] tracking-tight leading-[1.1] heading-font uppercase">
+                &ldquo;What are you <span className="luxury-gradient-text">looking for?&rdquo;</span>
               </h1>
             </div>
 
@@ -229,9 +234,9 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
             <div className="relative max-w-xl z-30" ref={dropdownRef}>
               <form
                 onSubmit={handleFormSubmit}
-                className="discovery-wrapper flex items-center px-5 py-4 rounded-full border transition-all duration-300"
+                className="discovery-wrapper flex items-center px-6 py-4 rounded-full border border-[#10367D]/20 hover:border-[#10367D]/40 bg-white shadow-[0_8px_30px_rgb(16,54,125,0.08)] transition-all duration-300"
               >
-                <Search className="text-[#10367D] mr-3 shrink-0" size={18} />
+                <Search className="text-[#10367D] mr-3 shrink-0" size={20} />
                 <input
                   type="text"
                   value={searchQuery}
@@ -255,8 +260,9 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
                   </button>
                 )}
               </form>
-              <div className="mt-2 text-xs text-stone-750 font-semibold pl-4 text-left">
-                Tell us what you need — we'll connect you with a verified partner.
+              <div className="mt-2.5 text-xs text-stone-600 font-medium pl-4 text-left flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                <span>Tell us what you need — we'll connect you directly with a verified partner.</span>
               </div>
 
               {/* Autocomplete & Matching Popover Panel */}
@@ -371,15 +377,16 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 onClick={onOpenPartnerModal}
-                className="btn-gold flex items-center gap-2 px-7 py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold shadow-lg animate-pulse"
+                className="luxury-btn-primary flex items-center gap-2 px-8 py-4 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <span>Partner With Us</span>
-                <ArrowRight size={14} />
+                <ArrowRight size={15} />
               </button>
               <button
                 onClick={() => handleSearchSelect('I want to install solar panels', 'solar')}
-                className="bg-transparent hover:bg-[#10367D]/5 text-[#10367D] border border-[#10367D]/25 flex items-center gap-1.5 px-6 py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold transition-all"
+                className="bg-white hover:bg-stone-50 text-[#10367D] border border-[#10367D]/25 flex items-center gap-2 px-7 py-4 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold shadow-sm hover:shadow transition-all"
               >
+                <Sparkles size={14} className="text-[#D57530]" />
                 <span>Try Example Search</span>
               </button>
             </div>
