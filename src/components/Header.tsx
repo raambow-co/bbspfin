@@ -204,6 +204,7 @@ export const Header: React.FC<HeaderProps> = ({
       case '/privacy': return "Privacy Policy";
       case '/terms': return "Terms of Service";
       case '/contact': return "Contact Desk";
+      case '/discovery': return "Discovery Hub";
       default: return "Ecosystem Member";
     }
   };
@@ -214,6 +215,7 @@ export const Header: React.FC<HeaderProps> = ({
       case '/loans': return "/build-bharat-loans.png";
       case '/real-estate': return "/build-bharat-real-estate.png";
       case '/education': return "/build-bharat-education.png";
+      case '/discovery': return "/build-bharat-logo.png";
       default: return null;
     }
   };
@@ -265,8 +267,10 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Center: nav links */}
           <nav className="hidden md:flex items-center gap-[28px] text-[14px] text-[#374151] font-medium font-sans">
             <button
-              onClick={() => scrollToSection('discovery')}
-              className="hover:text-[#1e3a6b] transition-colors bg-transparent border-none cursor-pointer p-0 font-sans text-[14px] font-medium"
+              onClick={() => onNavigate('/discovery')}
+              className={`hover:text-[#1e3a6b] transition-colors bg-transparent border-none cursor-pointer p-0 font-sans text-[14px] font-medium ${
+                currentPath === '/discovery' ? 'text-[#1e3a6b] font-bold border-b-2 border-[#1e3a6b]' : ''
+              }`}
             >
               Discovery
             </button>
@@ -325,8 +329,13 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="md:hidden border-t border-slate-100 px-6 py-6 space-y-4 bg-white text-left animate-fadeIn">
             <div className="flex flex-col space-y-3 font-semibold text-sm text-[#374151]">
               <button
-                onClick={() => scrollToSection('discovery')}
-                className="text-left py-2.5 hover:text-[#1e3a6b] border-b border-slate-100 bg-transparent font-sans"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigate('/discovery');
+                }}
+                className={`text-left py-2.5 hover:text-[#1e3a6b] border-b border-slate-100 bg-transparent font-sans ${
+                  currentPath === '/discovery' ? 'text-[#1e3a6b] font-bold' : ''
+                }`}
               >
                 Discovery
               </button>
@@ -409,7 +418,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Center: Center-Aligned Nav Links */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-slate-900">
           <button
-            onClick={() => scrollToSection('discovery')}
+            onClick={() => onNavigate('/discovery')}
             className="hover:text-[#10367D] transition-colors bg-transparent border-none cursor-pointer p-0 text-slate-900 font-bold text-sm subheading-font"
           >
             Discovery
@@ -472,8 +481,11 @@ export const Header: React.FC<HeaderProps> = ({
 
           <div className="flex flex-col space-y-3 font-semibold text-sm text-slate-600">
             <button
-              onClick={() => scrollToSection('discovery')}
-              className="text-left py-2.5 hover:text-[#10367D] border-b border-slate-100 bg-transparent"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigate('/discovery');
+              }}
+              className="text-left py-2.5 hover:text-[#10367D] border-b border-slate-100 bg-transparent text-slate-600 font-semibold"
             >
               Discovery
             </button>

@@ -22,6 +22,8 @@ import { CompanyProfilePage } from './pages/CompanyProfilePage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { ContactPage } from './pages/ContactPage';
+import { DiscoveryPage } from './pages/DiscoveryPage';
+import { SynergyConceptSection } from './components/SynergyConceptSection';
  
 export function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -59,6 +61,13 @@ export function App() {
     }
  
     switch (currentPath) {
+      case '/discovery':
+        return (
+          <DiscoveryPage 
+            onNavigate={navigate}
+            onOpenPartnerModal={() => setIsPartnerModalOpen(true)}
+          />
+        );
       case '/companies':
         return (
           <CompaniesDirectoryPage 
@@ -131,6 +140,12 @@ export function App() {
             <BuildBharatEcosystem 
               activeRegionFilter={selectedRegionFilter} 
               onClearRegionFilter={() => setSelectedRegionFilter(null)} 
+            />
+
+            {/* SECTION 4 — SYNERGY CONCEPT & FOUNDER SECTION */}
+            <SynergyConceptSection
+              onNavigate={navigate}
+              onOpenPartnerModal={() => setIsPartnerModalOpen(true)}
             />
  
             {/* NEW SECTION 2 — HOW IT WORKS EXPLAINER */}

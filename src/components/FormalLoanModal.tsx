@@ -18,8 +18,13 @@ import {
   AlertCircle,
   HelpCircle,
   Calendar,
-  Lock
+  Lock,
+  Eye,
+  EyeOff,
+  Trash2,
+  RefreshCw
 } from 'lucide-react';
+import { DocumentPreviewModal, PreviewableDocument } from './DocumentPreviewModal';
 
 interface FormalLoanModalProps {
   isOpen: boolean;
@@ -30,6 +35,7 @@ interface FormalLoanModalProps {
 
 interface UploadedFile {
   file: File;
+  previewUrl: string;
   name: string;
   sizeFormatted: string;
 }
@@ -118,10 +124,13 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
   const [panDoc, setPanDoc] = useState<UploadedFile | null>(null);
   const [bankDoc, setBankDoc] = useState<UploadedFile | null>(null);
   const [incomeDoc, setIncomeDoc] = useState<UploadedFile | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<{ doc: PreviewableDocument; title: string } | null>(null);
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showAccountNumber, setShowAccountNumber] = useState(false);
+  const [showConfirmAccountNumber, setShowConfirmAccountNumber] = useState(false);
 
   const indianStates = [
     'Telangana',
@@ -153,8 +162,10 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
   ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      const previewUrl = URL.createObjectURL(file);
       setter({
         file,
+        previewUrl,
         name: file.name,
         sizeFormatted: formatFileSize(file.size),
       });
@@ -840,26 +851,52 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Account Number *</label>
-                        <input
-                          type="password"
-                          value={formData.accountNumber}
-                          onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value.replace(/\D/g, '') })}
-                          placeholder="Account No..."
-                          className="w-full bg-white border border-stone-300 rounded-xl px-4 py-2.5 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
-                        />
+                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                          <span>Account Number *</span>
+                          <span className="text-[10px] text-stone-400 font-normal">9-18 digits</span>
+                        </label>
+                        <div className="relative flex items-center">
+                          <input
+                            type={showAccountNumber ? 'text' : 'password'}
+                            value={formData.accountNumber}
+                            onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value.replace(/\D/g, '') })}
+                            placeholder="Account No..."
+                            className="w-full bg-white border border-stone-300 rounded-xl pl-4 pr-10 py-2.5 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowAccountNumber(!showAccountNumber)}
+                            className="absolute right-3 p-1 text-stone-400 hover:text-[#10367D] transition-colors cursor-pointer bg-transparent border-none"
+                            title={showAccountNumber ? 'Hide Account Number' : 'Show Account Number'}
+                          >
+                            {showAccountNumber ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
+                        </div>
                         {formErrors.accountNumber && <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.accountNumber}</span>}
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">Confirm Account Number *</label>
-                        <input
-                          type="text"
-                          value={formData.confirmAccountNumber}
-                          onChange={(e) => setFormData({ ...formData, confirmAccountNumber: e.target.value.replace(/\D/g, '') })}
-                          placeholder="Re-enter Account No..."
-                          className="w-full bg-white border border-stone-300 rounded-xl px-4 py-2.5 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
-                        />
+                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                          <span>Confirm Account Number *</span>
+                          <span className="text-[10px] text-stone-400 font-normal">Must match</span>
+                        </label>
+                        <div className="relative flex items-center">
+                          <input
+                            type={showConfirmAccountNumber ? 'text' : 'password'}
+                            value={formData.confirmAccountNumber}
+                            onChange={(e) => setFormData({ ...formData, confirmAccountNumber: e.target.value.replace(/\D/g, '') })}
+                            placeholder="Re-enter Account No..."
+                            className="w-full bg-white border border-stone-300 rounded-xl pl-4 pr-10 py-2.5 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmAccountNumber(!showConfirmAccountNumber)}
+                            className="absolute right-3 p-1 text-stone-400 hover:text-[#10367D] transition-colors cursor-pointer bg-transparent border-none"
+                            title={showConfirmAccountNumber ? 'Hide Confirm Account Number' : 'Show Confirm Account Number'}
+                          >
+                            {showConfirmAccountNumber ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
+                        </div>
                         {formErrors.confirmAccountNumber && <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.confirmAccountNumber}</span>}
                       </div>
 
@@ -1181,60 +1218,184 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
                     <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-2">
                       <div className="flex justify-between items-center text-xs font-bold text-stone-700">
                         <span>Aadhaar Card (PDF / Image)</span>
-                        {aadhaarDoc && <span className="text-emerald-600">✓ Ready</span>}
+                        {aadhaarDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Ready</span>}
                       </div>
-                      <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
-                        <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
-                        <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
-                          {aadhaarDoc ? aadhaarDoc.name : 'Click to attach Aadhaar file'}
-                        </span>
-                        <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setAadhaarDoc)} className="hidden" />
-                      </label>
+
+                      {aadhaarDoc ? (
+                        <div className="bg-white border border-stone-200 rounded-xl p-3 shadow-sm flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText size={16} className="text-[#10367D] shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-xs font-bold text-stone-800 truncate max-w-[150px]">{aadhaarDoc.name}</p>
+                              <span className="text-[10px] text-stone-400 font-mono">{aadhaarDoc.sizeFormatted}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewDoc({ doc: aadhaarDoc, title: 'Aadhaar Card Preview' })}
+                              className="px-2 py-1 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all border-none"
+                            >
+                              <Eye size={12} />
+                              <span>Preview</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setAadhaarDoc(null)}
+                              className="p-1 text-stone-400 hover:text-red-600 rounded cursor-pointer border-none bg-transparent"
+                              title="Remove"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
+                          <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
+                          <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
+                            Click to attach Aadhaar file
+                          </span>
+                          <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setAadhaarDoc)} className="hidden" />
+                        </label>
+                      )}
                     </div>
 
                     {/* PAN Upload */}
                     <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-2">
                       <div className="flex justify-between items-center text-xs font-bold text-stone-700">
                         <span>PAN Card (PDF / Image)</span>
-                        {panDoc && <span className="text-emerald-600">✓ Ready</span>}
+                        {panDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Ready</span>}
                       </div>
-                      <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
-                        <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
-                        <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
-                          {panDoc ? panDoc.name : 'Click to attach PAN card file'}
-                        </span>
-                        <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setPanDoc)} className="hidden" />
-                      </label>
+
+                      {panDoc ? (
+                        <div className="bg-white border border-stone-200 rounded-xl p-3 shadow-sm flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText size={16} className="text-[#10367D] shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-xs font-bold text-stone-800 truncate max-w-[150px]">{panDoc.name}</p>
+                              <span className="text-[10px] text-stone-400 font-mono">{panDoc.sizeFormatted}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewDoc({ doc: panDoc, title: 'PAN Card Preview' })}
+                              className="px-2 py-1 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all border-none"
+                            >
+                              <Eye size={12} />
+                              <span>Preview</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setPanDoc(null)}
+                              className="p-1 text-stone-400 hover:text-red-600 rounded cursor-pointer border-none bg-transparent"
+                              title="Remove"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
+                          <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
+                          <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
+                            Click to attach PAN card file
+                          </span>
+                          <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setPanDoc)} className="hidden" />
+                        </label>
+                      )}
                     </div>
 
                     {/* Bank Proof Upload */}
                     <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-2">
                       <div className="flex justify-between items-center text-xs font-bold text-stone-700">
                         <span>Bank Statement / Cheque</span>
-                        {bankDoc && <span className="text-emerald-600">✓ Ready</span>}
+                        {bankDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Ready</span>}
                       </div>
-                      <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
-                        <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
-                        <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
-                          {bankDoc ? bankDoc.name : 'Click to attach Bank statement'}
-                        </span>
-                        <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setBankDoc)} className="hidden" />
-                      </label>
+
+                      {bankDoc ? (
+                        <div className="bg-white border border-stone-200 rounded-xl p-3 shadow-sm flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText size={16} className="text-[#10367D] shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-xs font-bold text-stone-800 truncate max-w-[150px]">{bankDoc.name}</p>
+                              <span className="text-[10px] text-stone-400 font-mono">{bankDoc.sizeFormatted}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewDoc({ doc: bankDoc, title: 'Bank Statement / Cheque Preview' })}
+                              className="px-2 py-1 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all border-none"
+                            >
+                              <Eye size={12} />
+                              <span>Preview</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setBankDoc(null)}
+                              className="p-1 text-stone-400 hover:text-red-600 rounded cursor-pointer border-none bg-transparent"
+                              title="Remove"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
+                          <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
+                          <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
+                            Click to attach Bank statement
+                          </span>
+                          <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setBankDoc)} className="hidden" />
+                        </label>
+                      )}
                     </div>
 
                     {/* Income Proof Upload */}
                     <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-2">
                       <div className="flex justify-between items-center text-xs font-bold text-stone-700">
                         <span>Salary Slip / ITR (Optional)</span>
-                        {incomeDoc && <span className="text-emerald-600">✓ Ready</span>}
+                        {incomeDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Ready</span>}
                       </div>
-                      <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
-                        <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
-                        <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
-                          {incomeDoc ? incomeDoc.name : 'Click to attach Income proof'}
-                        </span>
-                        <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setIncomeDoc)} className="hidden" />
-                      </label>
+
+                      {incomeDoc ? (
+                        <div className="bg-white border border-stone-200 rounded-xl p-3 shadow-sm flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText size={16} className="text-[#10367D] shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-xs font-bold text-stone-800 truncate max-w-[150px]">{incomeDoc.name}</p>
+                              <span className="text-[10px] text-stone-400 font-mono">{incomeDoc.sizeFormatted}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewDoc({ doc: incomeDoc, title: 'Income Proof / Salary Slip Preview' })}
+                              className="px-2 py-1 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all border-none"
+                            >
+                              <Eye size={12} />
+                              <span>Preview</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIncomeDoc(null)}
+                              className="p-1 text-stone-400 hover:text-red-600 rounded cursor-pointer border-none bg-transparent"
+                              title="Remove"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="border-2 border-dashed border-stone-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
+                          <UploadCloud size={20} className="text-stone-400 group-hover:text-[#10367D] mb-1" />
+                          <span className="text-xs text-stone-700 font-medium truncate max-w-[200px]">
+                            Click to attach Income proof
+                          </span>
+                          <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileUpload(e, setIncomeDoc)} className="hidden" />
+                        </label>
+                      )}
                     </div>
                   </div>
 
@@ -1364,6 +1525,13 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
         )}
 
       </div>
+
+      {/* Global Document & Screenshot Preview Modal */}
+      <DocumentPreviewModal
+        document={previewDoc?.doc || null}
+        title={previewDoc?.title}
+        onClose={() => setPreviewDoc(null)}
+      />
     </div>
   );
 };

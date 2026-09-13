@@ -99,6 +99,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
                 Education
               </button>
               <button 
+                onClick={() => onNavigate('/discovery')} 
+                className="hover:text-[#f0a951] transition-colors text-left bg-transparent border-none p-0 cursor-pointer text-[#dbe4ee] font-medium"
+              >
+                Discovery
+              </button>
+              <button 
                 onClick={() => onNavigate('/companies')} 
                 className="hover:text-[#f0a951] transition-colors text-left bg-transparent border-none p-0 cursor-pointer text-[#dbe4ee] font-medium"
               >

@@ -24,8 +24,18 @@ import {
   Mail,
   Clock,
   Navigation,
-  MessageSquare
+  MessageSquare,
+  Eye,
+  EyeOff,
+  Trash2,
+  RefreshCw,
+  Maximize2,
+  Users,
+  Award,
+  BadgeCheck,
+  Calendar
 } from 'lucide-react';
+import { DocumentPreviewModal, PreviewableDocument } from './DocumentPreviewModal';
 
 interface PartnershipCTAProps {
   isModalOpen: boolean;
@@ -159,19 +169,27 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
     fullName: '',
     email: '',
     phone: '',
-    businessName: '',
-    category: 'solar',
+    permanentAddress: '',
+    dob: '',
+    age: '',
+    nomineeName: '',
+    nomineeRelation: 'Spouse',
+    nomineeAge: '',
+    existingMemberName: '',
+    existingMemberNumber: '',
     aadhaarNumber: '',
     panNumber: '',
 
     // Step 3: Banking Details
     accountHolderName: '',
     bankName: '',
+    branchName: '',
     accountNumber: '',
     confirmAccountNumber: '',
     ifscCode: '',
 
     // Step 4: Payment
+    refundName: '',
     transactionId: '',
   });
 
@@ -180,12 +198,17 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
   const [panDoc, setPanDoc] = useState<UploadedDocument | null>(null);
   const [chequeDoc, setChequeDoc] = useState<UploadedDocument | null>(null);
   const [screenshotDoc, setScreenshotDoc] = useState<UploadedDocument | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<{ doc: PreviewableDocument; title: string } | null>(null);
+  const [isQrEnlarged, setIsQrEnlarged] = useState<boolean>(false);
+  const [membershipCode] = useState<string>('BBSP-MEM-' + Math.floor(100000 + Math.random() * 900000));
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submissionId, setSubmissionId] = useState('');
   const [copiedUpi, setCopiedUpi] = useState(false);
+  const [showAccountNumber, setShowAccountNumber] = useState(false);
+  const [showConfirmAccountNumber, setShowConfirmAccountNumber] = useState(false);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return bytes + ' B';
@@ -209,6 +232,37 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
     }
   };
 
+  const formatDobToIso = (dob: string): string => {
+    if (!dob) return '';
+    const parts = dob.split('/');
+    if (parts.length === 3 && parts[2]?.length === 4) {
+      return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+    }
+    return '';
+  };
+
+  const handleCalendarDateChange = (isoDate: string) => {
+    if (!isoDate) return;
+    const [y, m, d] = isoDate.split('-');
+    const formattedDob = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+    const birthYear = parseInt(y, 10);
+    const birthMonth = parseInt(m, 10) - 1;
+    const birthDay = parseInt(d, 10);
+
+    const today = new Date();
+    let calcAge = today.getFullYear() - birthYear;
+    const monthDiff = today.getMonth() - birthMonth;
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+      calcAge--;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      dob: formattedDob,
+      age: calcAge > 0 && calcAge < 120 ? String(calcAge) : ''
+    }));
+  };
+
   // Step 1 Validation
   const handleNextStep1 = () => {
     if (policyAccepted && termsAccepted) {
@@ -230,6 +284,30 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
       errors.phone = 'Phone number is required';
     } else if (!/^\+?[0-9\s-]{10,15}$/.test(formData.phone.replace(/\s/g, ''))) {
       errors.phone = 'Please enter a valid 10-digit phone number';
+    }
+
+    if (!formData.permanentAddress.trim()) {
+      errors.permanentAddress = 'Permanent Address is required';
+    }
+
+    if (!formData.dob.trim()) {
+      errors.dob = 'Date of Birth (DD/MM/YYYY) is required';
+    }
+
+    if (!formData.age.trim()) {
+      errors.age = 'Age is required';
+    }
+
+    if (!formData.nomineeName.trim()) {
+      errors.nomineeName = 'Nominee Full Name is required';
+    }
+
+    if (!formData.nomineeRelation.trim()) {
+      errors.nomineeRelation = 'Nominee Relation is required';
+    }
+
+    if (!formData.nomineeAge.trim()) {
+      errors.nomineeAge = 'Nominee Age is required';
     }
 
     // Aadhaar Number Validation (12 digits)
@@ -262,6 +340,9 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
   const handleNextStep2 = () => {
     if (validateStep2()) {
+      if (!formData.refundName) {
+        setFormData((prev) => ({ ...prev, refundName: prev.fullName }));
+      }
       setStep(3);
     }
   };
@@ -275,6 +356,9 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
     }
     if (!formData.bankName.trim()) {
       errors.bankName = 'Bank name is required';
+    }
+    if (!formData.branchName.trim()) {
+      errors.branchName = 'Branch name is required';
     }
     if (!formData.accountNumber.trim()) {
       errors.accountNumber = 'Account number is required';
@@ -298,6 +382,9 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
   const handleNextStep3 = () => {
     if (validateStep3()) {
+      if (!formData.refundName) {
+        setFormData((prev) => ({ ...prev, refundName: prev.fullName }));
+      }
       setStep(4);
     }
   };
@@ -305,6 +392,9 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
   // Step 4 Validation (Payment Verification)
   const validateStep4 = () => {
     const errors: Record<string, string> = {};
+    if (!formData.refundName.trim()) {
+      errors.refundName = 'Refund Account / Beneficiary Name is required';
+    }
     if (!screenshotDoc) {
       errors.screenshot = 'Please upload a screenshot of your payment';
     }
@@ -367,28 +457,35 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
       }
 
       const payload = {
-        formType: 'map-enquiry',
-        mapServiceInterest: mapEnquiry.category,
-        mapEnquiryMessage: mapEnquiry.message,
+        formType: 'partner-registration',
+        membershipCode: membershipCode,
         fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
-        businessName: formData.businessName,
-        category: formData.category,
+        permanentAddress: formData.permanentAddress,
+        dob: formData.dob,
+        age: formData.age,
+        nomineeName: formData.nomineeName,
+        nomineeRelation: formData.nomineeRelation,
+        nomineeAge: formData.nomineeAge,
+        existingMemberName: formData.existingMemberName,
+        existingMemberNumber: formData.existingMemberNumber,
         aadhaarNumber: formData.aadhaarNumber,
         panNumber: formData.panNumber.toUpperCase(),
         accountHolderName: formData.accountHolderName,
         bankName: formData.bankName,
+        branchName: formData.branchName,
         accountNumber: formData.accountNumber,
         ifscCode: formData.ifscCode.toUpperCase(),
+        refundName: formData.refundName || formData.fullName,
         transactionId: formData.transactionId,
+        amountPaid: '₹5,000 (100% Refundable Deposit)',
+        membershipType: 'Lifetime & Generations',
         attachments: attachmentsPayload,
       };
 
       const firestorePayload = {
         ...payload,
-        formType: 'partner-registration',
-        amountPaid: '₹5,000',
         status: 'Pending',
         timestamp: new Date().toLocaleDateString('en-GB')
       };
@@ -404,8 +501,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
       const data = await response.json();
 
       if (response.ok && data.success) {
-        const generatedId = 'BBSP-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-        setSubmissionId(generatedId);
+        setSubmissionId(membershipCode);
         setSubmitSuccess(true);
       } else {
         console.error('Submission failed', data);
@@ -427,15 +523,23 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
       fullName: '',
       email: '',
       phone: '',
-      businessName: '',
-      category: 'solar',
+      permanentAddress: '',
+      dob: '',
+      age: '',
+      nomineeName: '',
+      nomineeRelation: 'Spouse',
+      nomineeAge: '',
+      existingMemberName: '',
+      existingMemberNumber: '',
       aadhaarNumber: '',
       panNumber: '',
       accountHolderName: '',
       bankName: '',
+      branchName: '',
       accountNumber: '',
       confirmAccountNumber: '',
       ifscCode: '',
+      refundName: '',
       transactionId: '',
     });
     setAadhaarDoc(null);
@@ -443,6 +547,9 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
     setChequeDoc(null);
     setScreenshotDoc(null);
     setFormErrors({});
+    setIsQrEnlarged(false);
+    setShowAccountNumber(false);
+    setShowConfirmAccountNumber(false);
     setSubmitLoading(false);
     setSubmitSuccess(false);
     setSubmissionId('');
@@ -560,9 +667,6 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                   Join South India's Premier B2B Multi-Brand Ecosystem.
                 </p>
 
-                <p className="hidden md:block text-stone-650 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl mx-auto font-normal">
-                  Whether you operate in Solar Power, Financial Capital & Loans, Real Estate Development, or EdTech Training—Build Bharat provides a unified verified partnership framework and guaranteed referral payouts.
-                </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
                   <button
@@ -934,8 +1038,12 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                     <span className="font-bold text-stone-900">{formData.email}</span>
                   </div>
                   <div className="flex justify-between border-b border-stone-200/60 pb-2.5">
-                    <span className="text-stone-500 font-bold uppercase tracking-wider">Ecosystem Vertical</span>
-                    <span className="font-bold text-[#10367D] uppercase">{formData.category}</span>
+                    <span className="text-stone-500 font-bold uppercase tracking-wider">Membership Tier</span>
+                    <span className="font-bold text-[#10367D] uppercase">Lifetime & Generations</span>
+                  </div>
+                  <div className="flex justify-between border-b border-stone-200/60 pb-2.5">
+                    <span className="text-stone-500 font-bold uppercase tracking-wider">Registered Nominee</span>
+                    <span className="font-bold text-stone-900">{formData.nomineeName} ({formData.nomineeRelation})</span>
                   </div>
                   <div className="flex justify-between border-b border-stone-200/60 pb-2.5">
                     <span className="text-stone-500 font-bold uppercase tracking-wider">Bank Settlement A/C</span>
@@ -988,7 +1096,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                 {/* Main Scrollable Content Body */}
                 <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 pb-6 space-y-6">
                   
-                  {/* STEP 1: Terms, Rules, and Policies */}
+                      {/* STEP 1: Terms, Rules, and Policies */}
                   {step === 1 && (
                     <div className="space-y-6">
                       <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 sm:p-6 text-stone-700 text-xs sm:text-sm space-y-4">
@@ -1000,13 +1108,14 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                         </div>
 
                         <div className="max-h-64 overflow-y-auto pr-3 space-y-3 text-xs leading-relaxed text-stone-600">
-                          <ul className="list-disc pl-5 space-y-2">
-                            <li><strong className="text-stone-900">Ecosystem Multi-Category Access:</strong> Partners are empanelled across Solar, Real Estate, Loans, and EdTech pipelines.</li>
-                            <li><strong className="text-stone-900">Member ID & Referral System:</strong> Receive a unique verified Member ID and Referral Code to monitor all qualified transactions in real-time.</li>
-                            <li><strong className="text-stone-900">Payout Settlements:</strong> Referral earnings and commission payouts are directly credited into your verified Bank Account on transparent terms.</li>
-                            <li><strong className="text-stone-900">5-Year Membership Period:</strong> Your partner registration remains active for five (5) continuous years from the approval date.</li>
-                            <li><strong className="text-stone-900">₹5,000 Refundable Membership Deposit:</strong> A one-time activation fee of ₹5,000 is required. If a partner is unable to execute a single referral throughout the 5-year tenure, the entire deposit is eligible for refund as per company terms.</li>
-                            <li><strong className="text-stone-900">Mandatory KYC Verification:</strong> Government-issued Aadhaar Card, PAN Card, and Bank Account records are verified prior to issuing active badges.</li>
+                          <ul className="list-disc pl-5 space-y-2.5">
+                            <li><strong className="text-stone-900">Ecosystem Multi-Category Access:</strong> Partners are empanelled across Solar, Real Estate, Loans, and EdTech corporate pipelines.</li>
+                            <li><strong className="text-stone-900">Member ID & Referral System:</strong> Receive a verified unique Member ID and Non-Refundable Membership Code to monitor transactions.</li>
+                            <li><strong className="text-stone-900">Direct Payout Settlements:</strong> Commission and referral payouts are directly credited to your verified bank account with zero platform deduction.</li>
+                            <li><strong className="text-stone-900">Lifetime & Generations Membership:</strong> Your synergy partner status is valid for <strong>Lifetime and across Generations</strong> with full succession rights for your registered nominee.</li>
+                            <li><strong className="text-stone-900">₹5,000 — 100% Refundable Membership Deposit:</strong> The ₹5,000 deposit is <strong>100% refundable</strong> as per policy upon claim if no referrals are executed.</li>
+                            <li><strong className="text-stone-900">Instant WhatsApp Notification:</strong> Upon successful submission, a confirmation WhatsApp message and membership registration receipt are dispatched to your mobile number.</li>
+                            <li><strong className="text-stone-900">Mandatory KYC & Nominee Record:</strong> Statutory Aadhaar, PAN Card, Bank Details, and Nominee declaration are recorded for compliance.</li>
                           </ul>
                         </div>
                       </div>
@@ -1021,7 +1130,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             className="mt-1 rounded border-stone-300 text-[#10367D] focus:ring-[#10367D] h-4 w-4 shrink-0"
                           />
                           <span className="text-xs text-stone-700 leading-relaxed group-hover:text-stone-900 transition-colors">
-                            I agree to the <strong>Privacy Policy</strong> and authorize Build Bharat Synergy Partners to securely process my KYC identity and banking details for payout facilitation.
+                            I agree to the <strong>Privacy Policy</strong> and authorize Build Bharat Synergy Partners to process my KYC identity, nominee records, and bank details for payout facilitation.
                           </span>
                         </label>
 
@@ -1033,7 +1142,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             className="mt-1 rounded border-stone-300 text-[#10367D] focus:ring-[#10367D] h-4 w-4 shrink-0"
                           />
                           <span className="text-xs text-stone-700 leading-relaxed group-hover:text-stone-900 transition-colors">
-                            I accept the <strong>5-Year Partnership Terms & Refundable Fee Policy</strong> and certify that all submitted documents (Aadhaar, PAN, Bank) are genuine and accurate.
+                            I accept the <strong>Lifetime & Generations Partnership Terms</strong> and <strong>₹5,000 — 100% Refundable Membership Deposit Policy</strong>, certifying all submitted documents are accurate.
                           </span>
                         </label>
                       </div>
@@ -1045,13 +1154,14 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                     <div className="space-y-6">
                       <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
                         <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#10367D] block mb-1">
-                          SECTION 2.1 — BASIC CREDENTIALS
+                          SECTION 2.1 — APPLICANT PROFILE & PERMANENT ADDRESS
                         </span>
                         <p className="text-stone-600 text-xs leading-relaxed">
-                          Enter your contact information and primary business domain.
+                          Enter your personal identity, residential address, and date of birth details.
                         </p>
                       </div>
 
+                      {/* Row 1: Full Name, Email, Phone */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
@@ -1096,35 +1206,190 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                         </div>
                       </div>
 
+                      {/* Row 2: Permanent Address (Required) */}
+                      <div>
+                        <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                          Permanent Residential Address *
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={formData.permanentAddress}
+                          onChange={(e) => setFormData({ ...formData, permanentAddress: e.target.value })}
+                          placeholder="House / Flat No, Street, Landmark, City, District, State, PIN Code"
+                          className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm resize-none"
+                        />
+                        {formErrors.permanentAddress && (
+                          <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.permanentAddress}</span>
+                        )}
+                      </div>
+
+                      {/* Row 3: Date of Birth & Age (Calendar & Direct Input) */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            Business / Agency / Entity Name
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                            <span>Date of Birth (DD/MM/YYYY) *</span>
+                            <span className="text-[10px] text-[#10367D] font-bold">Pick via Calendar or Type</span>
                           </label>
-                          <input
-                            type="text"
-                            value={formData.businessName}
-                            onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                            placeholder="e.g. Reddy Infra & Solar Sol."
-                            className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm"
-                          />
+                          <div className="relative flex items-center">
+                            <input
+                              type="text"
+                              value={formData.dob}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setFormData({ ...formData, dob: val });
+                                const parts = val.split('/');
+                                if (parts.length === 3 && parts[2]?.length === 4) {
+                                  const birthYear = parseInt(parts[2], 10);
+                                  const birthMonth = parseInt(parts[1], 10) - 1;
+                                  const birthDay = parseInt(parts[0], 10);
+                                  const today = new Date();
+                                  let calcAge = today.getFullYear() - birthYear;
+                                  const monthDiff = today.getMonth() - birthMonth;
+                                  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+                                    calcAge--;
+                                  }
+                                  if (!isNaN(calcAge) && calcAge > 0 && calcAge < 120) {
+                                    setFormData((prev) => ({ ...prev, dob: val, age: String(calcAge) }));
+                                  }
+                                }
+                              }}
+                              placeholder="DD/MM/YYYY (e.g. 15/08/1988)"
+                              className="w-full bg-white border border-stone-250 rounded-xl pl-4 pr-11 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm font-mono tracking-wider"
+                            />
+                            {/* Calendar Trigger */}
+                            <div className="absolute right-2 flex items-center">
+                              <label
+                                className="p-2 text-[#10367D] hover:bg-slate-100 rounded-lg cursor-pointer transition-colors flex items-center justify-center relative"
+                                title="Open Calendar Picker"
+                              >
+                                <Calendar size={18} />
+                                <input
+                                  type="date"
+                                  max={new Date().toISOString().split('T')[0]}
+                                  min="1920-01-01"
+                                  value={formatDobToIso(formData.dob)}
+                                  onChange={(e) => handleCalendarDateChange(e.target.value)}
+                                  className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                                />
+                              </label>
+                            </div>
+                          </div>
+                          {formErrors.dob && <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.dob}</span>}
                         </div>
 
                         <div>
                           <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            Primary Operating Category *
+                            Age (Auto Calculated) *
                           </label>
-                          <select
-                            value={formData.category}
-                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                            className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm cursor-pointer"
-                          >
-                            {categories.map((cat) => (
-                              <option key={cat.id} value={cat.id}>
-                                {cat.name}
-                              </option>
-                            ))}
-                          </select>
+                          <input
+                            type="number"
+                            value={formData.age}
+                            onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                            placeholder="e.g. 36"
+                            className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm font-mono"
+                          />
+                          {formErrors.age && <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.age}</span>}
+                        </div>
+                      </div>
+
+                      {/* SECTION 2.2 — NOMINATION DETAILS (LIFETIME & GENERATIONS) */}
+                      <div className="pt-4 border-t border-slate-200 space-y-4">
+                        <div className="flex items-center gap-2 text-[#10367D] text-xs font-bold uppercase tracking-wider">
+                          <Users size={16} />
+                          <span>SECTION 2.2 — NOMINATION DETAILS (LIFETIME SUCCESSION)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                              Nominee Full Name *
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.nomineeName}
+                              onChange={(e) => setFormData({ ...formData, nomineeName: e.target.value })}
+                              placeholder="e.g. Sravanthi Reddy"
+                              className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm"
+                            />
+                            {formErrors.nomineeName && (
+                              <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.nomineeName}</span>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                              Nominee Relationship *
+                            </label>
+                            <select
+                              value={formData.nomineeRelation}
+                              onChange={(e) => setFormData({ ...formData, nomineeRelation: e.target.value })}
+                              className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm cursor-pointer"
+                            >
+                              <option value="Spouse">Spouse</option>
+                              <option value="Son">Son</option>
+                              <option value="Daughter">Daughter</option>
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Brother">Brother</option>
+                              <option value="Sister">Sister</option>
+                              <option value="Other">Other</option>
+                            </select>
+                            {formErrors.nomineeRelation && (
+                              <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.nomineeRelation}</span>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                              Nominee Age (Years) *
+                            </label>
+                            <input
+                              type="number"
+                              value={formData.nomineeAge}
+                              onChange={(e) => setFormData({ ...formData, nomineeAge: e.target.value })}
+                              placeholder="e.g. 32"
+                              className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm font-mono"
+                            />
+                            {formErrors.nomineeAge && (
+                              <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.nomineeAge}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SECTION 2.3 — REFERRAL / EXISTING MEMBER REFERENCE */}
+                      <div className="pt-4 border-t border-slate-200 space-y-4">
+                        <div className="flex items-center gap-2 text-stone-600 text-xs font-bold uppercase tracking-wider">
+                          <BadgeCheck size={16} className="text-[#10367D]" />
+                          <span>SECTION 2.3 — EXISTING MEMBER REFERENCE (OPTIONAL)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                              Existing Member Name
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.existingMemberName}
+                              onChange={(e) => setFormData({ ...formData, existingMemberName: e.target.value })}
+                              placeholder="Name of member who referred you"
+                              className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none shadow-sm"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                              Existing Membership Number
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.existingMemberNumber}
+                              onChange={(e) => setFormData({ ...formData, existingMemberNumber: e.target.value.toUpperCase() })}
+                              placeholder="e.g. BBSP-MEM-123456"
+                              className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none shadow-sm font-mono uppercase"
+                            />
+                          </div>
                         </div>
                       </div>
 
@@ -1161,25 +1426,75 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             <div className="pt-2">
                               <label className="block text-[11px] font-bold text-stone-600 uppercase tracking-wider mb-1.5 flex items-center justify-between">
                                 <span>Upload Aadhaar Card (PDF / Image) *</span>
-                                {aadhaarDoc && <span className="text-emerald-600 font-bold">✓ Attached</span>}
+                                {aadhaarDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Attached</span>}
                               </label>
-                              <label className="border-2 border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
-                                <UploadCloud size={20} className="text-slate-400 group-hover:text-[#10367D] mb-1" />
-                                <span className="text-xs text-stone-700 font-medium">
-                                  {aadhaarDoc ? aadhaarDoc.name : 'Click to select Aadhaar document'}
-                                </span>
-                                {aadhaarDoc && (
-                                  <span className="text-[10px] text-stone-400 font-mono mt-0.5">
-                                    Size: {aadhaarDoc.sizeFormatted}
+
+                              {aadhaarDoc ? (
+                                <div className="bg-white border border-stone-200 rounded-xl p-3.5 shadow-sm space-y-2.5">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <div className="w-8 h-8 rounded-lg bg-[#10367D]/10 text-[#10367D] flex items-center justify-center shrink-0">
+                                        <FileText size={16} />
+                                      </div>
+                                      <div className="min-w-0">
+                                        <p className="text-xs font-bold text-stone-800 truncate max-w-[180px]">
+                                          {aadhaarDoc.name}
+                                        </p>
+                                        <span className="text-[10px] text-stone-400 font-mono">
+                                          {aadhaarDoc.sizeFormatted}
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <button
+                                        type="button"
+                                        onClick={() => setPreviewDoc({ doc: aadhaarDoc, title: 'Aadhaar Card Preview' })}
+                                        className="px-2.5 py-1.5 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded-lg text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all shadow-sm border-none"
+                                      >
+                                        <Eye size={13} />
+                                        <span>Preview</span>
+                                      </button>
+
+                                      <label className="px-2 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-all border border-stone-200">
+                                        <RefreshCw size={11} />
+                                        <input
+                                          type="file"
+                                          accept="image/*,application/pdf"
+                                          onChange={(e) => handleFileUpload(e, setAadhaarDoc)}
+                                          className="hidden"
+                                        />
+                                      </label>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => setAadhaarDoc(null)}
+                                        className="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer border-none bg-transparent"
+                                        title="Remove"
+                                      >
+                                        <Trash2 size={14} />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <label className="border-2 border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-xl p-3.5 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
+                                  <UploadCloud size={20} className="text-slate-400 group-hover:text-[#10367D] mb-1" />
+                                  <span className="text-xs text-stone-700 font-medium">
+                                    Click to select Aadhaar document
                                   </span>
-                                )}
-                                <input
-                                  type="file"
-                                  accept="image/*,application/pdf"
-                                  onChange={(e) => handleFileUpload(e, setAadhaarDoc)}
-                                  className="hidden"
-                                />
-                              </label>
+                                  <span className="text-[10px] text-stone-400 mt-0.5">
+                                    PDF, JPG, PNG (Max 15MB)
+                                  </span>
+                                  <input
+                                    type="file"
+                                    accept="image/*,application/pdf"
+                                    onChange={(e) => handleFileUpload(e, setAadhaarDoc)}
+                                    className="hidden"
+                                  />
+                                </label>
+                              )}
+                              
                               {formErrors.aadhaarDoc && (
                                 <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.aadhaarDoc}</span>
                               )}
@@ -1207,25 +1522,75 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             <div className="pt-2">
                               <label className="block text-[11px] font-bold text-stone-600 uppercase tracking-wider mb-1.5 flex items-center justify-between">
                                 <span>Upload PAN Card (PDF / Image) *</span>
-                                {panDoc && <span className="text-emerald-600 font-bold">✓ Attached</span>}
+                                {panDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Attached</span>}
                               </label>
-                              <label className="border-2 border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
-                                <UploadCloud size={20} className="text-slate-400 group-hover:text-[#10367D] mb-1" />
-                                <span className="text-xs text-stone-700 font-medium">
-                                  {panDoc ? panDoc.name : 'Click to select PAN document'}
-                                </span>
-                                {panDoc && (
-                                  <span className="text-[10px] text-stone-400 font-mono mt-0.5">
-                                    Size: {panDoc.sizeFormatted}
+
+                              {panDoc ? (
+                                <div className="bg-white border border-stone-200 rounded-xl p-3.5 shadow-sm space-y-2.5">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <div className="w-8 h-8 rounded-lg bg-[#10367D]/10 text-[#10367D] flex items-center justify-center shrink-0">
+                                        <FileText size={16} />
+                                      </div>
+                                      <div className="min-w-0">
+                                        <p className="text-xs font-bold text-stone-800 truncate max-w-[180px]">
+                                          {panDoc.name}
+                                        </p>
+                                        <span className="text-[10px] text-stone-400 font-mono">
+                                          {panDoc.sizeFormatted}
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <button
+                                        type="button"
+                                        onClick={() => setPreviewDoc({ doc: panDoc, title: 'PAN Card Preview' })}
+                                        className="px-2.5 py-1.5 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded-lg text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all shadow-sm border-none"
+                                      >
+                                        <Eye size={13} />
+                                        <span>Preview</span>
+                                      </button>
+
+                                      <label className="px-2 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-all border border-stone-200">
+                                        <RefreshCw size={11} />
+                                        <input
+                                          type="file"
+                                          accept="image/*,application/pdf"
+                                          onChange={(e) => handleFileUpload(e, setPanDoc)}
+                                          className="hidden"
+                                        />
+                                      </label>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => setPanDoc(null)}
+                                        className="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer border-none bg-transparent"
+                                        title="Remove"
+                                      >
+                                        <Trash2 size={14} />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <label className="border-2 border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-xl p-3.5 flex flex-col items-center justify-center cursor-pointer transition-colors text-center group">
+                                  <UploadCloud size={20} className="text-slate-400 group-hover:text-[#10367D] mb-1" />
+                                  <span className="text-xs text-stone-700 font-medium">
+                                    Click to select PAN document
                                   </span>
-                                )}
-                                <input
-                                  type="file"
-                                  accept="image/*,application/pdf"
-                                  onChange={(e) => handleFileUpload(e, setPanDoc)}
-                                  className="hidden"
-                                />
-                              </label>
+                                  <span className="text-[10px] text-stone-400 mt-0.5">
+                                    PDF, JPG, PNG (Max 15MB)
+                                  </span>
+                                  <input
+                                    type="file"
+                                    accept="image/*,application/pdf"
+                                    onChange={(e) => handleFileUpload(e, setPanDoc)}
+                                    className="hidden"
+                                  />
+                                </label>
+                              )}
+
                               {formErrors.panDoc && (
                                 <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.panDoc}</span>
                               )}
@@ -1249,7 +1614,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
                             Account Holder Name (As per Bank) *
@@ -1268,49 +1633,87 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
                         <div>
                           <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            Bank Name & Branch *
+                            Bank Name *
                           </label>
                           <input
                             type="text"
                             value={formData.bankName}
                             onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
-                            placeholder="e.g. State Bank of India, Hayath Nagar Branch"
+                            placeholder="e.g. State Bank of India"
                             className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none shadow-sm"
                           />
                           {formErrors.bankName && (
                             <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.bankName}</span>
                           )}
                         </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                            Branch Name *
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.branchName}
+                            onChange={(e) => setFormData({ ...formData, branchName: e.target.value })}
+                            placeholder="e.g. Hayath Nagar Branch"
+                            className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none shadow-sm"
+                          />
+                          {formErrors.branchName && (
+                            <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.branchName}</span>
+                          )}
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            Bank Account Number *
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                            <span>Bank Account Number *</span>
+                            <span className="text-[10px] text-stone-400 font-normal">9-18 digits</span>
                           </label>
-                          <input
-                            type="password"
-                            value={formData.accountNumber}
-                            onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value.replace(/\D/g, '') })}
-                            placeholder="Enter 9-18 digit account number"
-                            className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
-                          />
+                          <div className="relative flex items-center">
+                            <input
+                              type={showAccountNumber ? 'text' : 'password'}
+                              value={formData.accountNumber}
+                              onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value.replace(/\D/g, '') })}
+                              placeholder="Enter 9-18 digit account number"
+                              className="w-full bg-white border border-stone-250 rounded-xl pl-4 pr-11 py-2.5 text-stone-900 text-sm font-mono tracking-wider focus:border-[#10367D] outline-none shadow-sm"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowAccountNumber(!showAccountNumber)}
+                              className="absolute right-3 p-1 text-stone-400 hover:text-[#10367D] transition-colors cursor-pointer bg-transparent border-none"
+                              title={showAccountNumber ? 'Hide Account Number' : 'Show Account Number'}
+                            >
+                              {showAccountNumber ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
                           {formErrors.accountNumber && (
                             <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.accountNumber}</span>
                           )}
                         </div>
 
                         <div>
-                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            Confirm Account Number *
+                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                            <span>Confirm Account Number *</span>
+                            <span className="text-[10px] text-stone-400 font-normal">Must match</span>
                           </label>
-                          <input
-                            type="text"
-                            value={formData.confirmAccountNumber}
-                            onChange={(e) => setFormData({ ...formData, confirmAccountNumber: e.target.value.replace(/\D/g, '') })}
-                            placeholder="Re-enter account number"
-                            className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
-                          />
+                          <div className="relative flex items-center">
+                            <input
+                              type={showConfirmAccountNumber ? 'text' : 'password'}
+                              value={formData.confirmAccountNumber}
+                              onChange={(e) => setFormData({ ...formData, confirmAccountNumber: e.target.value.replace(/\D/g, '') })}
+                              placeholder="Re-enter account number"
+                              className="w-full bg-white border border-stone-250 rounded-xl pl-4 pr-11 py-2.5 text-stone-900 text-sm font-mono tracking-wider focus:border-[#10367D] outline-none shadow-sm"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmAccountNumber(!showConfirmAccountNumber)}
+                              className="absolute right-3 p-1 text-stone-400 hover:text-[#10367D] transition-colors cursor-pointer bg-transparent border-none"
+                              title={showConfirmAccountNumber ? 'Hide Confirm Account Number' : 'Show Confirm Account Number'}
+                            >
+                              {showConfirmAccountNumber ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
                           {formErrors.confirmAccountNumber && (
                             <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.confirmAccountNumber}</span>
                           )}
@@ -1319,9 +1722,14 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            IFSC Code *
-                          </label>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                              IFSC Code *
+                            </label>
+                            <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                              ✓ Verification: Zero Extra Charges
+                            </span>
+                          </div>
                           <input
                             type="text"
                             maxLength={11}
@@ -1337,21 +1745,71 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
                         <div>
                           <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                            <span>Cancelled Cheque / Passbook (Optional)</span>
+                            <span>Bank Statement / Cancelled Cheque (Optional)</span>
                             {chequeDoc && <span className="text-emerald-600 font-bold text-[10px]">✓ Attached</span>}
                           </label>
-                          <label className="border border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-xl px-4 py-2 flex items-center justify-between cursor-pointer transition-colors shadow-sm">
-                            <span className="text-xs text-stone-600 truncate max-w-[200px]">
-                              {chequeDoc ? chequeDoc.name : 'Upload bank document'}
-                            </span>
-                            <UploadCloud size={16} className="text-[#10367D] shrink-0" />
-                            <input
-                              type="file"
-                              accept="image/*,application/pdf"
-                              onChange={(e) => handleFileUpload(e, setChequeDoc)}
-                              className="hidden"
-                            />
-                          </label>
+
+                          {chequeDoc ? (
+                            <div className="bg-white border border-stone-200 rounded-xl p-3 flex items-center justify-between gap-2 shadow-sm">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <FileText size={15} className="text-[#10367D] shrink-0" />
+                                <span className="text-xs text-stone-700 truncate max-w-[140px] font-medium">
+                                  {chequeDoc.name}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                <button
+                                  type="button"
+                                  onClick={() => setPreviewDoc({ doc: chequeDoc, title: 'Bank Statement / Cancelled Cheque Preview' })}
+                                  className="px-2 py-1 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-all border-none"
+                                >
+                                  <Eye size={12} />
+                                  <span>Preview</span>
+                                </button>
+                                
+                                <button
+                                  type="button"
+                                  onClick={() => setChequeDoc(null)}
+                                  className="p-1 text-stone-400 hover:text-red-600 rounded cursor-pointer border-none bg-transparent"
+                                  title="Remove"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <label className="border border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-xl px-4 py-2 flex items-center justify-between cursor-pointer transition-colors shadow-sm">
+                              <span className="text-xs text-stone-600 truncate max-w-[200px]">
+                                Upload statement / cheque
+                              </span>
+                              <UploadCloud size={16} className="text-[#10367D] shrink-0" />
+                              <input
+                                type="file"
+                                accept="image/*,application/pdf"
+                                onChange={(e) => handleFileUpload(e, setChequeDoc)}
+                                className="hidden"
+                              />
+                            </label>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* NOMINATING FORM PREVIEW CARD */}
+                      <div className="p-4 bg-blue-50/70 rounded-2xl border border-blue-200/80 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#10367D] flex items-center gap-1.5">
+                            <FileText size={13} />
+                            <span>Nominating Form Declaration Preview</span>
+                          </span>
+                          <span className="text-[10px] font-bold text-blue-700 bg-white px-2 py-0.5 rounded-full border border-blue-200">
+                            Lifetime Transmission Rights
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-stone-700 bg-white p-3 rounded-xl border border-blue-100">
+                          <div><strong className="text-stone-900">Nominee Name:</strong> {formData.nomineeName || 'Pending entry'}</div>
+                          <div><strong className="text-stone-900">Relationship:</strong> {formData.nomineeRelation || 'Spouse'}</div>
+                          <div><strong className="text-stone-900">Nominee Age:</strong> {formData.nomineeAge ? `${formData.nomineeAge} Yrs` : '—'}</div>
                         </div>
                       </div>
                     </div>
@@ -1366,7 +1824,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                         <div className="md:col-span-5 bg-slate-50 border border-slate-200/90 rounded-2xl p-5 text-center space-y-4 shadow-sm">
                           <div>
                             <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#10367D] block mb-1">
-                              5-YEAR ACTIVATION FEE
+                              MEMBERSHIP FEE — LIFETIME & GENERATIONS
                             </span>
                             <div className="text-3xl font-black text-[#10367D] heading-font">
                               ₹5,000
@@ -1376,25 +1834,56 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             </span>
                           </div>
 
-                          <div className="p-2 bg-white rounded-2xl border border-slate-200 shadow-sm inline-block">
-                            <img
-                              src="/bbsp-qr.png"
-                              alt="Build Bharat UPI QR Code"
-                              className="w-48 h-48 sm:w-52 sm:h-52 object-contain mx-auto rounded-xl"
-                            />
+                          <div
+                            onClick={() => setIsQrEnlarged(true)}
+                            className="p-3 bg-white rounded-2xl border border-slate-200 shadow-sm inline-block relative group cursor-pointer overflow-hidden select-none"
+                          >
+                            {/* Blurred QR Container */}
+                            <div className="relative overflow-hidden rounded-xl bg-slate-100 flex items-center justify-center">
+                              <img
+                                src="/bbsp-qr.png"
+                                alt="Build Bharat Bank UPI QR Code"
+                                className="w-48 h-48 sm:w-52 sm:h-52 object-contain mx-auto rounded-xl filter blur-[8px] scale-105 transition-all duration-300 group-hover:scale-110 opacity-70"
+                              />
+                              {/* Dark Frosted Tint Overlay */}
+                              <div className="absolute inset-0 bg-[#10367D]/15 backdrop-blur-[2px]" />
+
+                              {/* Centered Click to View Button & Helper */}
+                              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-3">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsQrEnlarged(true);
+                                  }}
+                                  className="bg-[#10367D] hover:bg-[#10367D]/95 text-white font-bold text-xs uppercase tracking-wider py-2.5 px-5 rounded-full shadow-2xl border border-white/40 flex items-center gap-2 transition-transform transform group-hover:scale-105 active:scale-95 cursor-pointer"
+                                >
+                                  <Eye size={15} />
+                                  <span>Click to View</span>
+                                </button>
+                                <span className="text-[10px] text-white font-semibold drop-shadow-md bg-black/45 px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+                                  Tap to pop up & scan
+                                </span>
+                              </div>
+                            </div>
                           </div>
 
-                          <div className="space-y-2">
-                            <p className="text-[11px] text-stone-500 font-medium">
-                              Scan with PhonePe, Google Pay, Paytm, or BHIM UPI
-                            </p>
+                          <div className="space-y-2 text-left bg-white p-3.5 rounded-xl border border-slate-200 text-xs">
+                            <div className="flex justify-between items-center text-[11px] pb-1.5 border-b border-slate-100">
+                              <span className="text-stone-500 font-medium">Beneficiary:</span>
+                              <strong className="text-[#10367D] font-bold">Build Bharat Bank</strong>
+                            </div>
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="text-stone-500 font-medium">Primary UPI ID:</span>
+                              <span className="font-mono font-bold text-stone-900">buildbharat@bank</span>
+                            </div>
                             <button
                               type="button"
                               onClick={copyUpiId}
-                              className="w-full text-xs font-bold text-[#10367D] bg-white hover:bg-slate-100 border border-slate-200 py-2 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-sm"
+                              className="w-full text-xs font-bold text-[#10367D] bg-stone-50 hover:bg-stone-100 border border-slate-200 py-2 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-sm mt-2"
                             >
                               <Copy size={13} />
-                              <span>{copiedUpi ? 'UPI ID Copied!' : 'Copy UPI ID: sudheer@buildbharatsp'}</span>
+                              <span>{copiedUpi ? 'UPI ID Copied!' : 'Copy UPI: sudheer@buildbharatsp'}</span>
                             </button>
                           </div>
                         </div>
@@ -1404,61 +1893,146 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                           
                           {/* Payment Screenshot Box */}
                           <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-5 space-y-4">
-                            <h4 className="text-xs font-bold text-[#10367D] uppercase tracking-wider flex items-center gap-1.5">
-                              <ImageIcon size={15} />
-                              <span>Step 4.1: Upload Payment Screenshot *</span>
-                            </h4>
-
-                            <label className="border-2 border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-2xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all text-center group shadow-sm">
-                              <UploadCloud size={28} className="text-[#10367D] mb-2 group-hover:scale-110 transition-transform" />
-                              <span className="text-xs font-bold text-stone-800">
-                                {screenshotDoc ? screenshotDoc.name : 'Click or Drag to Upload Payment Receipt'}
-                              </span>
-                              <span className="text-[10px] text-stone-400 mt-1">
-                                Supports PNG, JPG, JPEG, WEBP (Max 15MB)
-                              </span>
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs font-bold text-[#10367D] uppercase tracking-wider flex items-center gap-1.5">
+                                <ImageIcon size={15} />
+                                <span>Step 4.1: Upload Payment Screenshot *</span>
+                              </h4>
                               {screenshotDoc && (
-                                <span className="mt-2 text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                                  <CheckCircle2 size={13} /> File Ready ({screenshotDoc.sizeFormatted})
+                                <span className="text-emerald-600 font-bold text-xs flex items-center gap-1">
+                                  <CheckCircle2 size={13} /> Attached
                                 </span>
                               )}
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setScreenshotDoc)}
-                                className="hidden"
-                              />
-                            </label>
+                            </div>
+
+                            {screenshotDoc ? (
+                              <div className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm space-y-3">
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div className="w-12 h-12 rounded-xl border border-stone-200 bg-stone-50 overflow-hidden shrink-0 flex items-center justify-center">
+                                      <img
+                                        src={screenshotDoc.previewUrl}
+                                        alt="Payment proof thumbnail"
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <p className="text-xs font-bold text-stone-900 truncate max-w-[200px]">
+                                        {screenshotDoc.name}
+                                      </p>
+                                      <span className="text-[10px] text-stone-400 font-mono">
+                                        {screenshotDoc.sizeFormatted} · Image Proof
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <button
+                                      type="button"
+                                      onClick={() => setPreviewDoc({ doc: screenshotDoc, title: 'Payment Receipt Screenshot Preview' })}
+                                      className="px-3 py-1.5 bg-[#10367D] hover:bg-[#10367D]/90 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer border-none"
+                                    >
+                                      <Eye size={14} />
+                                      <span>Preview Screenshot</span>
+                                    </button>
+
+                                    <label className="px-2.5 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold flex items-center gap-1 cursor-pointer transition-all border border-stone-200" title="Replace Screenshot">
+                                      <RefreshCw size={12} />
+                                      <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleFileUpload(e, setScreenshotDoc)}
+                                        className="hidden"
+                                      />
+                                    </label>
+
+                                    <button
+                                      type="button"
+                                      onClick={() => setScreenshotDoc(null)}
+                                      className="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer border-none bg-transparent"
+                                      title="Remove"
+                                    >
+                                      <Trash2 size={15} />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <label className="border-2 border-dashed border-slate-300 hover:border-[#10367D] bg-white rounded-2xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all text-center group shadow-sm">
+                                <UploadCloud size={28} className="text-[#10367D] mb-2 group-hover:scale-110 transition-transform" />
+                                <span className="text-xs font-bold text-stone-800">
+                                  Click or Drag to Upload Payment Receipt
+                                </span>
+                                <span className="text-[10px] text-stone-400 mt-1">
+                                  Supports PNG, JPG, JPEG, WEBP (Max 15MB)
+                                </span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => handleFileUpload(e, setScreenshotDoc)}
+                                  className="hidden"
+                                />
+                              </label>
+                            )}
+
                             {formErrors.screenshot && (
                               <span className="text-[10px] text-red-500 font-bold block">{formErrors.screenshot}</span>
                             )}
 
-                            <div>
-                              <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                                UTR / Transaction Reference ID (Optional)
-                              </label>
-                              <input
-                                type="text"
-                                value={formData.transactionId}
-                                onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
-                                placeholder="e.g. 423456789012"
-                                className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
-                              />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                              <div>
+                                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                                  Refund Account / Nominee Name *
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.refundName}
+                                  onChange={(e) => setFormData({ ...formData, refundName: e.target.value })}
+                                  placeholder="Full Name for 100% Refund Claim"
+                                  className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2 text-stone-900 text-xs focus:border-[#10367D] outline-none shadow-sm"
+                                />
+                                {formErrors.refundName && (
+                                  <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.refundName}</span>
+                                )}
+                              </div>
+
+                              <div>
+                                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
+                                  UTR / Reference ID (Optional)
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.transactionId}
+                                  onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
+                                  placeholder="e.g. 423456789012"
+                                  className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2 text-stone-900 text-xs font-mono focus:border-[#10367D] outline-none shadow-sm"
+                                />
+                              </div>
                             </div>
                           </div>
 
                           {/* Instant Application Preview Card */}
-                          <div className="bg-stone-50/80 border border-stone-200 rounded-2xl p-4 text-xs space-y-2">
-                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-stone-500 block">
-                              Application Verification Summary
-                            </span>
+                          <div className="bg-stone-50/80 border border-stone-200 rounded-2xl p-4 text-xs space-y-2.5">
+                            <div className="flex items-center justify-between border-b border-stone-200/60 pb-1.5">
+                              <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#10367D]">
+                                Application Verification Dossier
+                              </span>
+                              <span className="text-[10px] font-mono font-bold text-[#10367D] bg-white px-2 py-0.5 rounded border border-slate-200">
+                                Code: {membershipCode}
+                              </span>
+                            </div>
+                            
                             <div className="grid grid-cols-2 gap-2 text-stone-700">
-                              <div><strong className="text-stone-900">Partner:</strong> {formData.fullName}</div>
-                              <div><strong className="text-stone-900">Vertical:</strong> {formData.category.toUpperCase()}</div>
-                              <div><strong className="text-stone-900">Aadhaar:</strong> {formData.aadhaarNumber}</div>
-                              <div><strong className="text-stone-900">PAN:</strong> {formData.panNumber}</div>
-                              <div><strong className="text-stone-900">Bank:</strong> {formData.bankName}</div>
-                              <div><strong className="text-stone-900">IFSC:</strong> {formData.ifscCode}</div>
+                              <div><strong className="text-stone-900">Partner:</strong> {formData.fullName} ({formData.age} Yrs)</div>
+                              <div><strong className="text-stone-900">Membership:</strong> Lifetime & Generations</div>
+                              <div><strong className="text-stone-900">Nominee:</strong> {formData.nomineeName} ({formData.nomineeRelation})</div>
+                              <div><strong className="text-stone-900">Refund Name:</strong> {formData.refundName || formData.fullName}</div>
+                              <div><strong className="text-stone-900">Bank & Branch:</strong> {formData.bankName} - {formData.branchName}</div>
+                              <div><strong className="text-stone-900">Aadhaar / PAN:</strong> Verified Documents</div>
+                            </div>
+
+                            <div className="pt-2 border-t border-stone-200/60 text-[11px] text-emerald-700 font-medium flex items-center gap-1.5">
+                              <span>📱 Instant WhatsApp registration confirmation & deposit receipt will be sent to {formData.phone || 'your phone'}.</span>
                             </div>
                           </div>
 
@@ -1535,7 +2109,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                       ) : (
                         <>
                           <FileCheck size={16} />
-                          <span>Submit Legal KYC Application</span>
+                          <span>Submit Lifetime KYC Application</span>
                         </>
                       )}
                     </button>
@@ -1546,6 +2120,57 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
           </div>
         </div>
       )}
+
+      {/* ENLARGED HIGH-RES QR CODE MODAL */}
+      {isQrEnlarged && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn text-left">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full border border-stone-200 shadow-2xl text-center space-y-4 animate-scaleUp">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="text-left">
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest block">Direct Payment Gate</span>
+                <h4 className="text-base font-extrabold text-[#10367D] heading-font">Build Bharat Bank</h4>
+              </div>
+              <button
+                onClick={() => setIsQrEnlarged(false)}
+                className="p-1.5 rounded-full text-stone-400 hover:text-stone-800 hover:bg-stone-100 transition-colors border-none cursor-pointer bg-transparent"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200">
+              <img
+                src="/bbsp-qr.png"
+                alt="Build Bharat Bank Large QR"
+                className="w-64 h-64 sm:w-72 sm:h-72 object-contain mx-auto rounded-xl shadow-sm bg-white p-2"
+              />
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="font-mono text-stone-700 bg-stone-100 p-2 rounded-xl border border-stone-200">
+                UPI: <strong>buildbharat@bank</strong> / <strong>sudheer@buildbharatsp</strong>
+              </div>
+              <p className="text-[11px] text-stone-500">
+                Scan with any UPI App (GPay, PhonePe, Paytm, BHIM) to pay ₹5,000.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setIsQrEnlarged(false)}
+              className="w-full py-2.5 bg-[#10367D] hover:bg-[#10367D]/90 text-white font-bold text-xs uppercase tracking-wider rounded-full cursor-pointer shadow-md"
+            >
+              Close QR Preview
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Global Document & Screenshot Preview Modal */}
+      <DocumentPreviewModal
+        document={previewDoc?.doc || null}
+        title={previewDoc?.title}
+        onClose={() => setPreviewDoc(null)}
+      />
     </>
   );
 };
