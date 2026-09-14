@@ -1110,10 +1110,10 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                         <div className="max-h-64 overflow-y-auto pr-3 space-y-3 text-xs leading-relaxed text-stone-600">
                           <ul className="list-disc pl-5 space-y-2.5">
                             <li><strong className="text-stone-900">Ecosystem Multi-Category Access:</strong> Partners are empanelled across Solar, Real Estate, Loans, and EdTech corporate pipelines.</li>
-                            <li><strong className="text-stone-900">Member ID & Referral System:</strong> Receive a verified unique Member ID and Non-Refundable Membership Code to monitor transactions.</li>
+                            <li><strong className="text-stone-900">Member ID & Referral System:</strong> Receive a verified unique Member ID and Membership Code to monitor transactions.</li>
                             <li><strong className="text-stone-900">Direct Payout Settlements:</strong> Commission and referral payouts are directly credited to your verified bank account with zero platform deduction.</li>
                             <li><strong className="text-stone-900">Lifetime & Generations Membership:</strong> Your synergy partner status is valid for <strong>Lifetime and across Generations</strong> with full succession rights for your registered nominee.</li>
-                            <li><strong className="text-stone-900">₹5,000 — 100% Refundable Membership Deposit:</strong> The ₹5,000 deposit is <strong>100% refundable</strong> as per policy upon claim if no referrals are executed.</li>
+                            <li><strong className="text-stone-900">₹5,000/- Refund Policy:</strong> Note: If the member does not earn any income, even a single rupee, during the five-year membership period, the full membership amount will be refunded upon completion of five years from the date of membership issuance, subject to the applicable terms and conditions.</li>
                             <li><strong className="text-stone-900">Instant WhatsApp Notification:</strong> Upon successful submission, a confirmation WhatsApp message and membership registration receipt are dispatched to your mobile number.</li>
                             <li><strong className="text-stone-900">Mandatory KYC & Nominee Record:</strong> Statutory Aadhaar, PAN Card, Bank Details, and Nominee declaration are recorded for compliance.</li>
                           </ul>
@@ -1142,7 +1142,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             className="mt-1 rounded border-stone-300 text-[#10367D] focus:ring-[#10367D] h-4 w-4 shrink-0"
                           />
                           <span className="text-xs text-stone-700 leading-relaxed group-hover:text-stone-900 transition-colors">
-                            I accept the <strong>Lifetime & Generations Partnership Terms</strong> and <strong>₹5,000 — 100% Refundable Membership Deposit Policy</strong>, certifying all submitted documents are accurate.
+                            I accept the <strong>Lifetime & Generations Partnership Terms</strong> and <strong>₹5,000/- Refund Policy</strong>, certifying all submitted documents are accurate.
                           </span>
                         </label>
                       </div>

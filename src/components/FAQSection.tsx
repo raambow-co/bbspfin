@@ -34,7 +34,7 @@ export function FAQSection() {
     { question: '5. How do I earn commissions?', answer: 'You earn commissions whenever your referred customer successfully purchases a product or service through Build Bharat Synergy Partners.' },
     { question: '6. Is there any limit to how much I can earn?', answer: 'No. There is no limit on the number of referrals you can make or the commissions you can earn.' },
     { question: '7. What is the membership fee?', answer: 'A one-time membership fee of ₹5,000 is required to activate your partner account.' },
-    { question: '8. Is the membership fee refundable?', answer: 'Yes. If you are unable to complete even a single successful transaction within five (5) years of your membership, your ₹5,000 membership fee will be eligible for refund as per our Terms & Conditions.' },
+    { question: '8. Is the membership fee refundable?', answer: 'Yes. If the member does not earn any income, even a single rupee, during the five-year membership period, the full membership amount will be refunded upon completion of five years from the date of membership issuance, subject to the applicable terms and conditions.' },
     { question: '9. How can I track my referrals and commissions?', answer: 'Your Partner Dashboard provides real-time access to your referrals, commission status, and other partner-related activities.' },
     { question: '10. How can I contact Build Bharat Synergy Partners?', answer: 'You can reach our support team through the Contact Us page, email, or WhatsApp for any assistance regarding your partnership.' },
   ];
