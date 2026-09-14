@@ -309,11 +309,18 @@ body {
   max-width: 1600px;
   margin: 0 auto;
   padding: 0 32px;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
   .container-custom {
-    padding: 0 20px;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-custom {
+    padding: 0 12px;
   }
 }
 
@@ -423,6 +430,23 @@ body {
 
 .animate-shadow-pulse {
   animation: shadowPulse 4s ease-in-out infinite;
+}
+
+/* Print optimizations for official PDF documents */
+@media print {
+  header, footer, nav, .floating-contact, button:not(.print-document button) {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .print-document {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 

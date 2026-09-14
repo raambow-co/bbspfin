@@ -29,7 +29,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate, onOpenPart
       </div>
  
       {/* Contact Panel Grid */}
-      <section className="py-20 px-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
         <div className="md:col-span-7 space-y-6">
           <div>
             <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#D57530] block mb-2">

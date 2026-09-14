@@ -113,6 +113,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
               <button 
                 onClick={() => {
                   onNavigate('/');
+                  setTimeout(() => document.getElementById('commission-structure')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                }} 
+                className="hover:text-[#f0a951] transition-colors text-left bg-transparent border-none p-0 cursor-pointer text-[#dbe4ee] font-medium"
+              >
+                Partner earnings
+              </button>
+              <button 
+                onClick={() => {
+                  onNavigate('/');
                   setTimeout(() => document.getElementById('regional')?.scrollIntoView({ behavior: 'smooth' }), 100);
                 }} 
                 className="hover:text-[#f0a951] transition-colors text-left bg-transparent border-none p-0 cursor-pointer text-[#dbe4ee] font-medium"

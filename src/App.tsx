@@ -24,6 +24,7 @@ import { TermsPage } from './pages/TermsPage';
 import { ContactPage } from './pages/ContactPage';
 import { DiscoveryPage } from './pages/DiscoveryPage';
 import { SynergyConceptSection } from './components/SynergyConceptSection';
+import { CommissionCadresSection } from './components/CommissionCadresSection';
  
 export function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -151,6 +152,11 @@ export function App() {
             {/* NEW SECTION 2 — HOW IT WORKS EXPLAINER */}
             <HowItWorks />
  
+            {/* OFFICIAL 20 CADRES COMMISSION & REVENUE SHARING SECTION */}
+            <CommissionCadresSection 
+              onOpenPartnerModal={() => setIsPartnerModalOpen(true)} 
+            />
+
             {/* NEW SECTION 4 — TESTIMONIALS */}
             <TestimonialSection />
  

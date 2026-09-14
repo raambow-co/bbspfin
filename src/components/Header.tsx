@@ -357,6 +357,12 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 Regional reach
               </button>
+              <button
+                onClick={() => scrollToSection('commission-structure')}
+                className="text-left py-2.5 hover:text-[#1e3a6b] border-b border-slate-100 bg-transparent font-sans"
+              >
+                Partner earnings
+              </button>
             </div>
             
             <div className="pt-2 flex flex-col gap-2">
@@ -441,6 +447,12 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Regional Reach
           </button>
+          <button
+            onClick={() => scrollToSection('commission-structure')}
+            className="hover:text-[#10367D] transition-colors bg-transparent border-none cursor-pointer p-0 text-slate-900 font-bold text-sm subheading-font"
+          >
+            Partner Earnings
+          </button>
         </nav>
  
         {/* Right: Primary Call-To-Action Button Group */}
@@ -506,6 +518,12 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-left py-2.5 hover:text-[#10367D] border-b border-slate-100 bg-transparent"
             >
               Regional Reach
+            </button>
+            <button
+              onClick={() => scrollToSection('commission-structure')}
+              className="text-left py-2.5 hover:text-[#10367D] border-b border-slate-100 bg-transparent"
+            >
+              Partner Earnings
             </button>
           </div>
  

@@ -1000,35 +1000,35 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
       {/* LARGE FULL-FEATURED PARTNER ONBOARDING MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/80 backdrop-blur-md animate-fadeIn text-left">
-          <div className="bg-[#FFFFFF] w-full max-w-4xl lg:max-w-5xl rounded-3xl border border-stone-200 p-6 sm:p-10 relative shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 md:p-8 bg-black/80 backdrop-blur-md animate-fadeIn text-left">
+          <div className="bg-[#FFFFFF] w-full max-w-4xl lg:max-w-5xl rounded-2xl sm:rounded-3xl border border-stone-200 p-4 sm:p-8 md:p-10 relative shadow-2xl overflow-hidden flex flex-col max-h-[96vh]">
             
             {/* Close Button */}
             <button
               onClick={handleReset}
-              className="absolute top-6 right-6 text-stone-500 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 p-2.5 border border-stone-200 transition-all cursor-pointer rounded-full z-20 shadow-sm"
+              className="absolute top-4 sm:top-6 right-4 sm:right-6 text-stone-500 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 p-2 sm:p-2.5 border border-stone-200 transition-all cursor-pointer rounded-full z-20 shadow-sm"
               aria-label="Close modal"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
             {submitSuccess ? (
               /* STEP 5: SUCCESS CONFIRMATION */
-              <div className="text-center py-8 flex flex-col items-center justify-center overflow-y-auto max-w-2xl mx-auto">
-                <div className="w-24 h-24 bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 border border-emerald-200 rounded-full shadow-inner animate-bounce">
-                  <CheckCircle2 size={52} />
+              <div className="text-center py-6 sm:py-8 flex flex-col items-center justify-center overflow-y-auto max-w-2xl mx-auto">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 sm:mb-6 border border-emerald-200 rounded-full shadow-inner animate-bounce">
+                  <CheckCircle2 size={44} />
                 </div>
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200 mb-2">
+                <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200 mb-2">
                   Application Successfully Logged
                 </span>
-                <h3 className="text-3xl sm:text-4xl font-extrabold text-[#10367D] heading-font mb-3 uppercase tracking-tight">
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#10367D] heading-font mb-3 uppercase tracking-tight">
                   Welcome to Build Bharat!
                 </h3>
-                <p className="text-stone-600 text-sm max-w-lg mx-auto mb-8 leading-relaxed">
+                <p className="text-stone-600 text-xs sm:text-sm max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed">
                   Thank you, <strong className="text-stone-900">{formData.fullName}</strong>. Your KYC credentials, bank settlement information, and payment proof have been securely transferred for verification.
                 </p>
 
-                <div className="bg-stone-50 border border-stone-200/80 rounded-2xl p-6 w-full text-left mb-8 text-xs space-y-3 shadow-sm">
+                <div className="bg-stone-50 border border-stone-200/80 rounded-2xl p-4 sm:p-6 w-full text-left mb-6 sm:mb-8 text-xs space-y-3 shadow-sm">
                   <div className="flex justify-between border-b border-stone-200/60 pb-2.5">
                     <span className="text-stone-500 font-bold uppercase tracking-wider">Application Tracking ID</span>
                     <span className="font-mono font-extrabold text-[#10367D] text-sm">{submissionId}</span>
@@ -1051,13 +1051,13 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-stone-500 font-bold uppercase tracking-wider">Activation Status</span>
-                    <span className="text-emerald-700 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full">Pending Desk Verification (24 Hrs)</span>
+                    <span className="text-emerald-700 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs">Pending Desk Verification (24 Hrs)</span>
                   </div>
                 </div>
 
                 <button
                   onClick={handleReset}
-                  className="bg-[#10367D] hover:bg-[#10367D]/90 text-white text-xs rounded-full px-10 py-4 uppercase font-bold tracking-wider cursor-pointer transition-all shadow-md"
+                  className="bg-[#10367D] hover:bg-[#10367D]/90 text-white text-xs rounded-full px-8 sm:px-10 py-3.5 sm:py-4 uppercase font-bold tracking-wider cursor-pointer transition-all shadow-md"
                 >
                   Finish & Close
                 </button>
@@ -1065,30 +1065,30 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
             ) : (
               <div className="flex flex-col h-full overflow-hidden">
                 {/* Modal Header */}
-                <div className="mb-6 pr-12">
-                  <div className="flex items-center gap-2 text-[#10367D] text-xs font-bold uppercase tracking-wider mb-1">
-                    <ShieldCheck size={16} className="text-[#D57530]" />
+                <div className="mb-4 sm:mb-6 pr-10 sm:pr-12">
+                  <div className="flex items-center gap-2 text-[#10367D] text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">
+                    <ShieldCheck size={15} className="text-[#D57530]" />
                     <span>Official Partner Onboarding & KYC Registration</span>
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#10367D] heading-font uppercase tracking-tight">
+                  <h3 className="text-xl sm:text-3xl font-extrabold text-[#10367D] heading-font uppercase tracking-tight">
                     Partner With Build Bharat
                   </h3>
                 </div>
 
                 {/* Stepper Progress Bar (4 Steps) */}
-                <div className="mb-6 select-none shrink-0 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
-                  <div className="grid grid-cols-4 gap-2 text-center text-[10px] sm:text-xs font-extrabold uppercase tracking-wider">
-                    <div className={`py-1 px-2 rounded-xl transition-all ${step === 1 ? 'bg-[#10367D] text-white shadow-sm' : step > 1 ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
-                      <span>1. Terms & Rules</span>
+                <div className="mb-4 sm:mb-6 select-none shrink-0 bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80">
+                  <div className="grid grid-cols-4 gap-1 sm:gap-2 text-center text-[9px] sm:text-xs font-extrabold uppercase tracking-wider">
+                    <div className={`py-1 px-1 sm:px-2 rounded-lg sm:rounded-xl transition-all ${step === 1 ? 'bg-[#10367D] text-white shadow-sm' : step > 1 ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
+                      <span>1. Terms</span>
                     </div>
-                    <div className={`py-1 px-2 rounded-xl transition-all ${step === 2 ? 'bg-[#10367D] text-white shadow-sm' : step > 2 ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
-                      <span>2. Profile & KYC</span>
+                    <div className={`py-1 px-1 sm:px-2 rounded-lg sm:rounded-xl transition-all ${step === 2 ? 'bg-[#10367D] text-white shadow-sm' : step > 2 ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
+                      <span>2. KYC</span>
                     </div>
-                    <div className={`py-1 px-2 rounded-xl transition-all ${step === 3 ? 'bg-[#10367D] text-white shadow-sm' : step > 3 ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
-                      <span>3. Bank Settlement</span>
+                    <div className={`py-1 px-1 sm:px-2 rounded-lg sm:rounded-xl transition-all ${step === 3 ? 'bg-[#10367D] text-white shadow-sm' : step > 3 ? 'text-emerald-700 bg-emerald-50' : 'text-stone-400'}`}>
+                      <span>3. Bank</span>
                     </div>
-                    <div className={`py-1 px-2 rounded-xl transition-all ${step === 4 ? 'bg-[#10367D] text-white shadow-sm' : 'text-stone-400'}`}>
-                      <span>4. Fee & Proof</span>
+                    <div className={`py-1 px-1 sm:px-2 rounded-lg sm:rounded-xl transition-all ${step === 4 ? 'bg-[#10367D] text-white shadow-sm' : 'text-stone-400'}`}>
+                      <span>4. Fee</span>
                     </div>
                   </div>
                 </div>

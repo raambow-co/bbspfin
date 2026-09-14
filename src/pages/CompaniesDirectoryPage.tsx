@@ -70,7 +70,7 @@ export const CompaniesDirectoryPage: React.FC<CompaniesDirectoryPageProps> = ({
  
       {/* Hero Header */}
       <section className="bg-stone-100 border-b border-stone-200 py-12 relative overflow-hidden">
-        <div className="container-custom relative z-10 max-w-5xl">
+        <div className="container-custom relative z-10 max-w-5xl px-4 sm:px-6">
           <span className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#D57530] bg-[#D57530]/5 px-3 py-1 rounded-full border border-[#D57530]/10 inline-block mb-3">
             Verified Partners Database
           </span>
@@ -85,7 +85,7 @@ export const CompaniesDirectoryPage: React.FC<CompaniesDirectoryPageProps> = ({
  
       {/* Directory & Filters Layout */}
       <section className="py-12 bg-[#FFFFFF] border-b border-stone-200">
-        <div className="container-custom max-w-5xl">
+        <div className="container-custom max-w-5xl px-4 sm:px-6">
           
           {/* Filter Toolbar */}
           <div className="bg-stone-50 border border-stone-200 p-5 rounded-2xl mb-8 flex flex-col md:flex-row items-stretch md:items-center gap-4 shadow-sm">

@@ -220,7 +220,7 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
                 </div>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl sm:whitespace-nowrap font-extrabold text-[#10367D] tracking-tight leading-tight heading-font">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#10367D] tracking-tight leading-tight heading-font">
                 &ldquo;What are you looking for?&rdquo;
               </h1>
             </div>
@@ -368,17 +368,17 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
             </div>
 
             {/* Quick Action buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
               <button
                 onClick={onOpenPartnerModal}
-                className="btn-gold flex items-center gap-2 px-7 py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold shadow-lg animate-pulse"
+                className="btn-gold flex items-center justify-center gap-2 px-7 py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold shadow-lg text-center"
               >
                 <span>Partner With Us</span>
                 <ArrowRight size={14} />
               </button>
               <button
                 onClick={() => handleSearchSelect('I want to install solar panels', 'solar')}
-                className="bg-transparent hover:bg-[#10367D]/5 text-[#10367D] border border-[#10367D]/25 flex items-center gap-1.5 px-6 py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold transition-all"
+                className="bg-transparent hover:bg-[#10367D]/5 text-[#10367D] border border-[#10367D]/25 flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider font-bold transition-all text-center"
               >
                 <span>Try Example Search</span>
               </button>
