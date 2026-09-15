@@ -200,7 +200,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
   const [screenshotDoc, setScreenshotDoc] = useState<UploadedDocument | null>(null);
   const [previewDoc, setPreviewDoc] = useState<{ doc: PreviewableDocument; title: string } | null>(null);
   const [isQrEnlarged, setIsQrEnlarged] = useState<boolean>(false);
-  const [membershipCode] = useState<string>('BBSP-MEM-' + Math.floor(100000 + Math.random() * 900000));
+  const [membershipCode] = useState<string>('BBSP-01' + Math.floor(1000 + Math.random() * 9000));
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -479,7 +479,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
         ifscCode: formData.ifscCode.toUpperCase(),
         refundName: formData.refundName || formData.fullName,
         transactionId: formData.transactionId,
-        amountPaid: '₹5,000 (100% Refundable Deposit)',
+        amountPaid: '₹5,000',
         membershipType: 'Lifetime & Generations',
         attachments: attachmentsPayload,
       };
@@ -1055,12 +1055,24 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                   </div>
                 </div>
 
-                <button
-                  onClick={handleReset}
-                  className="bg-[#10367D] hover:bg-[#10367D]/90 text-white text-xs rounded-full px-8 sm:px-10 py-3.5 sm:py-4 uppercase font-bold tracking-wider cursor-pointer transition-all shadow-md"
-                >
-                  Finish & Close
-                </button>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+                  <a
+                    href="/official-member-quotation-certificate.png"
+                    download="Official-Member-Quotation-Certificate.png"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs rounded-full px-6 py-3.5 uppercase font-bold tracking-wider cursor-pointer transition-all shadow-md flex items-center justify-center gap-2 w-full sm:w-auto text-decoration-none"
+                  >
+                    <FileText size={15} />
+                    <span>Download Official Certificate</span>
+                  </a>
+                  <button
+                    onClick={handleReset}
+                    className="bg-[#10367D] hover:bg-[#10367D]/90 text-white text-xs rounded-full px-8 py-3.5 uppercase font-bold tracking-wider cursor-pointer transition-all shadow-md w-full sm:w-auto"
+                  >
+                    Finish & Close
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex flex-col h-full overflow-hidden">
@@ -1386,7 +1398,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                               type="text"
                               value={formData.existingMemberNumber}
                               onChange={(e) => setFormData({ ...formData, existingMemberNumber: e.target.value.toUpperCase() })}
-                              placeholder="e.g. BBSP-MEM-123456"
+                              placeholder="e.g. BBSP-01001"
                               className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none shadow-sm font-mono uppercase"
                             />
                           </div>
@@ -1829,9 +1841,12 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             <div className="text-3xl font-black text-[#10367D] heading-font">
                               ₹5,000
                             </div>
-                            <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 inline-block mt-1">
-                              100% Refundable Deposit
+                            <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 inline-block mt-1">
+                              Verified Registration Deposit
                             </span>
+                            <p className="text-[10px] text-stone-500 italic mt-2 text-left leading-relaxed">
+                              * <strong>Note:</strong> If the member does not earn any income, even a single rupee, during the five-year membership period, the full membership amount will be refunded upon completion of five years from the date of membership issuance, subject to the applicable terms and conditions.
+                            </p>
                           </div>
 
                           <div

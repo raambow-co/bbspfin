@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { submitToFirestore } from '../lib/firebase';
 import { 
   TrendingUp, 
   Award, 
@@ -20,7 +21,8 @@ import {
   Printer, 
   Info,
   ChevronLeft,
-  Percent
+  Percent,
+  Loader2
 } from 'lucide-react';
 
 export interface CadreItem {
@@ -79,6 +81,7 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
   const [leadName, setLeadName] = useState<string>('');
   const [leadPhone, setLeadPhone] = useState<string>('');
   const [leadError, setLeadError] = useState<string>('');
+  const [leadLoading, setLeadLoading] = useState<boolean>(false);
   const [isUnlocked, setIsUnlocked] = useState<boolean>(() => {
     return typeof window !== 'undefined' && !!localStorage.getItem('bbsp_cadre_unlocked');
   });
@@ -107,7 +110,7 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
     }
   };
 
-  const handleLeadSubmit = (e: React.FormEvent) => {
+  const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!leadName.trim()) {
       setLeadError('Please enter your full name');
@@ -119,19 +122,56 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
       return;
     }
 
-    // Save lead record in localStorage & unlock document
+    setLeadLoading(true);
+
     const leadRecord = {
-      name: leadName.trim(),
+      formType: 'commission-cadre-pdf-download',
+      category: 'document-download',
+      fullName: leadName.trim(),
       phone: cleanPhone,
+      email: `lead.${cleanPhone}@buildbharatsp.com`,
+      businessName: 'Individual Lead',
+      source: '20 Cadres Commission Structure PDF Download',
+      requestedDocument: 'BuildBharat 20 Cadres Commission Structure',
+      status: 'Document Downloaded',
+      timestamp: new Date().toLocaleDateString('en-GB'),
       unlockedAt: new Date().toISOString()
     };
+
+    // 1. Submit to Firebase Firestore (Admin Panel Collections)
     try {
+      await submitToFirestore(leadRecord, 'submissions');
+      await submitToFirestore(leadRecord, 'document_leads');
+    } catch (dbErr) {
+      console.warn('Firestore lead sync fallback', dbErr);
+    }
+
+    // 2. Submit to backend API for admin email dispatch
+    try {
+      fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadRecord),
+      }).catch((apiErr) => console.warn('API lead dispatch error', apiErr));
+    } catch (err) {
+      console.warn('API fetch error', err);
+    }
+
+    // 3. Save lead record in localStorage for local admin panel & real-time sync
+    try {
+      const existingEnquiries = JSON.parse(localStorage.getItem('bbsp_enquiries') || '[]');
+      localStorage.setItem('bbsp_enquiries', JSON.stringify([leadRecord, ...existingEnquiries]));
+
+      const existingDocLeads = JSON.parse(localStorage.getItem('bbsp_document_leads') || '[]');
+      localStorage.setItem('bbsp_document_leads', JSON.stringify([leadRecord, ...existingDocLeads]));
+
       localStorage.setItem('bbsp_cadre_unlocked', 'true');
       localStorage.setItem('bbsp_cadre_lead', JSON.stringify(leadRecord));
     } catch {
       // ignore local storage errors in private browsing
     }
 
+    setLeadLoading(false);
     setIsUnlocked(true);
     setIsLeadGateOpen(false);
     setIsDocViewerOpen(true);
@@ -615,10 +655,20 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="btn-gold w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                  disabled={leadLoading}
+                  className="btn-gold w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-75"
                 >
-                  <span>Access Document Now</span>
-                  <ArrowRight size={15} />
+                  {leadLoading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      <span>Verifying & Unlocking...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Access Document Now</span>
+                      <ArrowRight size={15} />
+                    </>
+                  )}
                 </button>
               </div>
 

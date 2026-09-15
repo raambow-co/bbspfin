@@ -122,7 +122,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                 <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-stone-100 shadow-lg aspect-[3/4] w-full">
                   <img 
                     src="/bbsp-founder.jpeg" 
-                    alt="Sudheer Reddy D - Founder & Managing Director" 
+                    alt="D Sudheer Reddy - Founder & Managing Director" 
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                   
@@ -134,7 +134,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                       Founder & Managing Director
                     </span>
                     <h3 className="text-xl font-bold heading-font tracking-tight text-white">
-                      Sudheer Reddy D
+                      D Sudheer Reddy
                     </h3>
                   </div>
                 </div>
@@ -165,7 +165,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                   "Our vision is straightforward: eliminate the friction between clean energy, capital loans, real estate infrastructure, and skilled technical talent. By aligning these sectors under a unified synergy framework, Indian enterprises scale faster, smarter, and with lasting stability."
                 </p>
                 <div className="mt-3 text-xs font-bold text-[#10367D] uppercase tracking-wider font-sans">
-                  — Sudheer Reddy D, Founder & MD
+                  — D Sudheer Reddy, Founder & MD
                 </div>
               </div>
 

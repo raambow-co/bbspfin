@@ -195,6 +195,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             BuildBharat Synergy Partners · Secure Digital Lending Infrastructure · Confidential Application Record
           </div>
 
+    } else if (category === 'document-download' || req.body.formType === 'commission-cadre-pdf-download') {
+      emailSubject = `New Document Lead: ${applicantDisplayName} (${applicantPhone})`;
+      emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background: #ffffff;">
+          <div style="background: #10367D; color: #ffffff; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.85; display: block; margin-bottom: 4px;">BuildBharat Synergy Partners · Lead Desk</span>
+            <h1 style="margin: 0; font-size: 20px; font-weight: 800;">20 Cadres Commission Document Lead</h1>
+          </div>
+
+          <h3 style="color: #333; margin-top: 15px; background: #f4f6fa; padding: 8px 12px; border-left: 4px solid #D57530;">Lead Contact Details</h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <tr><td style="padding: 8px; font-weight: bold; width: 40%; color: #555;">Full Name:</td><td style="padding: 8px; font-weight: bold; color: #10367D;">${applicantDisplayName}</td></tr>
+            <tr><td style="padding: 8px; font-weight: bold; color: #555;">WhatsApp / Mobile:</td><td style="padding: 8px; font-weight: bold;"><a href="tel:${applicantPhone}">${applicantPhone}</a> &nbsp;|&nbsp; <a href="https://wa.me/91${applicantPhone.replace(/\D/g, '')}" target="_blank">Chat on WhatsApp</a></td></tr>
+            <tr><td style="padding: 8px; font-weight: bold; color: #555;">Requested Asset:</td><td style="padding: 8px;">BuildBharat 20 Cadres Commission Structure PDF</td></tr>
+            <tr><td style="padding: 8px; font-weight: bold; color: #555;">Access Timestamp:</td><td style="padding: 8px;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
+          </table>
+
+          <div style="margin-top: 25px; padding: 12px; background: #f8fafc; border-radius: 6px; font-size: 12px; color: #64748b; border: 1px solid #e2e8f0;">
+            This lead was captured when the visitor unlocked the official commission schedule. You can follow up directly via WhatsApp or phone.
+          </div>
         </div>
       `;
     } else {
@@ -229,7 +249,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           <h3 style="color: #333; margin-top: 20px; background: #f4f6fa; padding: 8px 12px; border-left: 4px solid #10B981;">4. Payment Verification</h3>
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 6px; font-weight: bold; width: 40%;">Fee Amount:</td><td style="padding: 6px; font-weight: bold; color: #10B981;">₹5,000 (One-time Refundable Membership)</td></tr>
+            <tr><td style="padding: 6px; font-weight: bold; width: 40%;">Fee Amount:</td><td style="padding: 6px; font-weight: bold; color: #10B981;">₹5,000</td></tr>
             <tr><td style="padding: 6px; font-weight: bold;">Transaction / UTR ID:</td><td style="padding: 6px; font-family: monospace;">${transactionId || 'Attached Screenshot'}</td></tr>
             <tr><td style="padding: 6px; font-weight: bold;">Documents Attached:</td><td style="padding: 6px;">${emailAttachments.length} file(s) attached</td></tr>
           </table>
