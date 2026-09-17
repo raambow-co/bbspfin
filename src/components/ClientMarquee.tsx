@@ -52,11 +52,8 @@ export function ClientMarquee() {
               <img
                 src={logo.src}
                 alt={logo.alt}
-                width="160"
-                height="60"
                 className="max-h-full max-w-full object-contain"
                 loading="lazy"
-                decoding="async"
               />
             </div>
           ))}

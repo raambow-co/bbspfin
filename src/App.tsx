@@ -1,32 +1,30 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { HeroDiscovery } from './components/HeroDiscovery';
 import { BuildBharatEcosystem } from './components/build-bharat-ecosystem';
-import { ClientMarquee } from './components/ClientMarquee';
+import { SmoothCursor } from './components/ui/smooth-cursor';
+import { PartnershipCTA } from './components/PartnershipCTA';
 import { Footer } from './components/Footer';
+import { CompanyPage } from './pages/CompanyPage';
+import { CompanyModal } from './components/CompanyModal';
 import { CompanyData } from './data/ecosystemData';
+import { ClientMarquee } from './components/ClientMarquee';
+ 
+// Phase 2 components & pages
+import { HowItWorks } from './components/HowItWorks';
+import { TestimonialSection } from './components/TestimonialSection';
+import { FAQSection } from './components/FAQSection';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
-
-// Dynamic lazy-loaded below-the-fold components for ultra-fast initial page load
-const SynergyConceptSection = lazy(() => import('./components/SynergyConceptSection'));
-const HowItWorks = lazy(() => import('./components/HowItWorks').then(m => ({ default: m.HowItWorks })));
-const CommissionCadresSection = lazy(() => import('./components/CommissionCadresSection').then(m => ({ default: m.CommissionCadresSection })));
-const TestimonialSection = lazy(() => import('./components/TestimonialSection').then(m => ({ default: m.TestimonialSection })));
-const FAQSection = lazy(() => import('./components/FAQSection').then(m => ({ default: m.FAQSection })));
-const SmoothCursor = lazy(() => import('./components/ui/smooth-cursor').then(m => ({ default: m.SmoothCursor })));
-const CookieConsent = lazy(() => import('./components/CookieConsent').then(m => ({ default: m.CookieConsent })));
-const FloatingContactButton = lazy(() => import('./components/FloatingContactButton').then(m => ({ default: m.FloatingContactButton })));
-
-// Dynamic lazy-loaded routes & modals
-const CompanyPage = lazy(() => import('./pages/CompanyPage').then(m => ({ default: m.CompanyPage })));
-const CompaniesDirectoryPage = lazy(() => import('./pages/CompaniesDirectoryPage').then(m => ({ default: m.CompaniesDirectoryPage })));
-const CompanyProfilePage = lazy(() => import('./pages/CompanyProfilePage').then(m => ({ default: m.CompanyProfilePage })));
-const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
-const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })));
-const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
-const DiscoveryPage = lazy(() => import('./pages/DiscoveryPage').then(m => ({ default: m.DiscoveryPage })));
-const PartnershipCTA = lazy(() => import('./components/PartnershipCTA').then(m => ({ default: m.PartnershipCTA })));
-const CompanyModal = lazy(() => import('./components/CompanyModal').then(m => ({ default: m.CompanyModal })));
+import { CookieConsent } from './components/CookieConsent';
+import { FloatingContactButton } from './components/FloatingContactButton';
+import { CompaniesDirectoryPage } from './pages/CompaniesDirectoryPage';
+import { CompanyProfilePage } from './pages/CompanyProfilePage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
+import { ContactPage } from './pages/ContactPage';
+import { DiscoveryPage } from './pages/DiscoveryPage';
+import { SynergyConceptSection } from './components/SynergyConceptSection';
+import { CommissionCadresSection } from './components/CommissionCadresSection';
  
 export function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -172,9 +170,7 @@ export function App() {
   return (
     <>
       <GoogleAnalytics currentPath={currentPath} />
-      <Suspense fallback={null}>
-        <SmoothCursor />
-      </Suspense>
+      <SmoothCursor />
       
       <div className="min-h-screen bg-[#070A11] text-white flex flex-col font-sans selection:bg-[#E2B049]/20 selection:text-white bg-grainy">
         {/* Header Navigation */}
@@ -190,35 +186,23 @@ export function App() {
  
         {/* Main Content Flow */}
         <main className="flex-grow">
-          <Suspense fallback={
-            <div className="min-h-[50vh] flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full border-2 border-[#10367D] border-t-transparent animate-spin" />
-            </div>
-          }>
-            {renderContent()}
-          </Suspense>
-
+          {renderContent()}
+ 
           {/* SECTION 6 — PARTNERSHIP / CTA */}
-          <Suspense fallback={null}>
-            <PartnershipCTA
-              isModalOpen={isPartnerModalOpen}
-              onCloseModal={() => setIsPartnerModalOpen(false)}
-              onOpenModal={() => setIsPartnerModalOpen(true)}
-              currentPath={currentPath}
-            />
-          </Suspense>
+          <PartnershipCTA
+            isModalOpen={isPartnerModalOpen}
+            onCloseModal={() => setIsPartnerModalOpen(false)}
+            onOpenModal={() => setIsPartnerModalOpen(true)}
+            currentPath={currentPath}
+          />
         </main>
  
         {/* Company detail profile modal */}
-        {selectedModalCompany && (
-          <Suspense fallback={null}>
-            <CompanyModal
-              company={selectedModalCompany}
-              onClose={() => setSelectedModalCompany(null)}
-              onOpenPartner={() => setIsPartnerModalOpen(true)}
-            />
-          </Suspense>
-        )}
+        <CompanyModal
+          company={selectedModalCompany}
+          onClose={() => setSelectedModalCompany(null)}
+          onOpenPartner={() => setIsPartnerModalOpen(true)}
+        />
  
         {/* Footer */}
         <Footer
@@ -231,14 +215,10 @@ export function App() {
         />
  
         {/* Cookie Consent Alert Banner */}
-        <Suspense fallback={null}>
-          <CookieConsent />
-        </Suspense>
+        <CookieConsent />
  
         {/* Floating WhatsApp Action Button */}
-        <Suspense fallback={null}>
-          <FloatingContactButton />
-        </Suspense>
+        <FloatingContactButton />
       </div>
     </>
   );

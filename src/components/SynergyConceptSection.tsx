@@ -123,10 +123,6 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                   <img 
                     src="/bbsp-founder.jpeg" 
                     alt="D Sudheer Reddy - Founder & Managing Director" 
-                    width="340"
-                    height="453"
-                    loading="lazy"
-                    decoding="async"
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                   
