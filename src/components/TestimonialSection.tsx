@@ -4,32 +4,32 @@ import { Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 export function TestimonialSection() {
   const testimonials = [
     {
-      author: 'Aditya Sai N',
+      author: 'D Sudheer Reddy',
       quote: 'Joining this ecosystem completely transformed our supply chain. We benefited immensely from the verified network and closed deals faster than ever before.',
       category: 'Solar',
-      companyName: 'Aditya Energy Solutions',
-      role: 'CEO'
+      companyName: 'BuildBharat Solar',
+      role: 'Founder & MD'
     },
     {
-      author: 'Yuvan D',
+      author: 'D Sudheer Reddy',
       quote: 'The membership provided us unparalleled access to premium real estate projects. The verification framework gave us the confidence to invest heavily and securely.',
       category: 'Real Estate',
-      companyName: 'Yuvan Infra',
-      role: 'Managing Partner'
+      companyName: 'BuildBharat Real Estate',
+      role: 'Managing Director'
     },
     {
-      author: 'Teja Dumpa',
+      author: 'D Sudheer Reddy',
       quote: 'We secured project financing seamlessly through the platform. This membership has been a game-changer for our working capital and expansion plans.',
       category: 'Loans',
-      companyName: 'Dumpa Enterprises',
-      role: 'Director of Finance'
+      companyName: 'BuildBharat Loans',
+      role: 'Managing Director'
     },
     {
       author: 'D Sudheer Reddy',
       quote: 'Our hiring process for tech talent became incredibly efficient. Benefiting from this membership meant we could source top-tier trained engineers without the hassle.',
       category: 'EdTech',
       companyName: 'BuildBharat EduTech',
-      role: 'Operations Head'
+      role: 'Founder & MD'
     }
   ];
 

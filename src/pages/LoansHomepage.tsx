@@ -361,7 +361,7 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
                         required
                         value={leadForm.fullName}
                         onChange={(e) => setLeadForm({ ...leadForm, fullName: e.target.value })}
-                        placeholder="e.g. Rajesh Kumar"
+                        placeholder="e.g. D Sudheer Reddy"
                         className="w-full bg-stone-50 border border-stone-200 rounded-xl px-3.5 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none"
                       />
                     </div>

@@ -18,38 +18,38 @@ interface Testimonial {
 const TESTIMONIALS_DATA: Testimonial[] = [
   {
     id: 1,
-    name: "Rajesh K.",
+    name: "D Sudheer Reddy",
     location: "VIJAYAWADA, AP",
     quote: "Switching to solar was completely hassle-free. Build Bharat handled the entire grid connection and subsidy process. Outstanding support from start to finish!",
     rating: 5,
-    avatarInitial: "R",
+    avatarInitial: "D",
     platform: "VERIFIED CUSTOMER"
   },
   {
     id: 2,
-    name: "Srinivas Rao",
+    name: "D Sudheer Reddy",
     location: "GUNTUR, AP",
     quote: "The panel build quality and installation execution are top-tier. My monthly electricity utility bill has already dropped by 85%. Highly recommend their clean energy setups.",
     rating: 5,
-    avatarInitial: "S",
+    avatarInitial: "D",
     platform: "VERIFIED CUSTOMER"
   },
   {
     id: 3,
-    name: "Latha M.",
+    name: "D Sudheer Reddy",
     location: "VISAKHAPATNAM, AP",
     quote: "Professional engineers, timely site audit, and complete clarity on direct bank subsidies. The system was mounted and commissioned within 48 hours without any issues.",
     rating: 5,
-    avatarInitial: "L",
+    avatarInitial: "D",
     platform: "VERIFIED CUSTOMER"
   },
   {
     id: 4,
-    name: "Kalyan C.",
+    name: "D Sudheer Reddy",
     location: "TIRUPATI, AP",
     quote: "Excellent collateral-free financing options aligned through their loans gateway made the investment extremely simple. The system runs flawlessly.",
     rating: 5,
-    avatarInitial: "K",
+    avatarInitial: "D",
     platform: "VERIFIED CUSTOMER"
   }
 ];

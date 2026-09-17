@@ -870,7 +870,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             type="text"
                             value={mapEnquiry.fullName}
                             onChange={(e) => setMapEnquiry({ ...mapEnquiry, fullName: e.target.value })}
-                            placeholder="e.g. Rajesh Kumar"
+                            placeholder="e.g. D Sudheer Reddy"
                             className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl px-4 py-3 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all"
                           />
                           {mapEnquiryErrors.fullName && (
@@ -908,7 +908,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             type="email"
                             value={mapEnquiry.email}
                             onChange={(e) => setMapEnquiry({ ...mapEnquiry, email: e.target.value })}
-                            placeholder="rajesh@company.com"
+                            placeholder="sudheer@buildbharatsp.com"
                             className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl px-4 py-3 text-stone-900 text-xs sm:text-sm focus:bg-white focus:border-[#10367D] outline-none shadow-sm transition-all"
                           />
                           {mapEnquiryErrors.email && (
@@ -1183,7 +1183,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             type="text"
                             value={formData.fullName}
                             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                            placeholder="e.g. Sudheer Reddy"
+                            placeholder="e.g. D Sudheer Reddy"
                             className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm"
                           />
                           {formErrors.fullName && <span className="text-[10px] text-red-500 font-bold mt-1 block">{formErrors.fullName}</span>}
@@ -1320,7 +1320,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                               type="text"
                               value={formData.nomineeName}
                               onChange={(e) => setFormData({ ...formData, nomineeName: e.target.value })}
-                              placeholder="e.g. Sravanthi Reddy"
+                              placeholder="e.g. D Sudheer Reddy"
                               className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] focus:ring-1 focus:ring-[#10367D] outline-none shadow-sm"
                             />
                             {formErrors.nomineeName && (

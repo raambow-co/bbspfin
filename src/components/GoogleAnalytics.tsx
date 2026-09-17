@@ -6,11 +6,11 @@ interface GoogleAnalyticsProps {
  
 export function GoogleAnalytics({ currentPath }: GoogleAnalyticsProps) {
   useEffect(() => {
-    // GA4 Placeholder Integration Loading Script
-    const trackingId = 'G-XXXXXXX';
+    // GA4 Integration
+    const trackingId = 'G-0JJSX19G4X';
     
-    // Add scripts dynamically to document head
-    if (!document.getElementById('ga-script')) {
+    // Add scripts dynamically to document head if not already loaded
+    if (!document.getElementById('ga-script') && !document.querySelector(`script[src*="${trackingId}"]`)) {
       const script = document.createElement('script');
       script.id = 'ga-script';
       script.async = true;
