@@ -2,44 +2,72 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Favicon and Brand Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="apple-touch-icon" href="/favicon-192x192.png" />
     <link rel="shortcut icon" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10367D" />
+    <meta name="application-name" content="Build Bharat Synergy Partners" />
+    <meta name="apple-mobile-web-app-title" content="Build Bharat" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     
-    <!-- Google tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0JJSX19G4X"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-0JJSX19G4X');
-    </script>
-
-    <title>Build Bharat Synergy Partners | Multi-Industry Business Ecosystem</title>
-    <meta name="description" content="Build Bharat Synergy Partners is a connected ecosystem of industry-leading businesses in Solar Renewable Energy, Financial Loans, Real Estate, and EdTech." />
-    <meta name="keywords" content="Build Bharat, Build Bharat Synergy Partners, BBSP, Solar Energy, Financial Loans, Real Estate Hyderabad, EdTech, Sriram Solar, Business Ecosystem, Multi-Industry Network" />
+    <!-- Primary SEO Meta Tags -->
+    <title>Build Bharat Synergy Partners | Multi-Industry Business Ecosystem & Partner Network</title>
+    <meta name="title" content="Build Bharat Synergy Partners | Multi-Industry Business Ecosystem & Partner Network" />
+    <meta name="description" content="Build Bharat Synergy Partners (BBSP) is an integrated multi-industry conglomerate spanning Solar Renewable Energy, Financial Loans, Real Estate Developments, and EdTech certifications with transparent 10-Cadre partner revenue distribution." />
+    <meta name="keywords" content="Build Bharat Synergy Partners, BBSP, Solar Energy Systems, Rooftop Solar Subsidies PM Surya Ghar, Home Loans Hyderabad, Business Loans DSA, Real Estate Telangana, HMDA Open Plots, EdTech Certification, 10 Cadres Commission, Business Partnership Network South India" />
     <meta name="author" content="Build Bharat Synergy Partners" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <link rel="canonical" href="https://buildbharatsp.com/" />
+    <link rel="alternate" hreflang="en-IN" href="https://buildbharatsp.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://buildbharatsp.com/" />
+
+    <!-- Geo & Local Business Targeting (South India / Hyderabad / Telangana) -->
+    <meta name="geo.region" content="IN-TG" />
+    <meta name="geo.placename" content="Hyderabad" />
+    <meta name="geo.position" content="17.3276;78.5986" />
+    <meta name="ICBM" content="17.3276, 78.5986" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://buildbharatsp.com/" />
     <meta property="og:site_name" content="Build Bharat Synergy Partners" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:title" content="Build Bharat Synergy Partners | Multi-Industry Business Ecosystem" />
-    <meta property="og:description" content="Connected ecosystem of industry-leading businesses across Solar Renewable Energy, Financial Loans, Real Estate, and EdTech." />
+    <meta property="og:description" content="Connected multi-industry conglomerate spanning Solar Energy, Financial Loans, Real Estate, and EdTech with verified 10-Cadre partner revenue distribution." />
     <meta property="og:image" content="https://buildbharatsp.com/build-bharat-logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Build Bharat Synergy Partners Logo & Ecosystem" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Build Bharat Synergy Partners" />
-    <meta name="twitter:description" content="Connected ecosystem across Solar Renewable Energy, Financial Loans, Real Estate, and EdTech." />
+    <meta name="twitter:site" content="@BuildBharatSP" />
+    <meta name="twitter:creator" content="@BuildBharatSP" />
+    <meta name="twitter:title" content="Build Bharat Synergy Partners | Multi-Industry Ecosystem" />
+    <meta name="twitter:description" content="Connected business ecosystem across Solar Renewable Energy, Financial Loans, Real Estate, and EdTech." />
     <meta name="twitter:image" content="https://buildbharatsp.com/build-bharat-logo.png" />
 
-    <!-- Google Structured Data (JSON-LD) for Sitelinks & Knowledge Graph -->
+    <!-- Google Analytics (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0JJSX19G4X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0JJSX19G4X', {
+        page_path: window.location.pathname,
+        send_page_view: true
+      });
+    </script>
+
+    <!-- Comprehensive Google Structured Data (JSON-LD) for Sitelinks, FAQ & Knowledge Graph -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,11 +76,25 @@
           "@type": "Organization",
           "@id": "https://buildbharatsp.com/#organization",
           "name": "Build Bharat Synergy Partners",
-          "alternateName": ["Build Bharat", "BBSP"],
+          "alternateName": ["Build Bharat", "BBSP", "BuildBharat"],
           "url": "https://buildbharatsp.com/",
-          "logo": "https://buildbharatsp.com/build-bharat-logo.png",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://buildbharatsp.com/build-bharat-logo.png",
+            "width": 600,
+            "height": 200
+          },
           "email": "sudheer@buildbharatsp.com",
           "telephone": "+91-9353018855",
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91-9353018855",
+              "contactType": "customer service",
+              "areaServed": "IN",
+              "availableLanguage": ["English", "Telugu", "Hindi"]
+            }
+          ],
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "5-76/03, Surya Vamsi Nagar, Hayath Nagar",
@@ -67,17 +109,24 @@
           "@id": "https://buildbharatsp.com/#website",
           "url": "https://buildbharatsp.com/",
           "name": "Build Bharat Synergy Partners",
+          "description": "Multi-industry corporate ecosystem across Solar, Loans, Real Estate, and EdTech.",
           "publisher": {
             "@id": "https://buildbharatsp.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://buildbharatsp.com/discovery?q={search_term_string}",
+            "query-input": "required name=search_term_string"
           }
         },
         {
           "@type": "LocalBusiness",
           "@id": "https://buildbharatsp.com/#localbusiness",
-          "name": "Build Bharat Synergy Partners",
+          "name": "Build Bharat Synergy Partners Corporate Headquarters",
           "image": "https://buildbharatsp.com/build-bharat-logo.png",
           "telephone": "+91-9353018855",
           "email": "sudheer@buildbharatsp.com",
+          "url": "https://buildbharatsp.com/",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "5-76/03, Surya Vamsi Nagar, Hayath Nagar",
@@ -86,39 +135,74 @@
             "postalCode": "501505",
             "addressCountry": "IN"
           },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "17.3276",
+            "longitude": "78.5986"
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "opens": "09:00",
+              "closes": "19:00"
+            }
+          ],
           "priceRange": "₹₹₹"
         },
         {
-          "@type": "SiteNavigationElement",
-          "name": [
-            "Solar Renewable Energy",
-            "Financial Loans",
-            "Real Estate",
-            "EdTech Education",
-            "Partner Companies",
-            "Discovery Explorer",
-            "Contact Us"
-          ],
-          "url": [
-            "https://buildbharatsp.com/solar",
-            "https://buildbharatsp.com/loans",
-            "https://buildbharatsp.com/real-estate",
-            "https://buildbharatsp.com/education",
-            "https://buildbharatsp.com/companies",
-            "https://buildbharatsp.com/discovery",
-            "https://buildbharatsp.com/contact"
+          "@type": "FAQPage",
+          "@id": "https://buildbharatsp.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is Build Bharat Synergy Partners?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Build Bharat Synergy Partners is a multi-industry ecosystem connecting leading enterprises in Solar Renewable Energy, Financial Loans, Real Estate, and EdTech Education, offering transparent referral and multi-tier 10-Cadre commission earnings."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the 10-Cadre Commission Structure work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Partners earn 20% (₹1,000) on direct referrals in Cadre 1, plus multi-tier overrides across Cadres 2 to 10 (total 39% network pool), 8% Franchise commission, and 2% Loyalty pool, totaling a 49% (₹2,450) distribution on the ₹5,000 lifetime membership fee."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What services are offered under BuildBharat Solar?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BuildBharat Solar offers MNRE-approved residential rooftop solar PV systems with PM Surya Ghar Muft Bijli Yojana subsidies up to ₹78,000, commercial solar plants, and a 25-year panel performance warranty."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do clients apply for Home and Business Loans?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Clients can apply directly through BuildBharat Loans, integrated with 40+ leading banks and NBFCs for lowest interest rates, instant eligibility checks, and quick disbursements."
+              }
+            }
           ]
         }
       ]
     }
     </script>
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts Preconnect & Optimized Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
-  <body>
+  <body class="bg-[#FAF6EE] text-[#1F1D1A] antialiased selection:bg-[#10367D] selection:text-white overflow-x-hidden">
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-[#10367D] focus:text-white focus:rounded-xl focus:shadow-xl focus:outline-none font-bold text-xs uppercase tracking-wider">
+      Skip to main content
+    </a>
+
     <div id="root"></div>
 
     <!-- Vite Module script for node / dev server environment -->

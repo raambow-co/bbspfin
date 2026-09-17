@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+        http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
   
-  <!-- Home / Main Ecosystem Hub -->
+  <!-- Main Ecosystem Hub / Homepage -->
   <url>
     <loc>https://buildbharatsp.com/</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://buildbharatsp.com/build-bharat-logo.png</image:loc>
+      <image:title>Build Bharat Synergy Partners Logo</image:title>
+      <image:caption>Multi-Industry Business Ecosystem in Solar, Loans, Real Estate, and EdTech</image:caption>
+    </image:image>
   </url>
 
   <!-- Solar Renewable Energy -->
@@ -16,7 +23,11 @@
     <loc>https://buildbharatsp.com/solar</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://buildbharatsp.com/build-bharat-solar.png</image:loc>
+      <image:title>BuildBharat Solar Solutions</image:title>
+    </image:image>
   </url>
 
   <!-- Financial Loans & Credit -->
@@ -24,7 +35,11 @@
     <loc>https://buildbharatsp.com/loans</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://buildbharatsp.com/build-bharat-loans.png</image:loc>
+      <image:title>BuildBharat Loan Services & DSA Network</image:title>
+    </image:image>
   </url>
 
   <!-- Real Estate & Infrastructure -->
@@ -32,7 +47,11 @@
     <loc>https://buildbharatsp.com/real-estate</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://buildbharatsp.com/build-bharat-real-estate.png</image:loc>
+      <image:title>BuildBharat Real Estate & Open Plots</image:title>
+    </image:image>
   </url>
 
   <!-- Education & EdTech -->
@@ -40,7 +59,11 @@
     <loc>https://buildbharatsp.com/education</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://buildbharatsp.com/build-bharat-education.png</image:loc>
+      <image:title>BuildBharat EdTech Training & Certification</image:title>
+    </image:image>
   </url>
 
   <!-- Discovery Explorer -->
@@ -48,7 +71,7 @@
     <loc>https://buildbharatsp.com/discovery</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
 
   <!-- Partner Companies Directory -->
@@ -56,7 +79,33 @@
     <loc>https://buildbharatsp.com/companies</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Individual Company Profiles -->
+  <url>
+    <loc>https://buildbharatsp.com/companies/sriram-solar</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://buildbharatsp.com/companies/build-bharat-loans</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://buildbharatsp.com/companies/build-bharat-real-estate</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://buildbharatsp.com/companies/build-bharat-education</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
 
   <!-- Contact & Headquarters -->
@@ -64,7 +113,7 @@
     <loc>https://buildbharatsp.com/contact</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
 
   <!-- Privacy Policy -->
@@ -72,7 +121,7 @@
     <loc>https://buildbharatsp.com/privacy</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.50</priority>
   </url>
 
   <!-- Terms & Conditions -->
@@ -80,7 +129,7 @@
     <loc>https://buildbharatsp.com/terms</loc>
     <lastmod>2026-09-17</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.50</priority>
   </url>
 
 </urlset>

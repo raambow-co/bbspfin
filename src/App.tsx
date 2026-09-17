@@ -25,7 +25,98 @@ import { ContactPage } from './pages/ContactPage';
 import { DiscoveryPage } from './pages/DiscoveryPage';
 import { SynergyConceptSection } from './components/SynergyConceptSection';
 import { CommissionCadresSection } from './components/CommissionCadresSection';
- 
+import { SEOHead } from './components/SEOHead';
+
+const getSeoProps = (path: string) => {
+  if (path === '/solar' || path === '/sriram-solar') {
+    return {
+      title: 'BuildBharat Solar Solutions | Rooftop PV & PM Surya Ghar Subsidies',
+      description: 'MNRE-approved residential and commercial solar installations across South India. Get up to ₹78,000 direct bank subsidy and a 25-year warranty with Sriram Solar.',
+      keywords: 'Solar Panels Hyderabad, Rooftop Solar Subsidy, PM Surya Ghar Muft Bijli Yojana, Commercial Solar Plant Telangana, Sriram Solar, BuildBharat Solar',
+      canonicalPath: '/solar'
+    };
+  }
+  if (path === '/loans') {
+    return {
+      title: 'BuildBharat Financial Loans | Home, Business & Personal Loan Services',
+      description: 'Access low-interest home loans, collateral-free MSME business loans, and loan against property with 40+ premier banking partners and rapid approvals.',
+      keywords: 'Home Loans Hyderabad, MSME Business Loans, Low Interest Loan DSA, Mortgage Loan Against Property, Instant Personal Loan, BuildBharat Loans',
+      canonicalPath: '/loans'
+    };
+  }
+  if (path === '/real-estate') {
+    return {
+      title: 'BuildBharat Real Estate | HMDA & DTCP Approved Open Plots & Farmlands',
+      description: 'Premium HMDA, DTCP, and RERA-approved residential open plots, gated communities, and high-appreciation farmlands in Hyderabad and South India growth corridors.',
+      keywords: 'Open Plots Hyderabad, HMDA Approved Plots, Farmland Investment Telangana, Gated Community Villas, Real Estate South India, BuildBharat Real Estate',
+      canonicalPath: '/real-estate'
+    };
+  }
+  if (path === '/education' || path === '/edu-tech') {
+    return {
+      title: 'BuildBharat EdTech | Industry-Aligned Upskilling & Career Certifications',
+      description: 'Comprehensive professional training in Full-Stack Web Development, AI & ML, Data Science, and Solar Engineering with 100% placement assistance.',
+      keywords: 'EdTech Certification India, Full Stack Developer Course Hyderabad, AI ML Training, Solar Technical Training, Placement Assistance, BuildBharat Education',
+      canonicalPath: '/education'
+    };
+  }
+  if (path === '/companies') {
+    return {
+      title: 'Operating Companies Directory | Build Bharat Synergy Partners',
+      description: 'Explore the full portfolio of operating enterprises across Solar Energy, Financial Services, Real Estate Developments, and Education.',
+      keywords: 'BuildBharat Companies, Sriram Solar, BuildBharat Loans, BuildBharat Real Estate, BuildBharat EdTech, Business Directory',
+      canonicalPath: '/companies'
+    };
+  }
+  if (path === '/discovery') {
+    return {
+      title: 'Interactive Ecosystem Explorer | Build Bharat Synergy Partners',
+      description: 'Search, filter, and discover multi-industry business services, partner benefits, and 10-Cadre revenue sharing opportunities.',
+      keywords: 'Business Discovery Explorer, BuildBharat Services, Synergy Network Finder, Multi Industry Portal',
+      canonicalPath: '/discovery'
+    };
+  }
+  if (path === '/contact') {
+    return {
+      title: 'Contact Corporate Headquarters | Build Bharat Synergy Partners Hyderabad',
+      description: 'Get in touch with Build Bharat Synergy Partners leadership, customer support, and regional branch desks across Telangana and South India.',
+      keywords: 'Contact BuildBharat, Hyderabad Corporate Office, Hayath Nagar HQ, Partner Support Desk',
+      canonicalPath: '/contact'
+    };
+  }
+  if (path === '/privacy') {
+    return {
+      title: 'Privacy Policy | Build Bharat Synergy Partners',
+      description: 'Official privacy policy outlining customer data protection, digital security protocols, and confidential lead processing.',
+      keywords: 'Privacy Policy, Data Protection, BuildBharat Terms',
+      canonicalPath: '/privacy'
+    };
+  }
+  if (path === '/terms') {
+    return {
+      title: 'Terms and Conditions | Build Bharat Synergy Partners',
+      description: 'Official terms and conditions governing partner memberships, 10-Cadre commissions, refunds, and ecosystem service usage.',
+      keywords: 'Terms and Conditions, Partnership Agreement, 10 Cadre Policy',
+      canonicalPath: '/terms'
+    };
+  }
+  if (path.startsWith('/companies/')) {
+    const name = path.replace('/companies/', '').replace(/-/g, ' ').toUpperCase();
+    return {
+      title: `${name} | Build Bharat Synergy Partner Company`,
+      description: `Official enterprise profile for ${name} within the Build Bharat Synergy Partners multi-industry conglomerate.`,
+      keywords: `${name}, BuildBharat Partner Company, Business Profile`,
+      canonicalPath: path
+    };
+  }
+  return {
+    title: 'Build Bharat Synergy Partners | Multi-Industry Business Ecosystem & Partner Network',
+    description: 'Build Bharat Synergy Partners (BBSP) is an integrated conglomerate connecting Solar Energy, Financial Loans, Real Estate, and EdTech with verified 10-Cadre revenue distribution.',
+    keywords: 'Build Bharat Synergy Partners, BBSP, Solar Energy, Financial Loans, Real Estate Hyderabad, EdTech, Sriram Solar, 10 Cadres Commission, Business Partnership India',
+    canonicalPath: '/'
+  };
+};
+
 export function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -152,7 +243,7 @@ export function App() {
             {/* NEW SECTION 2 — HOW IT WORKS EXPLAINER */}
             <HowItWorks />
  
-            {/* OFFICIAL 20 CADRES COMMISSION & REVENUE SHARING SECTION */}
+            {/* OFFICIAL 10 CADRES COMMISSION & REVENUE SHARING SECTION */}
             <CommissionCadresSection 
               onOpenPartnerModal={() => setIsPartnerModalOpen(true)} 
             />
@@ -169,6 +260,7 @@ export function App() {
  
   return (
     <>
+      <SEOHead {...getSeoProps(currentPath)} />
       <GoogleAnalytics currentPath={currentPath} />
       <SmoothCursor />
       

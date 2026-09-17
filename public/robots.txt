@@ -1,5 +1,29 @@
+# ==========================================
+# Build Bharat Synergy Partners - robots.txt
+# https://buildbharatsp.com
+# ==========================================
+
 User-agent: *
 Allow: /
+Allow: /solar
+Allow: /loans
+Allow: /real-estate
+Allow: /education
+Allow: /companies
+Allow: /companies/*
+Allow: /discovery
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+Allow: /documents/*.pdf
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.svg
 
-# Sitemaps
+# Disallow internal operational endpoints
+Disallow: /api/
+
+# Crawl Delay & Sitemap Reference
+Crawl-delay: 1
 Sitemap: https://buildbharatsp.com/sitemap.xml
