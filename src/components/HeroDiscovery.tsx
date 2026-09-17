@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Search, Sparkles, X, ArrowRight, CheckCircle2, HelpCircle, ShieldCheck, Sun, Coins, Building2, GraduationCap } from 'lucide-react';
 import { PILLAR_CATEGORIES, matchQueryToPillar } from '../data/ecosystemData';
-import { Globe } from './ui/globe';
+
+const Globe = lazy(() => import('./ui/globe').then(m => ({ default: m.Globe })));
 
 interface HeroDiscoveryProps {
   searchQuery: string;
@@ -209,14 +210,27 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
               <img
                 src="/build-bharat-logo.png"
                 alt="Build Bharat Synergy Partners Logo"
+                width="280"
+                height="96"
+                fetchPriority="high"
+                decoding="async"
                 className="h-16 sm:h-24 w-auto object-contain object-left mb-2 hover:scale-105 transition-all duration-700 ease-out drop-shadow-md"
               />
 
-              {/* Mobile/Tablet 3D Globe (Shown right below Logo on Mobile screens) */}
+              {/* Mobile/Tablet Visual Badge (High-Performance GPU CSS Orbit) */}
               <div className="block lg:hidden relative my-4 w-full">
-                <div className="absolute inset-0 max-w-[280px] sm:max-w-[380px] max-h-[380px] m-auto bg-gradient-to-tr from-[#A5CEE0]/20 via-[#10367D]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-                <div className="relative w-full max-w-[260px] sm:max-w-[360px] mx-auto aspect-square flex items-center justify-center">
-                  <Globe className="w-full h-full" />
+                <div className="absolute inset-0 max-w-[260px] sm:max-w-[320px] m-auto bg-gradient-to-tr from-[#A5CEE0]/20 via-[#10367D]/10 to-transparent rounded-full blur-2xl pointer-events-none" />
+                <div className="relative w-full max-w-[200px] sm:max-w-[240px] mx-auto aspect-square flex items-center justify-center p-3">
+                  <div className="relative w-full h-full rounded-full border border-[#10367D]/20 flex items-center justify-center animate-[spin_35s_linear_infinite]">
+                    <div className="absolute inset-2 rounded-full border border-dashed border-[#10367D]/20" />
+                    <div className="w-14 h-14 rounded-full bg-white border border-[#10367D]/15 flex items-center justify-center shadow-md">
+                      <img src="/build-bharat-logo.png" alt="BBSP" width="40" height="40" className="w-10 h-10 object-contain" />
+                    </div>
+                    <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#10367D] shadow-[0_0_8px_#10367D]" title="Solar" />
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 rounded-full bg-[#D57530] shadow-[0_0_8px_#D57530]" title="Loans" />
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3B7E9F] shadow-[0_0_8px_#3B7E9F]" title="Real Estate" />
+                    <span className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#5A9CBE] shadow-[0_0_8px_#5A9CBE]" title="EdTech" />
+                  </div>
                 </div>
               </div>
 
@@ -392,7 +406,9 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
             <div className="absolute inset-0 max-w-[480px] max-h-[480px] m-auto bg-gradient-to-tr from-[#A5CEE0]/20 via-[#10367D]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative w-full max-w-[620px] aspect-square flex items-center justify-center">
-              <Globe className="w-full h-full" />
+              <Suspense fallback={<div className="w-full h-full aspect-square rounded-full border border-stone-200/50 bg-stone-100/30 animate-pulse" />}>
+                <Globe className="w-full h-full" />
+              </Suspense>
             </div>
           </div>
 

@@ -29,11 +29,11 @@ export const SmoothCursor: FC<SmoothCursorProps> = ({ cursor }) => {
   }
  
   useEffect(() => {
-    setIsMounted(true)
-    
-    // Check if device is touch-based
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-    if (isTouchDevice) return
+    // Check if device is touch-based or screen is mobile
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth < 1024);
+    if (isTouchDevice) return;
+
+    setIsMounted(true);
  
     const handleMouseMove = (e: MouseEvent) => {
       // Ignore initial dummy browser load events at exactly (0, 0)

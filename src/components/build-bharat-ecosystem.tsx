@@ -166,6 +166,10 @@ export function BuildBharatEcosystem({
                     <img 
                       src={card.logo} 
                       alt={card.name} 
+                      width="64"
+                      height="64"
+                      loading="lazy"
+                      decoding="async"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
