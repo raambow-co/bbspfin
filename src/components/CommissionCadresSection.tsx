@@ -30,13 +30,13 @@ export const CADRE_DATA: CadreItem[] = [
   { cadre: "REFERAL & 1", cadreNumber: 1, di: "—", percentageFormatted: "20%", amountFormatted: "₹1,000", amount: 1000 },
   { cadre: "Cadre 2", cadreNumber: 2, di: "1", percentageFormatted: "5%", amountFormatted: "₹250", amount: 250 },
   { cadre: "Cadre 3", cadreNumber: 3, di: "2", percentageFormatted: "4%", amountFormatted: "₹200", amount: 200 },
-  { cadre: "Cadre 4", cadreNumber: 4, di: "2", percentageFormatted: "3%", amountFormatted: "₹150", amount: 150 },
-  { cadre: "Cadre 5", cadreNumber: 5, di: "3", percentageFormatted: "2%", amountFormatted: "₹100", amount: 100 },
-  { cadre: "Cadre 6", cadreNumber: 6, di: "3", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
-  { cadre: "Cadre 7", cadreNumber: 7, di: "3", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
-  { cadre: "Cadre 8", cadreNumber: 8, di: "3", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
-  { cadre: "Cadre 9", cadreNumber: 9, di: "3", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
-  { cadre: "Cadre 10", cadreNumber: 10, di: "3", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
+  { cadre: "Cadre 4", cadreNumber: 4, di: "3", percentageFormatted: "3%", amountFormatted: "₹150", amount: 150 },
+  { cadre: "Cadre 5", cadreNumber: 5, di: "4", percentageFormatted: "2%", amountFormatted: "₹100", amount: 100 },
+  { cadre: "Cadre 6", cadreNumber: 6, di: "5", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
+  { cadre: "Cadre 7", cadreNumber: 7, di: "5", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
+  { cadre: "Cadre 8", cadreNumber: 8, di: "5", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
+  { cadre: "Cadre 9", cadreNumber: 9, di: "5", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
+  { cadre: "Cadre 10", cadreNumber: 10, di: "5", percentageFormatted: "1%", amountFormatted: "₹50", amount: 50 },
 ];
 
 interface CommissionCadresSectionProps {
@@ -735,43 +735,43 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">4</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">2</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">3</td>
                           <td className="py-1.5 px-2 font-mono font-bold">150</td>
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">5</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">4</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">2</td>
                           <td className="py-1.5 px-2 font-mono font-bold">100</td>
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">6</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">5</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">1</td>
                           <td className="py-1.5 px-2 font-mono font-bold">50</td>
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">7</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">5</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">1</td>
                           <td className="py-1.5 px-2 font-mono font-bold">50</td>
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">8</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">5</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">1</td>
                           <td className="py-1.5 px-2 font-mono font-bold">50</td>
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">9</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">5</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">1</td>
                           <td className="py-1.5 px-2 font-mono font-bold">50</td>
                         </tr>
                         <tr>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900">10</td>
-                          <td className="py-1.5 px-2 border-r-2 border-stone-900">3</td>
+                          <td className="py-1.5 px-2 border-r-2 border-stone-900">5</td>
                           <td className="py-1.5 px-2 border-r-2 border-stone-900 font-mono">1</td>
                           <td className="py-1.5 px-2 font-mono font-bold">50</td>
                         </tr>
