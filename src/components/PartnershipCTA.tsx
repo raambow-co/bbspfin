@@ -1,5 +1,5 @@
 import { submitToFirestore } from '../lib/firebase';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowRight,
   ArrowLeft,
@@ -60,6 +60,18 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
   const [step, setStep] = useState(1);
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+
+  // Lock body scroll when partner modal is active on mobile
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
 
   // Map Section Quick Enquiry State
   const [mapEnquiry, setMapEnquiry] = useState({

@@ -46,7 +46,7 @@ const EcosystemDrawer: React.FC<EcosystemDrawerProps> = ({
  
   return (
     <Drawer>
-      <DrawerTrigger render={triggerButton} />
+      <DrawerTrigger render={(props) => React.cloneElement(triggerButton, props)} />
       <DrawerContent className="w-[85vw] sm:w-96 bg-[#FFFFFF] border-l border-slate-200/40 p-6 flex flex-col justify-between h-full shadow-2xl">
         <div>
           <DrawerHeader className="p-0 mb-6 text-left">
@@ -58,7 +58,7 @@ const EcosystemDrawer: React.FC<EcosystemDrawerProps> = ({
               Active corporate operating entities and certified member brands across the Synergy Network.
             </DrawerDescription>
           </DrawerHeader>
- 
+
           {/* Scrollable list of 4 companies */}
           <div className="space-y-4 overflow-y-auto max-h-[65vh] pr-1">
             {categories.map((pillar) => {
@@ -66,69 +66,76 @@ const EcosystemDrawer: React.FC<EcosystemDrawerProps> = ({
               return (
                 <DrawerClose 
                   key={pillar.id}
-                  render={
+                  render={(props) => (
                     <div 
+                      {...props}
                       className="bg-slate-50 border border-slate-100 rounded-xl p-4 hover:border-[#10367D]/20 hover:-translate-y-0.5 transition-all duration-300 shadow-sm cursor-pointer group text-left"
-                    />
-                  }
-                  onClick={() => {
-                    if (onCloseParentMenu) onCloseParentMenu();
-                    onNavigate(`/${pillar.id}`);
-                  }}
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2.5">
-                        <img 
-                          src={company.logo} 
-                          alt={company.name} 
-                          className="h-8 w-auto object-contain bg-white p-1 rounded-lg border border-slate-200 group-hover:scale-105 transition-transform" 
-                        />
-                        <h4 className="text-sm font-bold text-[#10367D] heading-font">
-                          {company.name}
-                        </h4>
+                      onClick={(e) => {
+                        props.onClick?.(e);
+                        if (onCloseParentMenu) onCloseParentMenu();
+                        onNavigate(`/${pillar.id}`);
+                      }}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2.5">
+                            <img 
+                              src={company.logo} 
+                              alt={company.name} 
+                              className="h-8 w-auto object-contain bg-white p-1 rounded-lg border border-slate-200 group-hover:scale-105 transition-transform" 
+                            />
+                            <h4 className="text-sm font-bold text-[#10367D] heading-font">
+                              {company.name}
+                            </h4>
+                          </div>
+                          
+                          <span className="text-[9px] font-bold px-2 py-0.5 bg-[#10367D]/10 text-[#10367D] rounded-full uppercase tracking-wider font-mono">
+                            {company.metrics[0].value}
+                          </span>
+                        </div>
+
+                        <p className="text-slate-600 text-[11px] font-normal leading-relaxed">
+                          {company.shortDescription}
+                        </p>
+
+                        <div className="mt-3 flex items-center justify-between text-[10px] font-semibold text-slate-500 group-hover:text-[#10367D] transition-colors pt-2.5 border-t border-slate-100">
+                          <span className="uppercase tracking-wider font-bold subheading-font">Enter Profile Portal</span>
+                          <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
                       </div>
-                      
-                      <span className="text-[9px] font-bold px-2 py-0.5 bg-[#10367D]/10 text-[#10367D] rounded-full uppercase tracking-wider font-mono">
-                        {company.metrics[0].value}
-                      </span>
                     </div>
- 
-                    <p className="text-slate-600 text-[11px] font-normal leading-relaxed">
-                      {company.shortDescription}
-                    </p>
- 
-                    <div className="mt-3 flex items-center justify-between text-[10px] font-semibold text-slate-500 group-hover:text-[#10367D] transition-colors pt-2.5 border-t border-slate-100">
-                      <span className="uppercase tracking-wider font-bold subheading-font">Enter Profile Portal</span>
-                      <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                </DrawerClose>
+                  )}
+                />
               );
             })}
           </div>
         </div>
- 
+
         <DrawerFooter className="p-0 mt-6 pt-4 border-t border-slate-100 flex flex-col gap-2">
           <DrawerClose 
-            render={
+            render={(props) => (
               <button
+                {...props}
                 className="bg-[#10367D]/10 hover:bg-[#10367D]/20 text-[#10367D] border border-transparent w-full justify-center text-xs py-2.5 flex items-center gap-2 rounded-full cursor-pointer transition-all font-bold"
+                onClick={(e) => {
+                  props.onClick?.(e);
+                  if (onCloseParentMenu) onCloseParentMenu();
+                  onOpenPartnerModal();
+                }}
               >
                 <span>Initiate Partner Inquiry</span>
                 <ArrowRight size={13} />
               </button>
-            }
-            onClick={() => {
-              if (onCloseParentMenu) onCloseParentMenu();
-              onOpenPartnerModal();
-            }}
+            )}
           />
-          <DrawerClose render={
-            <button className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-full justify-center text-xs py-2.5 rounded-full cursor-pointer">
+          <DrawerClose render={(props) => (
+            <button 
+              {...props}
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-full justify-center text-xs py-2.5 rounded-full cursor-pointer"
+            >
               Close Directory
             </button>
-          } />
+          )} />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
@@ -395,12 +402,12 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 pr-6 md:pr-8 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] border-b border-slate-200/40"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 px-4 md:py-4 md:px-8 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] border-b border-slate-200/40"
     >
       <div className="max-w-[1600px] mx-auto flex items-center justify-between">
         
         {/* Left: Brand Identity */}
-        <div className="flex items-center gap-4 pl-12 md:pl-24">
+        <div className="flex items-center gap-4 pl-0 md:pl-24">
           <a 
             href="/" 
             className="flex items-center group text-decoration-none shrink-0"
