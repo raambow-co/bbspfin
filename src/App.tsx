@@ -234,7 +234,7 @@ export function App() {
               onClearRegionFilter={() => setSelectedRegionFilter(null)} 
             />
 
-            {/* SECTION 4 — SYNERGY CONCEPT & FOUNDER SECTION */}
+            {/* SECTION 4 — SYNERGY CONCEPT & ADMIN SECTION */}
             <SynergyConceptSection
               onNavigate={navigate}
               onOpenPartnerModal={() => setIsPartnerModalOpen(true)}

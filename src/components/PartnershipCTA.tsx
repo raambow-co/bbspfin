@@ -1,4 +1,5 @@
 import { submitToFirestore } from '../lib/firebase';
+import { getNextMembershipCode, commitNextMembershipCode, generateEnquiryId } from '../lib/idGenerator';
 import React, { useState, useEffect } from 'react';
 import {
   ArrowRight,
@@ -114,7 +115,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
     setMapEnquiryLoading(true);
 
     try {
-      const generatedId = 'ENQ-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      const generatedId = generateEnquiryId();
       const payload = {
         id: generatedId,
         formType: 'map-enquiry',
@@ -212,7 +213,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
   const [screenshotDoc, setScreenshotDoc] = useState<UploadedDocument | null>(null);
   const [previewDoc, setPreviewDoc] = useState<{ doc: PreviewableDocument; title: string } | null>(null);
   const [isQrEnlarged, setIsQrEnlarged] = useState<boolean>(false);
-  const [membershipCode] = useState<string>('BBSP-01' + Math.floor(1000 + Math.random() * 9000));
+  const [membershipCode, setMembershipCode] = useState<string>(getNextMembershipCode());
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -513,6 +514,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
       const data = await response.json();
 
       if (response.ok && data.success) {
+        commitNextMembershipCode();
         setSubmissionId(membershipCode);
         setSubmitSuccess(true);
       } else {
@@ -565,6 +567,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
     setSubmitLoading(false);
     setSubmitSuccess(false);
     setSubmissionId('');
+    setMembershipCode(getNextMembershipCode());
     onCloseModal();
   };
 
@@ -1410,7 +1413,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                               type="text"
                               value={formData.existingMemberNumber}
                               onChange={(e) => setFormData({ ...formData, existingMemberNumber: e.target.value.toUpperCase() })}
-                              placeholder="e.g. BBSP-01001"
+                              placeholder="e.g. BBSP0001"
                               className="w-full bg-white border border-stone-250 rounded-xl px-4 py-2.5 text-stone-900 text-sm focus:border-[#10367D] outline-none shadow-sm font-mono uppercase"
                             />
                           </div>

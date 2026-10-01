@@ -8,28 +8,28 @@ export function TestimonialSection() {
       quote: 'Joining this ecosystem completely transformed our supply chain. We benefited immensely from the verified network and closed deals faster than ever before.',
       category: 'Solar',
       companyName: 'BuildBharat Solar',
-      role: 'Founder & MD'
+      role: 'Admin & MD'
     },
     {
       author: 'D Sudheer Reddy',
       quote: 'The membership provided us unparalleled access to premium real estate projects. The verification framework gave us the confidence to invest heavily and securely.',
       category: 'Real Estate',
       companyName: 'BuildBharat Real Estate',
-      role: 'Managing Director'
+      role: 'Admin & Managing Director'
     },
     {
       author: 'D Sudheer Reddy',
       quote: 'We secured project financing seamlessly through the platform. This membership has been a game-changer for our working capital and expansion plans.',
       category: 'Loans',
       companyName: 'BuildBharat Loans',
-      role: 'Managing Director'
+      role: 'Admin & Managing Director'
     },
     {
       author: 'D Sudheer Reddy',
       quote: 'Our hiring process for tech talent became incredibly efficient. Benefiting from this membership meant we could source top-tier trained engineers without the hassle.',
       category: 'EdTech',
       companyName: 'BuildBharat EduTech',
-      role: 'Founder & MD'
+      role: 'Admin & MD'
     }
   ];
 

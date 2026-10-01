@@ -468,7 +468,7 @@ const html = `<!DOCTYPE html>
 
       <div class="footer-right">
         <div class="signature-name">D Sudheer Reddy</div>
-        <div class="signature-title">MANAGING DIRECTOR & SUPERADMIN</div>
+        <div class="signature-title">ADMIN & MANAGING DIRECTOR</div>
         <div class="authorized-badge">
           <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>

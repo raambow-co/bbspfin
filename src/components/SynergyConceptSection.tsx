@@ -108,13 +108,13 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
         </div>
 
         {/* ======================================================== */}
-        {/* PART 2 — FOUNDER & LEADERSHIP SECTION */}
+        {/* PART 2 — ADMIN & LEADERSHIP SECTION */}
         {/* ======================================================== */}
         <div className="bg-white border border-stone-200 rounded-3xl p-8 sm:p-12 shadow-sm relative overflow-hidden">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 items-center">
             
-            {/* Left: Founder Portrait Card */}
+            {/* Left: Admin Portrait Card */}
             <div className="lg:col-span-5 flex flex-col items-center text-center">
               <div className="relative group w-full max-w-[340px]">
                 
@@ -122,7 +122,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                 <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-stone-100 shadow-lg aspect-[3/4] w-full">
                   <img 
                     src="/bbsp-founder.png" 
-                    alt="D Sudheer Reddy - Founder & Managing Director" 
+                    alt="D Sudheer Reddy - Admin & Managing Director" 
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                   
@@ -131,7 +131,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
 
                   <div className="absolute bottom-4 left-4 right-4 text-left text-white">
                     <span className="text-[10px] uppercase font-bold tracking-widest text-amber-400 block mb-0.5">
-                      Founder & Managing Director
+                      Admin & Managing Director
                     </span>
                     <h3 className="text-xl font-bold heading-font tracking-tight text-white">
                       D Sudheer Reddy
@@ -159,13 +159,13 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                 </h3>
               </div>
 
-              {/* Founder's Direct Quote */}
+              {/* Admin's Direct Quote */}
               <div className="bg-[#FAF9F6] border-l-4 border-[#10367D] p-5 sm:p-6 rounded-r-2xl">
                 <p className="text-stone-700 text-sm sm:text-base leading-relaxed italic font-serif">
                   "Our vision is straightforward: eliminate the friction between clean energy, capital loans, real estate infrastructure, and skilled technical talent. By aligning these sectors under a unified synergy framework, Indian enterprises scale faster, smarter, and with lasting stability."
                 </p>
                 <div className="mt-3 text-xs font-bold text-[#10367D] uppercase tracking-wider font-sans">
-                  — D Sudheer Reddy, Founder & MD
+                  — D Sudheer Reddy, Admin & MD
                 </div>
               </div>
 
@@ -201,7 +201,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                   onClick={onOpenPartnerModal}
                   className="bg-[#10367D] hover:bg-[#10367D]/90 text-white font-bold text-xs uppercase tracking-wider px-6 py-2.5 rounded-full flex items-center gap-2 shadow-sm transition-all cursor-pointer border-none"
                 >
-                  <span>Connect with Founder</span>
+                  <span>Connect with Admin</span>
                   <ArrowRight size={13} />
                 </button>
               </div>

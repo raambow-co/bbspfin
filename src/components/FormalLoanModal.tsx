@@ -1,4 +1,5 @@
 import { submitToFirestore } from '../lib/firebase';
+import { generateLoanApplicationId } from '../lib/idGenerator';
 import React, { useState } from 'react';
 import {
   X,
@@ -47,9 +48,7 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
   initialAmount = 2500000,
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [applicationId] = useState(
-    'BBSP-LN-' + Math.floor(100000 + Math.random() * 900000)
-  );
+  const [applicationId] = useState<string>(generateLoanApplicationId());
 
   // Form State
   const [formData, setFormData] = useState({
@@ -1048,7 +1047,7 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
                           type="text"
                           value={formData.uplineIdCode}
                           onChange={(e) => setFormData({ ...formData, uplineIdCode: e.target.value })}
-                          placeholder="e.g. BBSP-1092"
+                          placeholder="e.g. BBSP0001"
                           className="w-full bg-white border border-stone-300 rounded-xl px-4 py-2 text-stone-900 text-sm font-mono focus:border-[#10367D] outline-none shadow-sm"
                         />
                       </div>
