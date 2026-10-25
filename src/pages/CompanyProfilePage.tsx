@@ -39,7 +39,7 @@ export const CompanyProfilePage: React.FC<CompanyProfilePageProps> = ({ companyI
       accentBg: 'bg-[#A5CEE0]/10',
       accentBorder: 'border-[#A5CEE0]/20',
       icon: <Sun className="text-[#A5CEE0]" size={28} />,
-      heroImage: '/solar_hero_premium.png',
+      heroImage: '/solar_hero_premium.webp',
       badgeColor: 'border-[#A5CEE0]/30 text-[#A5CEE0] bg-[#A5CEE0]/10',
       taglineColor: 'text-[#A5CEE0]'
     },

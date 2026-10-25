@@ -121,7 +121,7 @@ export const SynergyConceptSection: React.FC<SynergyConceptSectionProps> = ({
                 {/* Photo Frame Container */}
                 <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-stone-100 shadow-lg aspect-[3/4] w-full">
                   <img 
-                    src="/bbsp-founder.png" 
+                    src="/bbsp-founder.webp" 
                     alt="D Sudheer Reddy - Admin & Managing Director" 
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />

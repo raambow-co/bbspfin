@@ -688,7 +688,7 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
                 <div className="bg-[#10367D] text-white pt-6 pb-6 px-6 relative rounded-b-3xl">
                   <div className="flex justify-center mb-1.5">
                     <img 
-                      src="/build-bharat-logo.png" 
+                      src="/build-bharat-logo.webp" 
                       alt="BuildBharat" 
                       className="h-10 w-auto object-contain bg-white/95 p-1 rounded-lg"
                     />

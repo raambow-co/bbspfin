@@ -12,7 +12,7 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://buildbharatsp.com/build-bharat-logo.png</image:loc>
+      <image:loc>https://buildbharatsp.com/build-bharat-logo.webp</image:loc>
       <image:title>Build Bharat Synergy Partners Logo</image:title>
       <image:caption>Multi-Industry Business Ecosystem in Solar, Loans, Real Estate, and EdTech</image:caption>
     </image:image>
@@ -25,7 +25,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://buildbharatsp.com/build-bharat-solar.png</image:loc>
+      <image:loc>https://buildbharatsp.com/build-bharat-solar.webp</image:loc>
       <image:title>BuildBharat Solar Solutions</image:title>
     </image:image>
   </url>
@@ -37,7 +37,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://buildbharatsp.com/build-bharat-loans.png</image:loc>
+      <image:loc>https://buildbharatsp.com/build-bharat-loans.webp</image:loc>
       <image:title>BuildBharat Loan Services & DSA Network</image:title>
     </image:image>
   </url>
@@ -49,7 +49,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://buildbharatsp.com/build-bharat-real-estate.png</image:loc>
+      <image:loc>https://buildbharatsp.com/build-bharat-real-estate.webp</image:loc>
       <image:title>BuildBharat Real Estate & Open Plots</image:title>
     </image:image>
   </url>
@@ -61,7 +61,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://buildbharatsp.com/build-bharat-education.png</image:loc>
+      <image:loc>https://buildbharatsp.com/build-bharat-education.webp</image:loc>
       <image:title>BuildBharat EdTech Training & Certification</image:title>
     </image:image>
   </url>

@@ -1,4 +1,7 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": {
     "site": "bbspartners-01",
     "public": "dist",
@@ -15,3 +18,4 @@
     ]
   }
 }
+

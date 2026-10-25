@@ -16,6 +16,7 @@ Allow: /contact
 Allow: /privacy
 Allow: /terms
 Allow: /documents/*.pdf
+Allow: /*.webp
 Allow: /*.png
 Allow: /*.jpg
 Allow: /*.jpeg
@@ -23,6 +24,7 @@ Allow: /*.svg
 
 # Disallow internal operational endpoints
 Disallow: /api/
+Disallow: /admin
 
 # Crawl Delay & Sitemap Reference
 Crawl-delay: 1

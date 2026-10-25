@@ -469,11 +469,15 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
         });
       }
 
+      const cleanEmail = (formData.email || '').toLowerCase().trim();
+
       const payload = {
         formType: 'partner-registration',
+        id: membershipCode,
         membershipCode: membershipCode,
         fullName: formData.fullName,
-        email: formData.email,
+        email: cleanEmail,
+        emailLower: cleanEmail,
         phone: formData.phone,
         permanentAddress: formData.permanentAddress,
         dob: formData.dob,
@@ -497,30 +501,63 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
         attachments: attachmentsPayload,
       };
 
-      const firestorePayload = {
+      // Lightweight attachment metadata for Firestore and LocalStorage (prevents quota exceeded & 1MB limit)
+      const lightweightAttachments = attachmentsPayload.map(att => ({
+        name: att.name,
+        type: att.type,
+        sizeKb: Math.round((att.base64?.length || 0) * 0.75 / 1024),
+        uploaded: true
+      }));
+
+      const firestorePayload: any = {
         ...payload,
+        id: membershipCode,
+        email: cleanEmail,
+        attachments: lightweightAttachments,
+        hasAttachments: attachmentsPayload.length > 0,
         status: 'Pending',
-        timestamp: new Date().toLocaleDateString('en-GB')
+        timestamp: new Date().toLocaleDateString('en-GB'),
+        submittedAt: new Date().toISOString()
       };
-      await submitToFirestore(firestorePayload, 'submissions');
-      const response = await fetch('/api/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        commitNextMembershipCode();
-        setSubmissionId(membershipCode);
-        setSubmitSuccess(true);
-      } else {
-        console.error('Submission failed', data);
-        alert(data.error || 'Failed to submit registration. Please try again or contact support.');
+      // Submit to Firestore submissions collection
+      const firestoreRes = await submitToFirestore(firestorePayload, 'submissions');
+      if (firestoreRes && firestoreRes.success && firestoreRes.docId) {
+        firestorePayload.firestoreDocId = firestoreRes.docId;
       }
+
+      // Persist in localStorage for admin panel & real-time sync with docId attached
+      try {
+        const existing = JSON.parse(localStorage.getItem('bbsp_enquiries') || '[]');
+        localStorage.setItem('bbsp_enquiries', JSON.stringify([firestorePayload, ...existing]));
+      } catch (storageErr) {
+        console.warn('LocalStorage save error', storageErr);
+      }
+
+
+      try {
+        const response = await fetch('/api/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) {
+          commitNextMembershipCode();
+          setSubmissionId(membershipCode);
+          setSubmitSuccess(true);
+          return;
+        }
+      } catch (apiErr) {
+        console.warn('Backend API notification queued / fallback', apiErr);
+      }
+
+      commitNextMembershipCode();
+      setSubmissionId(membershipCode);
+      setSubmitSuccess(true);
     } catch (error) {
       console.error('Error submitting form', error);
       alert('An error occurred while uploading. Please try again.');
@@ -1072,8 +1109,8 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
                   <a
-                    href="/official-member-quotation-certificate.png"
-                    download="Official-Member-Quotation-Certificate.png"
+                    href="/official-member-quotation-certificate.webp"
+                    download="Official-Member-Quotation-Certificate.webp"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs rounded-full px-6 py-3.5 uppercase font-bold tracking-wider cursor-pointer transition-all shadow-md flex items-center justify-center gap-2 w-full sm:w-auto text-decoration-none"
@@ -1871,7 +1908,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
                             {/* Blurred QR Container */}
                             <div className="relative overflow-hidden rounded-xl bg-slate-100 flex items-center justify-center">
                               <img
-                                src="/bbsp-qr.png"
+                                src="/bbsp-qr.webp"
                                 alt="Build Bharat Bank UPI QR Code"
                                 className="w-48 h-48 sm:w-52 sm:h-52 object-contain mx-auto rounded-xl filter blur-[8px] scale-105 transition-all duration-300 group-hover:scale-110 opacity-70"
                               />
@@ -2170,7 +2207,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
 
             <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200">
               <img
-                src="/bbsp-qr.png"
+                src="/bbsp-qr.webp"
                 alt="Build Bharat Bank Large QR"
                 className="w-64 h-64 sm:w-72 sm:h-72 object-contain mx-auto rounded-xl shadow-sm bg-white p-2"
               />

@@ -73,7 +73,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'BuildBharat Solar delivers end-to-end clean energy projects across South India. From solar audit to grid integration, we help businesses and homeowners transition to clean power.',
         category: 'solar',
         logoPlaceholder: 'BUILD BHARAT SOLAR',
-        logo: '/build-bharat-solar.png',
+        logo: '/build-bharat-solar.webp',
         websiteUrl: 'https://example.com/solar-infrastructure',
         keyServices: ['Rooftop Solar Solutions', 'Commercial Energy Audits', 'Microgrid & Battery Storage', 'Solar Farm Development'],
         metrics: [
@@ -94,7 +94,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'Sunshine Renewables is an industry leader in decentralized rooftop systems, specializing in quick setups for IT campuses and logistics warehouses.',
         category: 'solar',
         logoPlaceholder: 'SUNSHINE RENEWABLES',
-        logo: '/build-bharat-solar.png',
+        logo: '/build-bharat-solar.webp',
         websiteUrl: 'https://example.com/sunshine-solar',
         keyServices: ['Industrial Rooftops', 'Net Metering Approvals', 'Thermal Solar Audits', 'Ecosystem Integration'],
         metrics: [
@@ -115,7 +115,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'Deccan Solar Systems builds custom high-durability panels and battery banks engineered specifically for maritime and high-salinity coastal areas.',
         category: 'solar',
         logoPlaceholder: 'DECCAN SOLAR',
-        logo: '/build-bharat-solar.png',
+        logo: '/build-bharat-solar.webp',
         websiteUrl: 'https://example.com/deccan-solar',
         keyServices: ['Coastal Solar Parks', 'Battery Microgrids', 'Corrosion-Resistant Panels', 'Ecosystem Maintenance'],
         metrics: [
@@ -152,7 +152,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'BuildBharat Loans simplifies lending with fast digital approvals, tailored repayment structures, and transparent interest rates.',
         category: 'loans',
         logoPlaceholder: 'BUILD BHARAT LOANS',
-        logo: '/build-bharat-loans.png',
+        logo: '/build-bharat-loans.webp',
         websiteUrl: 'https://example.com/capital-credit',
         keyServices: ['MSME Business Capital', 'Green Infrastructure Loans', 'Residential Home Mortgages', 'Skill Education Financing'],
         metrics: [
@@ -173,7 +173,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'Apex Capital Partners provides commercial developers and heavy manufacturers with custom funding terms and asset-backed credit options.',
         category: 'loans',
         logoPlaceholder: 'APEX CAPITAL',
-        logo: '/build-bharat-loans.png',
+        logo: '/build-bharat-loans.webp',
         websiteUrl: 'https://example.com/apex-capital',
         keyServices: ['Corporate Mezzanine Debt', 'Machinery Lease Financing', 'Working Capital Lines', 'Industrial Loans'],
         metrics: [
@@ -194,7 +194,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'Coastal FinSolutions provides fast, zero-collateral micro-credit and working capital loans for small retailers and regional distributors.',
         category: 'loans',
         logoPlaceholder: 'COASTAL FIN',
-        logo: '/build-bharat-loans.png',
+        logo: '/build-bharat-loans.webp',
         websiteUrl: 'https://example.com/coastal-fin',
         keyServices: ['Micro-Business Loans', 'Retail Credit Lines', 'Short-Term Inventories', 'E-Billing Capital'],
         metrics: [
@@ -231,7 +231,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'BuildBharat Real Estate creates thoughtfully engineered developments across major growth cities, integrated with solar energy.',
         category: 'real-estate',
         logoPlaceholder: 'BUILD BHARAT REAL ESTATE',
-        logo: '/build-bharat-real-estate.png',
+        logo: '/build-bharat-real-estate.webp',
         websiteUrl: 'https://example.com/spaces-realty',
         keyServices: ['Eco Gated Communities', 'Grade-A Office Spaces', 'Integrated Urban Plotted Layouts', 'Property Asset Management'],
         metrics: [
@@ -252,7 +252,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'Vista Green Developers builds high-end coastal properties that blend luxury with absolute carbon neutrality, utilizing hybrid battery grids.',
         category: 'real-estate',
         logoPlaceholder: 'VISTA GREEN',
-        logo: '/build-bharat-real-estate.png',
+        logo: '/build-bharat-real-estate.webp',
         websiteUrl: 'https://example.com/vista-green',
         keyServices: ['Off-Grid Eco Villas', 'Luxury Coastal Suites', 'Boutique Green Resorts', 'LEED Architecture'],
         metrics: [
@@ -273,7 +273,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'Horizon Tech Parks creates specialized infrastructure designed for fast-growing IT teams, complete with integrated dining and gym systems.',
         category: 'real-estate',
         logoPlaceholder: 'HORIZON TECH',
-        logo: '/build-bharat-real-estate.png',
+        logo: '/build-bharat-real-estate.webp',
         websiteUrl: 'https://example.com/horizon-tech',
         keyServices: ['Shared Workspace Labs', 'Co-Working Incubators', 'Smart Fiber Hubs', 'Venture Infrastructure'],
         metrics: [
@@ -310,7 +310,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'BuildBharat EduTech delivers practical, outcome-driven education designed by tech industry leaders.',
         category: 'education',
         logoPlaceholder: 'BUILD BHARAT EDUTECH',
-        logo: '/build-bharat-education.png',
+        logo: '/build-bharat-education.webp',
         websiteUrl: 'https://example.com/learning-academy',
         keyServices: ['Full-Stack Software Engineering', 'AI & Data Science Accelerators', 'Clean Tech & Solar Engineering', 'Enterprise Workforce Upskilling'],
         metrics: [
@@ -331,7 +331,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'SkillCrafters Academy builds verified industrial pipelines, preparing technical technicians for clean energy and logistics infrastructure roles.',
         category: 'education',
         logoPlaceholder: 'SKILLCRAFTERS',
-        logo: '/build-bharat-education.png',
+        logo: '/build-bharat-education.webp',
         websiteUrl: 'https://example.com/skillcrafters',
         keyServices: ['Solar Grid Upkeep', 'Logistics Management', 'E-Vehicle Infrastructure', 'Industrial Certifications'],
         metrics: [
@@ -352,7 +352,7 @@ export const PILLAR_CATEGORIES: Record<string, PillarCategory> = {
         fullDescription: 'CareerFlow Labs helps students and engineers launch technology careers with interactive remote bootcamps led by senior developers.',
         category: 'education',
         logoPlaceholder: 'CAREERFLOW',
-        logo: '/build-bharat-education.png',
+        logo: '/build-bharat-education.webp',
         websiteUrl: 'https://example.com/careerflow',
         keyServices: ['React Web Architecture', 'Cloud Infrastructure', 'Database Orchestrations', 'Interview Prep labs'],
         metrics: [

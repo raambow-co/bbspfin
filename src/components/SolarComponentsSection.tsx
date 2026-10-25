@@ -12,26 +12,26 @@ interface ComponentCard {
 
 const COMPONENTS: ComponentCard[] = [
   {
-    image: "/solar-panels.png",
+    image: "/solar-panels.webp",
     badge: "A-GRADE MONO/POLY",
     title: "Solar Panels",
     href: "#"
   },
   {
-    image: "/inverters.png",
+    image: "/inverters.webp",
     badge: "GRID-TIED & HYBRID",
     title: "High-End Inverters",
     href: "#",
     hasSpecsLink: true
   },
   {
-    image: "/acdb-dcdb.png",
+    image: "/acdb-dcdb.webp",
     badge: "PROTECTION UNITS",
     title: "ACDB & DCDB",
     href: "#"
   },
   {
-    image: "/cables-accessories.png",
+    image: "/cables-accessories.webp",
     badge: "STANDARD GRADE",
     title: "Cables & Accs",
     href: "#"

@@ -324,19 +324,32 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
         status: 'Underwriting',
         timestamp: new Date().toLocaleDateString('en-GB')
       };
-      await submitToFirestore(firestorePayload, 'submissions');
-      const response = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        setIsSuccess(true);
-      } else {
-        const data = await response.json();
-        alert(data.error || 'Failed to submit loan application. Please try again.');
+      // Persist in localStorage for admin panel & real-time sync
+      try {
+        const existing = JSON.parse(localStorage.getItem('bbsp_enquiries') || '[]');
+        localStorage.setItem('bbsp_enquiries', JSON.stringify([firestorePayload, ...existing]));
+      } catch (storageErr) {
+        console.warn('LocalStorage save error', storageErr);
       }
+
+      await submitToFirestore(firestorePayload, 'submissions');
+
+      try {
+        const response = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          setIsSuccess(true);
+          return;
+        }
+      } catch (apiErr) {
+        console.warn('API sync fallback to Firestore & local storage', apiErr);
+      }
+
+      setIsSuccess(true);
     } catch (err) {
       console.error(err);
       alert('Network error while transmitting loan file. Please try again.');

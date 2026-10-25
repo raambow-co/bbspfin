@@ -114,7 +114,7 @@ export const GovernmentInitiativeSection: React.FC = () => {
           <div className="lg:col-span-5">
             <div className="relative border border-[#EBE6DD] p-2 bg-[#FFFFFF] rounded-2xl shadow-xl overflow-hidden group">
               <img 
-                src="/pm-surya-ghar.png" 
+                src="/pm-surya-ghar.webp" 
                 alt="PM Surya Ghar Rooftop Solar Installation in India"
                 className="w-full h-80 object-cover rounded-xl filter grayscale group-hover:grayscale-0 transition-all duration-700"
               />

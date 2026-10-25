@@ -84,7 +84,7 @@ export const DiscoveryPage: React.FC<DiscoveryPageProps> = ({
               {/* White Padded Logo Box */}
               <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center w-full max-w-[280px] h-[150px] mb-6 group-hover:scale-105 transition-transform duration-300">
                 <img 
-                  src="/build-bharat-logo.png" 
+                  src="/build-bharat-logo.webp" 
                   alt="BuildBharat Agro" 
                   className="max-h-24 max-w-full w-auto object-contain"
                 />
@@ -114,7 +114,7 @@ export const DiscoveryPage: React.FC<DiscoveryPageProps> = ({
               {/* White Padded Logo Box */}
               <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center w-full max-w-[280px] h-[150px] mb-6 group-hover:scale-105 transition-transform duration-300">
                 <img 
-                  src="/build-bharat-logo.png" 
+                  src="/build-bharat-logo.webp" 
                   alt="BuildBharat EV" 
                   className="max-h-24 max-w-full w-auto object-contain"
                 />

@@ -14,7 +14,7 @@ const DEFAULT_TITLE = 'Build Bharat Synergy Partners | Multi-Industry Business E
 const DEFAULT_DESC = 'Build Bharat Synergy Partners is a premier multi-industry conglomerate integrating Solar Energy, Financial Loans, Real Estate, and EdTech with verified 10-Cadre partner revenue distribution.';
 const DEFAULT_KEYWORDS = 'Build Bharat, Build Bharat Synergy Partners, BBSP, Solar Energy, Financial Loans, Real Estate Hyderabad, EdTech, Sriram Solar, 10 Cadres Commission, Business Partnership India';
 const SITE_URL = 'https://buildbharatsp.com';
-const DEFAULT_OG_IMAGE = 'https://buildbharatsp.com/build-bharat-logo.png';
+const DEFAULT_OG_IMAGE = 'https://buildbharatsp.com/build-bharat-logo.webp';
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
   title = DEFAULT_TITLE,

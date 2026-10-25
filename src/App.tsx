@@ -26,6 +26,9 @@ import { DiscoveryPage } from './pages/DiscoveryPage';
 import { SynergyConceptSection } from './components/SynergyConceptSection';
 import { CommissionCadresSection } from './components/CommissionCadresSection';
 import { SEOHead } from './components/SEOHead';
+import { AdminPage } from './pages/AdminPage';
+import { MemberDashboardPage } from './pages/MemberDashboardPage';
+import { MemberLoginModal } from './components/MemberLoginModal';
 
 const getSeoProps = (path: string) => {
   if (path === '/solar' || path === '/sriram-solar') {
@@ -100,6 +103,14 @@ const getSeoProps = (path: string) => {
       canonicalPath: '/terms'
     };
   }
+  if (path === '/admin') {
+    return {
+      title: 'Administrative Command & Live Audit Desk | Build Bharat Synergy Partners',
+      description: 'Executive management portal: live diagnostic audits, backend verification, partner KYC approvals, and formal loan underwriting dossiers.',
+      keywords: 'BBSP Admin, BuildBharat Management, System Audit, Partner Verification, Executive Desk, D Sudheer Reddy',
+      canonicalPath: '/admin'
+    };
+  }
   if (path.startsWith('/companies/')) {
     const name = path.replace('/companies/', '').replace(/-/g, ' ').toUpperCase();
     return {
@@ -123,6 +134,7 @@ export function App() {
   const [isPartnerModalOpen, setIsPartnerModalOpen] = useState<boolean>(false);
   const [selectedModalCompany, setSelectedModalCompany] = useState<CompanyData | null>(null);
   const [selectedRegionFilter, setSelectedRegionFilter] = useState<string | null>(null);
+  const [isMemberLoginOpen, setIsMemberLoginOpen] = useState<boolean>(false);
   const [currentPath, setCurrentPath] = useState<string>(window.location.pathname);
  
   useEffect(() => {
@@ -258,6 +270,35 @@ export function App() {
     }
   };
  
+  if (currentPath === '/admin') {
+    return (
+      <>
+        <SEOHead {...getSeoProps(currentPath)} />
+        <GoogleAnalytics currentPath={currentPath} />
+        <AdminPage onNavigate={navigate} />
+      </>
+    );
+  }
+
+  if (currentPath === '/member-dashboard' || currentPath === '/dashboard') {
+    return (
+      <>
+        <SEOHead 
+          title="BBSP Member Command Portal | Build Bharat Synergy Partners"
+          description="Executive Member Command Center for certified Build Bharat Synergy Partners to monitor commissions, sector yields, and disbursement proofs."
+          canonicalPath="/member-dashboard"
+        />
+        <GoogleAnalytics currentPath={currentPath} />
+        <MemberDashboardPage 
+          onNavigate={navigate} 
+          onLogout={() => {
+            navigate('/');
+          }}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <SEOHead {...getSeoProps(currentPath)} />
@@ -268,6 +309,7 @@ export function App() {
         {/* Header Navigation */}
         <Header
           onOpenPartnerModal={() => setIsPartnerModalOpen(true)}
+          onOpenMemberLogin={() => setIsMemberLoginOpen(true)}
           onSelectCategory={(catId: string) => {
             setSelectedCategory(catId);
             navigate('/');
@@ -294,6 +336,21 @@ export function App() {
           company={selectedModalCompany}
           onClose={() => setSelectedModalCompany(null)}
           onOpenPartner={() => setIsPartnerModalOpen(true)}
+        />
+
+        {/* Member Login Authentication Gate Modal */}
+        <MemberLoginModal
+          isOpen={isMemberLoginOpen}
+          onClose={() => setIsMemberLoginOpen(false)}
+          onSuccessLogin={(member) => {
+            navigate('/member-dashboard');
+          }}
+          onOpenPartnerModal={() => {
+            setIsPartnerModalOpen(true);
+          }}
+          onEnterDemoMode={() => {
+            navigate('/member-dashboard');
+          }}
         />
  
         {/* Footer */}

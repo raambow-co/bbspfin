@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ShieldCheck, Landmark, ChevronDown, Home, Search, Award } from 'lucide-react';
+import { submitToFirestore } from '../lib/firebase';
+import { generateEnquiryId } from '../lib/idGenerator';
 
 interface RealEstateHomepageProps {
   onNavigate: (path: string) => void;
@@ -54,9 +56,37 @@ export const RealEstateHomepage: React.FC<RealEstateHomepageProps> = ({
     }, 100);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.fullName.trim() && formData.contactInfo.trim()) {
+      const generatedId = generateEnquiryId();
+      const isEmail = formData.contactInfo.includes('@');
+      const leadPayload = {
+        id: generatedId,
+        fullName: formData.fullName.trim(),
+        phone: isEmail ? '' : formData.contactInfo.trim(),
+        email: isEmail ? formData.contactInfo.trim() : '',
+        category: 'real-estate',
+        businessName: `${formData.configuration} in ${formData.preferredLocation}`,
+        notes: `Location: ${formData.preferredLocation} | Config: ${formData.configuration} | Details: ${formData.requirements || 'N/A'}`,
+        status: 'Pending',
+        timestamp: new Date().toLocaleDateString('en-GB'),
+        submittedAt: new Date().toISOString()
+      };
+
+      try {
+        const existing = JSON.parse(localStorage.getItem('bbsp_enquiries') || '[]');
+        localStorage.setItem('bbsp_enquiries', JSON.stringify([leadPayload, ...existing]));
+      } catch (err) {
+        // ignore
+      }
+
+      try {
+        await submitToFirestore(leadPayload, 'submissions');
+      } catch (err) {
+        console.warn('Real estate firestore save fallback', err);
+      }
+
       setFormSubmitted(true);
       // Reset form
       setFormData({
@@ -68,6 +98,7 @@ export const RealEstateHomepage: React.FC<RealEstateHomepageProps> = ({
       });
     }
   };
+
 
   const faqs = [
     {

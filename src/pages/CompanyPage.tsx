@@ -380,7 +380,7 @@ const SolarHomepage: React.FC<{
           <div className="lg:col-span-5 relative">
             <div className="border border-stone-200 p-2 bg-[#FFFFFF] rounded-2xl shadow-md overflow-hidden relative">
               <img 
-                src="/solar_hero_premium.png" 
+                src="/solar_hero_premium.webp" 
                 alt={company.name}
                 className="w-full h-[420px] object-cover rounded-xl"
               />
@@ -388,7 +388,7 @@ const SolarHomepage: React.FC<{
             {/* Absolute overlapping card */}
             <div className="absolute -bottom-4 -left-4 bg-white border border-stone-200 p-4 rounded-2xl shadow-lg flex items-center gap-3 max-w-[260px]">
               <div className="w-12 h-12 rounded-xl overflow-hidden bg-stone-100 flex-shrink-0">
-                <img src="/pm-surya-ghar.png" className="w-full h-full object-cover" />
+                <img src="/pm-surya-ghar.webp" className="w-full h-full object-cover" />
               </div>
               <div className="text-left">
                 <span className="text-[8px] font-bold text-[#E8963C] block uppercase tracking-wider font-sans">Live Deployment</span>
@@ -449,7 +449,7 @@ const SolarHomepage: React.FC<{
           <div className="lg:col-span-5 relative">
             <div className="border border-stone-850 p-2 bg-[#1A1A1A] rounded-2xl shadow-xl">
               <img 
-                src="/solar-panels.png" 
+                src="/solar-panels.webp" 
                 alt="Solar Panel Installation"
                 className="w-full h-80 object-cover rounded-xl"
               />
@@ -472,7 +472,7 @@ const SolarHomepage: React.FC<{
               {/* Official Authority Badge and Labels */}
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-white rounded-lg border border-stone-250 p-1.5 flex-shrink-0 flex items-center justify-center shadow-sm">
-                  <img src="/pm-surya-ghar.png" alt="PM Surya Ghar Emblem" className="max-h-full max-w-full object-contain" />
+                  <img src="/pm-surya-ghar.webp" alt="PM Surya Ghar Emblem" className="max-h-full max-w-full object-contain" />
                 </div>
                 <div className="text-left font-sans">
                   <span className="text-[9px] uppercase tracking-wider text-stone-400 font-bold block">Authority Signal</span>
@@ -527,7 +527,7 @@ const SolarHomepage: React.FC<{
             <div className="lg:col-span-5 relative w-full h-full min-h-[300px] flex items-center justify-center">
               <div className="border border-stone-200 p-2 bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-[400px]">
                 <img 
-                  src="/pm-modi-solar.png" 
+                  src="/pm-modi-solar.webp" 
                   alt="PM Surya Ghar Muft Bijli Yojana Banner featuring PM Narendra Modi"
                   className="w-full h-auto rounded-xl object-cover" 
                 />
@@ -582,31 +582,31 @@ const SolarHomepage: React.FC<{
           {/* Masonry-style Grid of 4-5 real installation photos */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="lg:col-span-2 relative overflow-hidden rounded-2xl border border-stone-800 h-64 group">
-              <img src="/solar_hero_premium.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <img src="/solar_hero_premium.webp" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span className="text-xs font-bold uppercase tracking-wider font-sans text-white">Commercial Rooftop Grid</span>
               </div>
             </div>
             <div className="relative overflow-hidden rounded-2xl border border-stone-800 h-64 group">
-              <img src="/solar-panels.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <img src="/solar-panels.webp" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span className="text-xs font-bold uppercase tracking-wider font-sans text-white">High Efficiency PV</span>
               </div>
             </div>
             <div className="relative overflow-hidden rounded-2xl border border-stone-800 h-64 group">
-              <img src="/inverters.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <img src="/inverters.webp" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span className="text-xs font-bold uppercase tracking-wider font-sans text-white">Smart Hybrid Inverter</span>
               </div>
             </div>
             <div className="relative overflow-hidden rounded-2xl border border-stone-800 h-64 group">
-              <img src="/pm-surya-ghar.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <img src="/pm-surya-ghar.webp" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span className="text-xs font-bold uppercase tracking-wider font-sans text-white">Residential Net Metering</span>
               </div>
             </div>
             <div className="lg:col-span-3 relative overflow-hidden rounded-2xl border border-stone-800 h-64 group">
-              <img src="/acdb-dcdb.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <img src="/acdb-dcdb.webp" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span className="text-xs font-bold uppercase tracking-wider font-sans text-white">Distribution System</span>
               </div>
@@ -661,7 +661,7 @@ export const CompanyPage: React.FC<CompanyPageProps> = ({ category, onNavigate, 
       accentBg: 'bg-[#A5CEE0]/10',
       accentBorder: 'border-[#A5CEE0]/20',
       icon: <Sun className="text-[#A5CEE0]" size={28} />,
-      heroImage: '/solar_hero_premium.png',
+      heroImage: '/solar_hero_premium.webp',
       badgeColor: 'border-[#A5CEE0]/30 text-[#A5CEE0] bg-[#A5CEE0]/10',
       taglineColor: 'text-[#A5CEE0]'
     },
@@ -980,7 +980,7 @@ export const CompanyPage: React.FC<CompanyPageProps> = ({ category, onNavigate, 
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/70 backdrop-blur-[12px] p-6 animate-fadeIn">
           <div className="text-center max-w-sm w-full px-6 py-10 bg-white border border-[#EBE6DD] rounded-3xl shadow-xl flex flex-col items-center">
             <img 
-              src="/build-bharat-education.png" 
+              src="/build-bharat-education.webp" 
               alt="BuildBharat EduTech Logo" 
               className="h-20 w-auto object-contain mb-5" 
             />

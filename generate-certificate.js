@@ -1,8 +1,8 @@
 import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 
-const logoBase64 = readFileSync('public/build-bharat-logo.png').toString('base64');
-const logoSrc = `data:image/png;base64,${logoBase64}`;
+const logoBase64 = readFileSync('public/build-bharat-logo.webp').toString('base64');
+const logoSrc = `data:image/webp;base64,${logoBase64}`;
 
 const html = `<!DOCTYPE html>
 <html lang="en">

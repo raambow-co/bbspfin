@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { submitToFirestore } from '../lib/firebase';
 import {
   ArrowLeft,
   ArrowRight,
@@ -185,24 +186,40 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLeadSubmitting(true);
+    
+    const leadPayload = {
+      id: `BBSP-LN-FAST-${Date.now()}`,
+      fullName: leadForm.fullName,
+      phone: leadForm.phone,
+      email: leadForm.email,
+      category: 'loans',
+      businessName: `Fast Loan: ${leadForm.loanType.toUpperCase()} (₹${leadForm.requestedAmount})`,
+      requiredAmount: leadForm.requestedAmount,
+      city: leadForm.city,
+      notes: `Employment: ${leadForm.employmentType}, Monthly Income: ₹${leadForm.monthlyIncome}`,
+      status: 'Pending',
+      timestamp: new Date().toLocaleDateString('en-GB'),
+      submittedAt: new Date().toISOString()
+    };
+
+    // Save to local storage for Admin Panel
     try {
-      const response = await fetch('/api/submit', {
+      const existing = JSON.parse(localStorage.getItem('bbsp_enquiries') || '[]');
+      localStorage.setItem('bbsp_enquiries', JSON.stringify([leadPayload, ...existing]));
+    } catch (storageErr) {
+      console.warn('Storage save fallback', storageErr);
+    }
+
+    try {
+      await submitToFirestore(leadPayload, 'submissions');
+      await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: leadForm.fullName,
-          phone: leadForm.phone,
-          email: leadForm.email,
-          category: 'loans',
-          businessName: `Loan Inquiry: ${leadForm.loanType.toUpperCase()} (₹${leadForm.requestedAmount})`,
-          notes: `City: ${leadForm.city}, Employment: ${leadForm.employmentType}, Monthly Income: ₹${leadForm.monthlyIncome}`
-        })
+        body: JSON.stringify(leadPayload)
       });
-      if (response.ok) {
-        setLeadSuccess(true);
-      }
+      setLeadSuccess(true);
     } catch (err) {
-      console.error(err);
+      console.warn('Fast lead submission error, fallback to local', err);
       setLeadSuccess(true); // Graceful fallback
     } finally {
       setLeadSubmitting(false);

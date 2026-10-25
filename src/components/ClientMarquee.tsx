@@ -2,10 +2,10 @@ import React from 'react';
 
 export function ClientMarquee() {
   const logos = [
-    { src: '/build-bharat-loans.png', alt: 'BuildBharat Loans' },
-    { src: '/build-bharat-real-estate.png', alt: 'BuildBharat Real Estate' },
-    { src: '/build-bharat-education.png', alt: 'BuildBharat EduTech' },
-    { src: '/build-bharat-solar.png', alt: 'BuildBharat Solar' },
+    { src: '/build-bharat-loans.webp', alt: 'BuildBharat Loans' },
+    { src: '/build-bharat-real-estate.webp', alt: 'BuildBharat Real Estate' },
+    { src: '/build-bharat-education.webp', alt: 'BuildBharat EduTech' },
+    { src: '/build-bharat-solar.webp', alt: 'BuildBharat Solar' },
   ];
 
   // Triple-duplicate so scroll is truly seamless at any speed

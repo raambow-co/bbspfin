@@ -207,7 +207,7 @@ export const HeroDiscovery: React.FC<HeroDiscoveryProps> = ({
             {/* Simplified Hero Heading & Brand Intro */}
             <div className="space-y-4 text-left">
               <img
-                src="/build-bharat-logo.png"
+                src="/build-bharat-logo.webp"
                 alt="Build Bharat Synergy Partners Logo"
                 className="h-16 sm:h-24 w-auto object-contain object-left mb-2 hover:scale-105 transition-all duration-700 ease-out drop-shadow-md"
               />

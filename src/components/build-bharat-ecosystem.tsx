@@ -8,7 +8,7 @@ const features = [
   {
     id: "loans",
     name: "BuildBharat Loans",
-    logo: "/build-bharat-loans.png",
+    logo: "/build-bharat-loans.webp",
     description: "Structured corporate financing, project debt placement, and working capital lines for expanding MSMEs.",
     stat: "",
     href: "/loans",
@@ -18,7 +18,7 @@ const features = [
   {
     id: "solar",
     name: "BuildBharat Solar",
-    logo: "/build-bharat-solar.png",
+    logo: "/build-bharat-solar.webp",
     description: "Industrial solar installations and clean renewable energy grid integration for commercial developers.",
     stat: "",
     href: "/solar",
@@ -28,7 +28,7 @@ const features = [
   {
     id: "about",
     name: "Build Bharat",
-    logo: "/build-bharat-logo.png",
+    logo: "/build-bharat-logo.webp",
     description: "India's premier multi-brand B2B partnership platform. We align sustainable infrastructure, corporate capital solutions, prime real estate developments, and industrial skill training under one unified verification framework.",
     stat: "",
     href: "/about",
@@ -38,7 +38,7 @@ const features = [
   {
     id: "real-estate",
     name: "BuildBharat Real Estate",
-    logo: "/build-bharat-real-estate.png",
+    logo: "/build-bharat-real-estate.webp",
     description: "Strategic commercial developments, Grade-A IT parks, and logistics warehouses across economic growth corridors.",
     stat: "",
     href: "/real-estate",
@@ -48,7 +48,7 @@ const features = [
   {
     id: "education",
     name: "BuildBharat EduTech",
-    logo: "/build-bharat-education.png",
+    logo: "/build-bharat-education.webp",
     description: "High-value industrial training bootcamps, talent pipeline development, and tech career certifications.",
     stat: "",
     href: "/education",

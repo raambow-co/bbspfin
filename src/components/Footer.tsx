@@ -34,7 +34,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
                 onClick={() => onNavigate('/')}
               >
                 <img 
-                  src="/build-bharat-logo.png" 
+                  src="/build-bharat-logo.webp" 
                   alt="Build Bharat Synergy Partners" 
                   className="h-12 sm:h-16 w-auto object-contain" 
                 />
@@ -128,6 +128,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
               >
                 About hubs
               </button>
+              <button 
+                onClick={() => onNavigate('/admin')} 
+                className="hover:text-[#f0a951] transition-colors text-left bg-transparent border-none p-0 cursor-pointer text-[#f0a951] font-semibold flex items-center gap-1.5 pt-1"
+              >
+                <span>Admin & MD Desk</span>
+                <span className="text-[9px] bg-[#f0a951]/20 text-[#f0a951] px-1.5 py-0.5 rounded font-mono font-bold">PORTAL</span>
+              </button>
             </div>
           </div>
 
@@ -179,7 +186,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
         <div className="pt-6 mt-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[#7d8ea3] text-xs font-medium">
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
             <div className="flex items-center gap-2.5 bg-white px-4 py-1.5 rounded-full border border-white/40 shadow-sm transition-all hover:shadow-md">
-              <img src="/build-bharat-logo.png" alt="Build Bharat Logo" className="h-4 sm:h-5 w-auto object-contain" />
+              <img src="/build-bharat-logo.webp" alt="Build Bharat Logo" className="h-4 sm:h-5 w-auto object-contain" />
               <span className="text-[#10367D] font-extrabold tracking-wider uppercase text-[10px] sm:text-[11px] font-sans">
                 Build Bharat Synergy Partners
               </span>
@@ -195,9 +202,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPartner, onNavigate }) => 
               <a href="#" aria-label="Facebook" className="text-[#b9c6d6] hover:text-[#f0a951] transition-all hover:scale-110"><Facebook size={18} strokeWidth={1.5} /></a>
             </div>
             <span className="hidden md:block w-px h-5 bg-[#2c4a6b]/60"></span>
-            <p className="font-semibold text-center md:text-right uppercase tracking-wider text-[10px] text-[#b9c6d6]">
-              MD: D Sudheer Reddy
-            </p>
+            <button
+              onClick={() => onNavigate('/admin')}
+              className="font-semibold text-center md:text-right uppercase tracking-wider text-[10px] text-[#b9c6d6] hover:text-[#f0a951] transition-colors bg-transparent border-none p-0 cursor-pointer flex items-center gap-1.5"
+              title="Open BBSP Executive Admin & Audit Desk"
+            >
+              <span>MD: D Sudheer Reddy</span>
+              <span className="text-[9px] px-1 py-0.2 rounded bg-white/10 text-[#f0a951]">ADMIN</span>
+            </button>
           </div>
         </div>
       </div>

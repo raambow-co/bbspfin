@@ -26,8 +26,8 @@ async function render() {
   await page.evaluateHandle('document.fonts.ready');
 
   const cardElement = await page.$('.cert-card');
-  const outputPath = path.join(__dirname, 'public', 'official-member-quotation-certificate.png');
-  const rootOutputPath = path.join(__dirname, 'official-member-quotation-certificate.png');
+  const outputPath = path.join(__dirname, 'public', 'official-member-quotation-certificate.webp');
+  const rootOutputPath = path.join(__dirname, 'official-member-quotation-certificate.webp');
 
   await cardElement.screenshot({
     path: outputPath,

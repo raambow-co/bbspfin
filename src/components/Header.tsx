@@ -14,6 +14,7 @@ import {
  
 interface HeaderProps {
   onOpenPartnerModal: () => void;
+  onOpenMemberLogin?: () => void;
   onSelectCategory?: (catId: string) => void;
   onNavigate: (path: string) => void;
   currentPath: string;
@@ -144,6 +145,7 @@ const EcosystemDrawer: React.FC<EcosystemDrawerProps> = ({
  
 export const Header: React.FC<HeaderProps> = ({ 
   onOpenPartnerModal, 
+  onOpenMemberLogin,
   onSelectCategory,
   onNavigate,
   currentPath
@@ -218,11 +220,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   const getSubPageLogo = () => {
     switch (currentPath) {
-      case '/solar': return "/build-bharat-solar.png";
-      case '/loans': return "/build-bharat-loans.png";
-      case '/real-estate': return "/build-bharat-real-estate.png";
-      case '/education': return "/build-bharat-education.png";
-      case '/discovery': return "/build-bharat-logo.png";
+      case '/solar': return "/build-bharat-solar.webp";
+      case '/loans': return "/build-bharat-loans.webp";
+      case '/real-estate': return "/build-bharat-real-estate.webp";
+      case '/education': return "/build-bharat-education.webp";
+      case '/discovery': return "/build-bharat-logo.webp";
       default: return null;
     }
   };
@@ -421,7 +423,7 @@ export const Header: React.FC<HeaderProps> = ({
             }}
           >
             <img 
-              src="/build-bharat-logo.png" 
+              src="/build-bharat-logo.webp" 
               alt="Build Bharat Synergy Partners" 
               className="h-9 sm:h-12 w-auto object-contain group-hover:scale-[1.03] transition-transform duration-300" 
             />
@@ -463,17 +465,28 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
  
         {/* Right: Primary Call-To-Action Button Group */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
           <EcosystemDrawer 
             onNavigate={onNavigate}
             onOpenPartnerModal={onOpenPartnerModal}
             triggerButton={
-              <button className="bg-white hover:bg-slate-50 border border-slate-200 text-[#10367D] text-xs font-bold uppercase tracking-wider rounded-full px-4 py-2.5 flex items-center gap-2 cursor-pointer shadow-sm transition-all">
+              <button className="bg-white hover:bg-slate-50 border border-slate-200 text-[#10367D] text-xs font-bold uppercase tracking-wider rounded-full px-3.5 py-2.5 flex items-center gap-1.5 cursor-pointer shadow-sm transition-all">
                 <Building2 size={14} className="text-[#10367D]" />
                 <span>Companies</span>
               </button>
             }
           />
+
+          {onOpenMemberLogin && (
+            <button
+              onClick={onOpenMemberLogin}
+              className="bg-slate-50 hover:bg-slate-100 border border-[#10367D]/25 hover:border-[#10367D]/50 text-[#10367D] text-xs font-bold uppercase tracking-wider rounded-full px-3.5 py-2.5 flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+              title="Access BBSP Member Portal"
+            >
+              <ShieldCheck size={14} className="text-[#D57530]" />
+              <span>Member Login</span>
+            </button>
+          )}
           
           <button
             onClick={onOpenPartnerModal}
@@ -546,6 +559,19 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               }
             />
+
+            {onOpenMemberLogin && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenMemberLogin();
+                }}
+                className="bg-slate-50 hover:bg-slate-100 border border-[#10367D]/30 text-[#10367D] text-xs font-bold uppercase tracking-wider rounded-full py-2.5 flex items-center justify-center gap-2 cursor-pointer w-full shadow-sm transition-all"
+              >
+                <ShieldCheck size={14} className="text-[#D57530]" />
+                <span>Member Login Portal</span>
+              </button>
+            )}
  
             <button
               onClick={() => {
