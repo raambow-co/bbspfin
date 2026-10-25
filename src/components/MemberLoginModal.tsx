@@ -67,18 +67,16 @@ export const MemberLoginModal: React.FC<MemberLoginModalProps> = ({
       let matchedMember: any = null;
       let memberStatus = 'not_found';
 
-      // 1. Direct check using getApprovedMemberByEmail
-      if (cleanInput.includes('@')) {
-        try {
-          const approvedData = await getApprovedMemberByEmail(cleanInput);
-          if (approvedData) {
-            isApproved = true;
-            matchedMember = approvedData;
-            memberStatus = 'approved';
-          }
-        } catch (err) {
-          console.warn('getApprovedMemberByEmail check error:', err);
+      // 1. Direct check using getApprovedMemberByEmail (supports both Email and Member ID)
+      try {
+        const approvedData = await getApprovedMemberByEmail(cleanInput);
+        if (approvedData) {
+          isApproved = true;
+          matchedMember = approvedData;
+          memberStatus = 'approved';
         }
+      } catch (err) {
+        console.warn('getApprovedMemberByEmail check error:', err);
       }
 
       // 2. Query Firestore submissions collection (by email or membershipCode)
@@ -109,16 +107,17 @@ export const MemberLoginModal: React.FC<MemberLoginModalProps> = ({
         }
       }
 
-      // 3. Fallback check in local storage cache
+      // 3. Fallback check in local storage cache (bbsp_members & bbsp_enquiries)
       if (!isApproved) {
         try {
-          const cachedRaw = localStorage.getItem('bbsp_enquiries');
-          if (cachedRaw) {
-            const cachedLeads = JSON.parse(cachedRaw);
-            const found = cachedLeads.find((l: any) => 
+          const rawMembers = localStorage.getItem('bbsp_members');
+          if (rawMembers) {
+            const memberList = JSON.parse(rawMembers);
+            const found = memberList.find((l: any) => 
               (l.email || '').toLowerCase().trim() === cleanInput ||
               (l.membershipCode || '').toUpperCase() === cleanInput.toUpperCase() ||
-              (l.id || '').toUpperCase() === cleanInput.toUpperCase()
+              (l.id || '').toUpperCase() === cleanInput.toUpperCase() ||
+              (l.memberId || '').toUpperCase() === cleanInput.toUpperCase()
             );
             if (found) {
               const rawStatus = (found.status || '').toLowerCase().trim();
@@ -128,6 +127,29 @@ export const MemberLoginModal: React.FC<MemberLoginModalProps> = ({
                 matchedMember = found;
               } else if (!matchedMember) {
                 matchedMember = found;
+              }
+            }
+          }
+
+          if (!isApproved) {
+            const cachedRaw = localStorage.getItem('bbsp_enquiries');
+            if (cachedRaw) {
+              const cachedLeads = JSON.parse(cachedRaw);
+              const found = cachedLeads.find((l: any) => 
+                (l.email || '').toLowerCase().trim() === cleanInput ||
+                (l.membershipCode || '').toUpperCase() === cleanInput.toUpperCase() ||
+                (l.id || '').toUpperCase() === cleanInput.toUpperCase() ||
+                (l.memberId || '').toUpperCase() === cleanInput.toUpperCase()
+              );
+              if (found) {
+                const rawStatus = (found.status || '').toLowerCase().trim();
+                memberStatus = rawStatus;
+                if (rawStatus === 'approved' || rawStatus === 'sanctioned' || found.isApproved === true) {
+                  isApproved = true;
+                  matchedMember = found;
+                } else if (!matchedMember) {
+                  matchedMember = found;
+                }
               }
             }
           }

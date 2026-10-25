@@ -78,17 +78,24 @@ async function runCompleteE2EFlowTest() {
     // ----------------------------------------------------
     // STEP 4: USER LOGS IN USING THE EXACT SAME EMAIL ID
     // ----------------------------------------------------
-    console.log('▶ Step 4: User now logs in using their registered Email ID...');
+    console.log('▶ Step 4a: User logs in using their registered Email ID...');
     const postApprovalMember = await getApprovedMemberByEmail(testEmail);
     if (!postApprovalMember) {
       throw new Error('Login failed: Approved member not found in Firestore!');
     }
 
-    console.log('  ✓ Authentication SUCCESSFUL!');
+    console.log('  ✓ Authentication via Email SUCCESSFUL!');
     console.log('  ✓ Member Name   :', postApprovalMember.fullName || postApprovalMember.name);
     console.log('  ✓ Member Email  :', postApprovalMember.email);
     console.log('  ✓ Member ID     :', postApprovalMember.membershipCode || postApprovalMember.id);
     console.log('  ✓ Cadre Status  :', postApprovalMember.status);
+
+    console.log('▶ Step 4b: User logs in using their Membership Code (' + testMemberCode + ')...');
+    const memberByCode = await getApprovedMemberByEmail(testMemberCode);
+    if (!memberByCode) {
+      throw new Error('Login failed: Approved member not found by Membership Code!');
+    }
+    console.log('  ✓ Authentication via Membership Code SUCCESSFUL!');
     console.log('  ✓ Member Portal unlocked and ready for dashboard rendering!\n');
 
     // ----------------------------------------------------

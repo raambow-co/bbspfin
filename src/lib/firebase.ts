@@ -454,23 +454,42 @@ export async function approveMemberInFirestore(lead: any): Promise<{ success: bo
 /**
  * Check if an email belongs to an approved BBSP member
  */
-export async function getApprovedMemberByEmail(email: string): Promise<any | null> {
-  const cleanEmail = (email || '').toLowerCase().trim();
-  if (!cleanEmail) return null;
+export async function getApprovedMemberByEmail(emailOrCode: string): Promise<any | null> {
+  const cleanInput = (emailOrCode || '').trim();
+  if (!cleanInput) return null;
+  const cleanEmail = cleanInput.toLowerCase();
+  const cleanCode = cleanInput.toUpperCase();
+  const isEmail = cleanInput.includes('@');
 
   try {
-    // 1. Check 'members' collection
-    const memberDoc = await getDoc(doc(db, 'members', cleanEmail));
-    if (memberDoc.exists()) {
-      const data = memberDoc.data();
-      if (data.status === 'Approved' || data.isApproved === true) {
-        return { id: memberDoc.id, ...data };
+    // 1. Check 'members' collection (by email doc ID or query by membershipCode/id)
+    if (isEmail) {
+      const memberDoc = await getDoc(doc(db, 'members', cleanEmail));
+      if (memberDoc.exists()) {
+        const data = memberDoc.data();
+        if (data.status === 'Approved' || data.isApproved === true) {
+          return { id: memberDoc.id, ...data };
+        }
+      }
+    } else {
+      const membersCol = collection(db, 'members');
+      const qCode = query(membersCol, where('membershipCode', '==', cleanCode));
+      const snapCode = await getDocs(qCode);
+      if (!snapCode.empty) {
+        for (const docSnap of snapCode.docs) {
+          const data = docSnap.data();
+          if (data.status === 'Approved' || data.isApproved === true) {
+            return { id: docSnap.id, ...data };
+          }
+        }
       }
     }
 
     // 2. Check 'submissions' collection
     const subCol = collection(db, 'submissions');
-    const q = query(subCol, where('email', '==', cleanEmail));
+    const q = isEmail 
+      ? query(subCol, where('email', '==', cleanEmail))
+      : query(subCol, where('membershipCode', '==', cleanCode));
     const snapshot = await getDocs(q);
     if (!snapshot.empty) {
       let found: any = null;
@@ -492,14 +511,22 @@ export async function getApprovedMemberByEmail(email: string): Promise<any | nul
     const rawMembers = localStorage.getItem('bbsp_members');
     if (rawMembers) {
       const list = JSON.parse(rawMembers);
-      const m = list.find((item: any) => (item.email || '').toLowerCase().trim() === cleanEmail);
+      const m = list.find((item: any) => 
+        (item.email || '').toLowerCase().trim() === cleanEmail ||
+        (item.membershipCode || '').toUpperCase() === cleanCode ||
+        (item.id || '').toUpperCase() === cleanCode
+      );
       if (m && (m.status === 'Approved' || m.isApproved === true)) return m;
     }
 
     const rawEnquiries = localStorage.getItem('bbsp_enquiries');
     if (rawEnquiries) {
       const list = JSON.parse(rawEnquiries);
-      const m = list.find((item: any) => (item.email || '').toLowerCase().trim() === cleanEmail);
+      const m = list.find((item: any) => 
+        (item.email || '').toLowerCase().trim() === cleanEmail ||
+        (item.membershipCode || '').toUpperCase() === cleanCode ||
+        (item.id || '').toUpperCase() === cleanCode
+      );
       if (m && ((m.status || '').toLowerCase().trim() === 'approved' || (m.status || '').toLowerCase().trim() === 'sanctioned' || m.isApproved === true)) {
         return m;
       }
