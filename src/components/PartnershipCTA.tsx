@@ -515,7 +515,7 @@ export const PartnershipCTA: React.FC<PartnershipCTAProps> = ({
         email: cleanEmail,
         attachments: lightweightAttachments,
         hasAttachments: attachmentsPayload.length > 0,
-        status: 'Pending',
+        status: 'In Review',
         timestamp: new Date().toLocaleDateString('en-GB'),
         submittedAt: new Date().toISOString()
       };

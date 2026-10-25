@@ -66,7 +66,7 @@ interface LeadRecord {
   phone?: string;
   category?: string;
   businessName?: string;
-  status: 'Pending' | 'Under Review' | 'Approved' | 'Sanctioned' | 'Rejected';
+  status: 'In Review' | 'Contacted' | 'Approved' | 'Rejected';
   timestamp?: string;
   submittedAt?: string;
   // Partner KYC details
@@ -133,7 +133,7 @@ const DEFAULT_SEEDS: LeadRecord[] = [
     accountNumber: '50100482910394',
     ifscCode: 'HDFC0000123',
     city: 'Hyderabad',
-    status: 'Under Review',
+    status: 'In Review',
     timestamp: '14/10/2026',
     submittedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
   },
@@ -143,7 +143,7 @@ const DEFAULT_SEEDS: LeadRecord[] = [
     phone: '9440187654',
     category: 'document-download',
     businessName: '10 Cadres Commission Structure PDF Access',
-    status: 'Pending',
+    status: 'In Review',
     timestamp: '14/10/2026',
     submittedAt: new Date(Date.now() - 3600000 * 1).toISOString(),
     notes: 'Downloaded 10 Cadres Revenue Schedule - Interested in District DI Cadre'
@@ -378,23 +378,78 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     }
   };
 
-  // Helper to merge live Firestore leads with cached leads
+  // Helper to merge live Firestore leads with cached leads without reverting Approved status
   const mergeWithFirestoreLeads = (cloudLeads: LeadRecord[], currentLeads: LeadRecord[]) => {
     if (!cloudLeads || cloudLeads.length === 0) return currentLeads;
 
+    // Load any locally registered approved member emails to prevent accidental downgrade
+    const approvedEmails = new Set<string>();
+    try {
+      const raw = localStorage.getItem('bbsp_members');
+      if (raw) {
+        const list = JSON.parse(raw);
+        list.forEach((m: any) => {
+          if (m.email) approvedEmails.add(m.email.toLowerCase().trim());
+        });
+      }
+    } catch (e) {}
+
     const map = new Map<string, LeadRecord>();
 
-    // Cloud leads take precedence
+    // Cloud leads processing
     for (const lead of cloudLeads) {
-      const key = lead.firestoreDocId || lead.id;
-      map.set(key, lead);
+      const cleanEmail = (lead.email || '').toLowerCase().trim();
+      const isApprovedInLocal = 
+        approvedEmails.has(cleanEmail) ||
+        currentLeads.some(l => 
+          ((cleanEmail && l.email && l.email.toLowerCase().trim() === cleanEmail) ||
+           (l.id && l.id === lead.id) ||
+           (l.membershipCode && l.membershipCode === lead.membershipCode) ||
+           (l.firestoreDocId && l.firestoreDocId === lead.firestoreDocId)) &&
+          l.status === 'Approved'
+        );
+
+      const effectiveStatus: LeadRecord['status'] = isApprovedInLocal ? 'Approved' : lead.status;
+      const mergedLead: LeadRecord = {
+        ...lead,
+        status: effectiveStatus,
+        isApproved: effectiveStatus === 'Approved'
+      };
+
+      const key = lead.firestoreDocId || (cleanEmail ? `email_${cleanEmail}` : lead.id);
+      map.set(key, mergedLead);
     }
 
-    // Keep local records that aren't synced yet
+    // Keep local records that aren't synced yet or have offline changes
     for (const local of currentLeads) {
-      const key = local.firestoreDocId || local.id;
-      if (!map.has(key)) {
+      const cleanEmail = (local.email || '').toLowerCase().trim();
+      let matchedKey: string | null = null;
+
+      for (const [k, v] of map.entries()) {
+        if (
+          (cleanEmail && v.email && v.email.toLowerCase().trim() === cleanEmail) ||
+          (local.membershipCode && v.membershipCode === local.membershipCode) ||
+          (local.firestoreDocId && v.firestoreDocId === local.firestoreDocId) ||
+          (local.id && v.id === local.id)
+        ) {
+          matchedKey = k;
+          break;
+        }
+      }
+
+      if (!matchedKey) {
+        const key = local.firestoreDocId || (cleanEmail ? `email_${cleanEmail}` : local.id);
         map.set(key, local);
+      } else {
+        // If local is Approved but cloud wasn't, ensure Approved is retained
+        if (local.status === 'Approved') {
+          const existing = map.get(matchedKey)!;
+          map.set(matchedKey, {
+            ...existing,
+            status: 'Approved',
+            isApproved: true
+          });
+        }
       }
     }
 
@@ -623,7 +678,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
       category: testForm.category,
       businessName: testForm.businessName,
       notes: testForm.notes,
-      status: 'Under Review',
+      status: 'In Review',
       timestamp: new Date().toLocaleDateString('en-GB'),
       submittedAt: new Date().toISOString()
     };
@@ -660,65 +715,82 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
   // Status Updater with full member approval & Firestore sync
   const updateLeadStatus = async (id: string, newStatus: LeadRecord['status']) => {
-    const targetLead = leads.find(item => item.id === id || item.applicationId === id || item.membershipCode === id || item.firestoreDocId === id);
+    const targetLead = leads.find(item => 
+      item.id === id || 
+      item.applicationId === id || 
+      item.membershipCode === id || 
+      item.firestoreDocId === id
+    );
     if (!targetLead) return;
 
-    const isApprovedStatus = newStatus === 'Approved' || newStatus === 'Sanctioned';
+    const isApproved = newStatus === 'Approved';
+    const cleanEmail = (targetLead.email || '').toLowerCase().trim();
 
+    // 1. Update React state immediately
     const updated = leads.map(item => {
       if (item.id === id || item.applicationId === id || item.membershipCode === id || item.firestoreDocId === id) {
         return { 
           ...item, 
           status: newStatus,
-          isApproved: isApprovedStatus,
-          approvedAt: isApprovedStatus ? (item.approvedAt || new Date().toISOString()) : undefined
+          isApproved: isApproved,
+          approvedAt: isApproved ? (item.approvedAt || new Date().toISOString()) : undefined
         };
       }
       return item;
     });
     setLeads(updated);
     localStorage.setItem('bbsp_enquiries', JSON.stringify(updated));
+
     if (selectedLead && (selectedLead.id === id || selectedLead.membershipCode === id || selectedLead.firestoreDocId === id)) {
       setSelectedLead({ 
         ...selectedLead, 
         status: newStatus,
-        isApproved: isApprovedStatus
+        isApproved: isApproved
       });
     }
 
-    if (isApprovedStatus) {
-      // 1. Approve in Firestore (updates submissions + members collection)
-      try {
-        await approveMemberInFirestore({
-          ...targetLead,
-          status: newStatus,
-          isApproved: true
-        });
-      } catch (e) {
-        console.warn('approveMemberInFirestore error:', e);
-      }
-
-      // 2. Also cache in bbsp_members in localStorage for instant offline access
+    if (isApproved) {
+      // 2. Save directly to bbsp_members in localStorage for instant member login
       try {
         const rawMembers = localStorage.getItem('bbsp_members');
         const list = rawMembers ? JSON.parse(rawMembers) : [];
-        const cleanEmail = (targetLead.email || '').toLowerCase().trim();
         const filtered = list.filter((m: any) => (m.email || '').toLowerCase().trim() !== cleanEmail);
         filtered.push({
           ...targetLead,
-          status: newStatus,
+          status: 'Approved',
           isApproved: true,
           email: cleanEmail
         });
         localStorage.setItem('bbsp_members', JSON.stringify(filtered));
       } catch (e) {}
 
-      // Feedback toast
-      setActionFeedback(`✓ Partner "${targetLead.fullName || targetLead.name || 'Applicant'}" has been APPROVED! Website member login is activated for ${targetLead.email}.`);
+      setActionFeedback(`✓ Partner "${targetLead.fullName || 'Applicant'}" APPROVED! Moved to Website Member Directory with active login access.`);
+
+      // 3. Fully await Firestore sync
+      try {
+        await approveMemberInFirestore({
+          ...targetLead,
+          status: 'Approved',
+          isApproved: true
+        });
+      } catch (e) {
+        console.warn('approveMemberInFirestore error:', e);
+      }
       setTimeout(() => setActionFeedback(null), 6000);
     } else {
-      // Demote or reject
-      const docId = targetLead?.firestoreDocId || (targetLead && targetLead.id && targetLead.id.length > 15 ? targetLead.id : null);
+      // If changing to In Review, Contacted, or Rejected, remove from members store if present
+      if (cleanEmail) {
+        try {
+          const rawMembers = localStorage.getItem('bbsp_members');
+          if (rawMembers) {
+            const list = JSON.parse(rawMembers);
+            const filtered = list.filter((m: any) => (m.email || '').toLowerCase().trim() !== cleanEmail);
+            localStorage.setItem('bbsp_members', JSON.stringify(filtered));
+          }
+        } catch (e) {}
+      }
+
+      const docId = targetLead?.firestoreDocId || targetLead?.id || cleanEmail;
       if (docId) {
         await updateSubmissionInFirestore(docId, { status: newStatus, isApproved: false });
       }
@@ -795,6 +867,12 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
       return matchSearch && matchCategory && matchStatus;
     });
   }, [leads, searchQuery, categoryFilter, statusFilter]);
+
+  // Finite Status Section Counts
+  const inReviewCount = useMemo(() => leads.filter(l => l.status === 'In Review').length, [leads]);
+  const contactedCount = useMemo(() => leads.filter(l => l.status === 'Contacted').length, [leads]);
+  const approvedCount = useMemo(() => leads.filter(l => l.status === 'Approved').length, [leads]);
+  const rejectedCount = useMemo(() => leads.filter(l => l.status === 'Rejected').length, [leads]);
 
   // Handle PIN Login
   const handlePinSubmit = (e: React.FormEvent) => {
@@ -1156,6 +1234,91 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
               </div>
             )}
             
+            {/* Finite 4-Status Section Tabs */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 pb-1">
+              <button
+                onClick={() => setStatusFilter('all')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 ${
+                  statusFilter === 'all'
+                    ? 'bg-[#E2B049] text-[#070A11] border-[#E2B049] shadow-md font-extrabold'
+                    : 'bg-[#0E131F] text-stone-300 border-white/10 hover:border-white/20 hover:text-white'
+                }`}
+              >
+                <Layers size={14} />
+                <span>All Applications ({leads.length})</span>
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('In Review')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 ${
+                  statusFilter === 'In Review'
+                    ? 'bg-amber-500 text-[#070A11] border-amber-500 shadow-md font-extrabold'
+                    : 'bg-[#0E131F] text-amber-300 border-amber-500/30 hover:border-amber-500/60'
+                }`}
+              >
+                <AlertCircle size={14} className={statusFilter === 'In Review' ? 'text-[#070A11]' : 'text-amber-400'} />
+                <span>In Review ({inReviewCount})</span>
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('Contacted')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 ${
+                  statusFilter === 'Contacted'
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md font-extrabold'
+                    : 'bg-[#0E131F] text-blue-300 border-blue-500/30 hover:border-blue-500/60'
+                }`}
+              >
+                <Phone size={14} className={statusFilter === 'Contacted' ? 'text-white' : 'text-blue-400'} />
+                <span>Contacted ({contactedCount})</span>
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('Approved')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 ${
+                  statusFilter === 'Approved'
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-md font-extrabold'
+                    : 'bg-[#0E131F] text-emerald-400 border-emerald-500/30 hover:border-emerald-500/60'
+                }`}
+              >
+                <CheckCircle2 size={14} className={statusFilter === 'Approved' ? 'text-white' : 'text-emerald-400'} />
+                <span>Approved (Website Member Directory) ({approvedCount})</span>
+              </button>
+
+              <button
+                onClick={() => setStatusFilter('Rejected')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 ${
+                  statusFilter === 'Rejected'
+                    ? 'bg-red-600 text-white border-red-600 shadow-md font-extrabold'
+                    : 'bg-[#0E131F] text-red-300 border-red-500/30 hover:border-red-500/60'
+                }`}
+              >
+                <X size={14} className={statusFilter === 'Rejected' ? 'text-white' : 'text-red-400'} />
+                <span>Rejected ({rejectedCount})</span>
+              </button>
+            </div>
+
+            {/* Banner for Website Member Directory Section */}
+            {statusFilter === 'Approved' && (
+              <div className="p-4 bg-emerald-950/40 border border-emerald-500/40 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs text-emerald-300 shadow-lg animate-fadeIn">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                    <CheckCircle2 size={18} />
+                  </div>
+                  <div>
+                    <span className="font-extrabold text-white text-sm">Website Member Directory</span>
+                    <p className="text-emerald-300/80 text-xs mt-0.5">
+                      All approved partners listed below have permanent login access granted to the website member portal using their registered Email ID.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold bg-emerald-500/20 px-3 py-1 rounded-xl border border-emerald-500/30 text-emerald-300">
+                    {approvedCount} Active Website Members
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* Header & Controls */}
             <div className="bg-[#0E131F] border border-white/10 rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
               
@@ -1188,15 +1351,14 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
+                  onChange={(e) => setStatusFilter(e.target.value as any)}
                   className="bg-[#070A11] border border-white/10 rounded-xl px-3 py-2 text-xs text-stone-300 outline-none focus:border-[#E2B049]"
                 >
-                  <option value="all">All Statuses</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Under Review">Under Review</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Sanctioned">Sanctioned</option>
-                  <option value="Rejected">Rejected</option>
+                  <option value="all">All Statuses ({leads.length})</option>
+                  <option value="In Review">In Review ({inReviewCount})</option>
+                  <option value="Contacted">Contacted ({contactedCount})</option>
+                  <option value="Approved">Approved (Member Directory) ({approvedCount})</option>
+                  <option value="Rejected">Rejected ({rejectedCount})</option>
                 </select>
 
                 <button
@@ -1309,39 +1471,39 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                             {item.amountPaid || (item.requiredAmount ? `₹${Number(item.requiredAmount).toLocaleString('en-IN')}` : '₹5,000')}
                           </td>
                           <td className="py-3.5 px-4">
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1.5">
-                              {item.status !== 'Approved' && item.status !== 'Sanctioned' ? (
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                              {item.status !== 'Approved' ? (
                                 <button
                                   onClick={() => updateLeadStatus(item.id || item.membershipCode!, 'Approved')}
-                                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-[11px] flex items-center gap-1 shadow-sm transition-all active:scale-95 cursor-pointer border-none"
-                                  title="Approve applicant and activate website member login"
+                                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer border-none shrink-0"
+                                  title="Approve applicant and move to Website Member Directory with instant login access"
                                 >
-                                  <CheckCircle2 size={12} />
+                                  <CheckCircle2 size={13} />
                                   <span>Approve</span>
                                 </button>
                               ) : (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                                  <CheckCircle2 size={12} /> Approved
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+                                  <CheckCircle2 size={13} />
+                                  <span>Member Active</span>
                                 </span>
                               )}
 
                               <select
                                 value={item.status}
                                 onChange={(e) => updateLeadStatus(item.id || item.membershipCode!, e.target.value as any)}
-                                className={`text-[10px] font-bold rounded px-1.5 py-0.5 border outline-none cursor-pointer ${
-                                  item.status === 'Approved' || item.status === 'Sanctioned'
-                                    ? 'bg-[#0E131F] text-emerald-400 border-emerald-500/30'
-                                    : item.status === 'Under Review'
-                                    ? 'bg-[#0E131F] text-blue-400 border-blue-500/30'
+                                className={`text-[11px] font-bold rounded-xl px-2.5 py-1.5 border outline-none cursor-pointer transition-colors ${
+                                  item.status === 'Approved'
+                                    ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40'
+                                    : item.status === 'Contacted'
+                                    ? 'bg-blue-950/70 text-blue-300 border-blue-500/40'
                                     : item.status === 'Rejected'
-                                    ? 'bg-[#0E131F] text-red-400 border-red-500/30'
-                                    : 'bg-[#0E131F] text-amber-400 border-amber-500/30'
+                                    ? 'bg-red-950/70 text-red-300 border-red-500/40'
+                                    : 'bg-amber-950/70 text-amber-300 border-amber-500/40'
                                 }`}
                               >
-                                <option value="Pending">Pending</option>
-                                <option value="Under Review">Under Review</option>
+                                <option value="In Review">In Review</option>
+                                <option value="Contacted">Contacted</option>
                                 <option value="Approved">Approved</option>
-                                <option value="Sanctioned">Sanctioned</option>
                                 <option value="Rejected">Rejected</option>
                               </select>
                             </div>
@@ -1351,16 +1513,16 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                           </td>
                           <td className="py-3.5 px-4 text-right">
                             <div className="flex items-center justify-end gap-1.5">
-                              {item.status !== 'Approved' && item.status !== 'Sanctioned' && (
+                              {item.status !== 'Approved' && (
                                 <button
                                   onClick={() => updateLeadStatus(item.id || item.membershipCode!, 'Approved')}
                                   className="p-1.5 bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 rounded-lg transition-colors cursor-pointer border border-emerald-500/40"
-                                  title="Quick Approve Member"
+                                  title="Approve Member & Move to Website Directory"
                                 >
                                   <Check size={13} />
                                 </button>
                               )}
-                              {(item.status === 'Approved' || item.status === 'Sanctioned') && (
+                              {item.status === 'Approved' && (
                                 <button
                                   onClick={() => {
                                     setPayoutTargetMember(item);
@@ -1695,16 +1857,15 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                   onChange={(e) => updateLeadStatus(selectedLead.id || selectedLead.membershipCode!, e.target.value as any)}
                   className="bg-[#070A11] border border-white/10 rounded-lg px-2.5 py-1 text-xs text-white"
                 >
-                  <option value="Pending">Pending</option>
-                  <option value="Under Review">Under Review</option>
+                  <option value="In Review">In Review</option>
+                  <option value="Contacted">Contacted</option>
                   <option value="Approved">Approved</option>
-                  <option value="Sanctioned">Sanctioned</option>
                   <option value="Rejected">Rejected</option>
                 </select>
               </div>
 
               <div className="flex items-center gap-2">
-                {selectedLead.status !== 'Approved' && selectedLead.status !== 'Sanctioned' && (
+                {selectedLead.status !== 'Approved' && (
                   <button
                     onClick={() => updateLeadStatus(selectedLead.id || selectedLead.membershipCode!, 'Approved')}
                     className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all cursor-pointer border-none active:scale-95"
@@ -1713,7 +1874,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                     <span>Approve Member & Activate Access</span>
                   </button>
                 )}
-                {(selectedLead.status === 'Approved' || selectedLead.status === 'Sanctioned') && (
+                {selectedLead.status === 'Approved' && (
                   <button
                     onClick={() => {
                       setPayoutTargetMember(selectedLead);

@@ -145,7 +145,7 @@ export const CommissionCadresSection: React.FC<CommissionCadresSectionProps> = (
       businessName: 'Individual Lead',
       source: '10 Cadres Commission PDF',
       requestedDocument: 'BuildBharat 10 Cadres Commission Structure',
-      status: 'Document Downloaded',
+      status: 'In Review',
       timestamp: new Date().toLocaleDateString('en-GB'),
       unlockedAt: new Date().toISOString()
     };

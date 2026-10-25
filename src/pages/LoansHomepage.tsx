@@ -197,7 +197,7 @@ export const LoansHomepage: React.FC<LoansHomepageProps> = ({
       requiredAmount: leadForm.requestedAmount,
       city: leadForm.city,
       notes: `Employment: ${leadForm.employmentType}, Monthly Income: ₹${leadForm.monthlyIncome}`,
-      status: 'Pending',
+      status: 'In Review',
       timestamp: new Date().toLocaleDateString('en-GB'),
       submittedAt: new Date().toISOString()
     };

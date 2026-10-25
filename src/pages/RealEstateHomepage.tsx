@@ -69,7 +69,7 @@ export const RealEstateHomepage: React.FC<RealEstateHomepageProps> = ({
         category: 'real-estate',
         businessName: `${formData.configuration} in ${formData.preferredLocation}`,
         notes: `Location: ${formData.preferredLocation} | Config: ${formData.configuration} | Details: ${formData.requirements || 'N/A'}`,
-        status: 'Pending',
+        status: 'In Review',
         timestamp: new Date().toLocaleDateString('en-GB'),
         submittedAt: new Date().toISOString()
       };

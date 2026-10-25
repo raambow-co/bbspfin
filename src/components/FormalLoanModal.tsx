@@ -321,7 +321,7 @@ export const FormalLoanModal: React.FC<FormalLoanModalProps> = ({
         nomineeRelation: formData.nomineeRelation,
         branchName: formData.branchName,
         uplineIdCode: formData.uplineIdCode,
-        status: 'Underwriting',
+        status: 'In Review',
         timestamp: new Date().toLocaleDateString('en-GB')
       };
       // Persist in localStorage for admin panel & real-time sync

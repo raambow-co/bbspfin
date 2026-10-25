@@ -1,6 +1,6 @@
-import { 
-  submitToFirestore, 
-  approveMemberInFirestore, 
+import {
+  submitToFirestore,
+  approveMemberInFirestore,
   getApprovedMemberByEmail,
   deleteSubmissionFromFirestore,
   db
@@ -28,7 +28,7 @@ async function runCompleteE2EFlowTest() {
       email: testEmail,
       phone: '9848099999',
       category: 'partner-franchise',
-      status: 'Pending',
+      status: 'In Review',
       amountPaid: '₹5,000',
       bankName: 'HDFC Bank',
       accountNumber: '50100482910394',
@@ -42,7 +42,7 @@ async function runCompleteE2EFlowTest() {
       throw new Error('Failed to submit registration to Firestore: ' + JSON.stringify(submitRes));
     }
     const docId = submitRes.docId;
-    console.log(`  ✓ Registration recorded in Firestore cloud! Doc ID: ${docId} | Status: Pending\n`);
+    console.log(`  ✓ Registration recorded in Firestore cloud! Doc ID: ${docId} | Status: In Review\n`);
 
     // ----------------------------------------------------
     // STEP 2: USER TRIES TO LOGIN BEFORE ADMIN APPROVAL
@@ -52,7 +52,7 @@ async function runCompleteE2EFlowTest() {
     if (preApprovalCheck) {
       throw new Error('Security Breach: Member accessed dashboard BEFORE admin approved!');
     }
-    console.log('  ✓ Access Gate Verified: Login is BLOCKED because status is still "Pending".\n');
+    console.log('  ✓ Access Gate Verified: Login is BLOCKED because status is still "In Review".\n');
 
     // ----------------------------------------------------
     // STEP 3: ADMIN REVIEWS & CLICKS "APPROVE" IN DASHBOARD

@@ -122,7 +122,7 @@ async function runAdminPanelTestSuite() {
     email: string;
     category: string;
     businessName: string;
-    status: 'Pending' | 'Under Review' | 'Approved' | 'Sanctioned' | 'Rejected';
+    status: 'In Review' | 'Contacted' | 'Approved' | 'Rejected';
     amountPaid?: string;
   }
 
@@ -145,7 +145,7 @@ async function runAdminPanelTestSuite() {
       email: 'vikram@infra.com',
       category: 'loans',
       businessName: 'Commercial Term Loan',
-      status: 'Under Review',
+      status: 'In Review',
       amountPaid: '₹50,00,000'
     },
     {
@@ -155,7 +155,7 @@ async function runAdminPanelTestSuite() {
       email: 'ananya@edutech.in',
       category: 'document-download',
       businessName: '10 Cadres Commission Schedule',
-      status: 'Pending'
+      status: 'In Review'
     }
   ];
 
@@ -208,8 +208,8 @@ async function runAdminPanelTestSuite() {
   const filterSolar = filterLeads(initialLeads, '', 'solar', 'all');
   assert(filterSolar.length === 1 && filterSolar[0].category === 'solar', 'Filter by category "solar" returns Solar applications only');
 
-  const filterPending = filterLeads(initialLeads, '', 'all', 'Pending');
-  assert(filterPending.length === 1 && filterPending[0].status === 'Pending', 'Filter by status "Pending" returns Pending applications only');
+  const filterInReview = filterLeads(initialLeads, '', 'all', 'In Review');
+  assert(filterInReview.length === 2 && filterInReview[0].status === 'In Review', 'Filter by status "In Review" returns In Review applications only');
 
   // ----------------------------------------------------
   // TEST GROUP 5: CSV EXPORT DATA FORMATTING

@@ -114,6 +114,18 @@ export function normalizeFirestoreDoc(id: string, raw: Record<string, any>): any
     }
   }
 
+  const rawStatus = (raw.status || '').toLowerCase().trim();
+  let normalizedStatus: 'In Review' | 'Contacted' | 'Approved' | 'Rejected' = 'In Review';
+  if (rawStatus === 'approved' || rawStatus === 'sanctioned' || raw.isApproved === true) {
+    normalizedStatus = 'Approved';
+  } else if (rawStatus === 'contacted') {
+    normalizedStatus = 'Contacted';
+  } else if (rawStatus === 'rejected' || rawStatus === 'declined') {
+    normalizedStatus = 'Rejected';
+  } else {
+    normalizedStatus = 'In Review';
+  }
+
   return {
     id: raw.id || raw.membershipCode || raw.applicationId || id,
     firestoreDocId: id,
@@ -122,7 +134,8 @@ export function normalizeFirestoreDoc(id: string, raw: Record<string, any>): any
     phone: raw.phone || raw.contact || raw.mobile || raw.loanApplicationData?.contact || '',
     category: raw.category || raw.formType || 'general',
     businessName: raw.businessName || raw.purpose || raw.loanApplicationData?.purpose || '',
-    status: raw.status || 'Pending',
+    status: normalizedStatus,
+    isApproved: normalizedStatus === 'Approved',
     timestamp: formattedDate,
     submittedAt,
     membershipCode: raw.membershipCode,
@@ -224,19 +237,46 @@ export function subscribeToSubmissions(
  * Update lead record status in Firestore
  */
 export async function updateSubmissionInFirestore(
-  docId: string, 
+  docIdOrQuery: string, 
   updates: Record<string, any>, 
   collectionName = 'submissions'
 ): Promise<boolean> {
   try {
-    const docRef = doc(db, collectionName, docId);
-    await updateDoc(docRef, {
-      ...updates,
-      updatedAt: serverTimestamp()
-    });
-    return true;
+    let success = false;
+    // 1. Try direct update if docId exists
+    try {
+      const docRef = doc(db, collectionName, docIdOrQuery);
+      await updateDoc(docRef, {
+        ...updates,
+        updatedAt: serverTimestamp()
+      });
+      success = true;
+    } catch (e) {
+      // not direct doc id or doesn't exist under that exact key, fallback to query
+    }
+
+    if (!success) {
+      const colRef = collection(db, collectionName);
+      const queries = [
+        query(colRef, where('id', '==', docIdOrQuery)),
+        query(colRef, where('membershipCode', '==', docIdOrQuery)),
+        query(colRef, where('email', '==', docIdOrQuery.toLowerCase().trim()))
+      ];
+      for (const q of queries) {
+        const snap = await getDocs(q);
+        for (const d of snap.docs) {
+          await updateDoc(d.ref, {
+            ...updates,
+            updatedAt: serverTimestamp()
+          });
+          success = true;
+        }
+        if (success) break;
+      }
+    }
+    return success;
   } catch (err) {
-    console.error(`Failed to update doc ${docId} in ${collectionName}:`, err);
+    console.error(`Failed to update doc ${docIdOrQuery} in ${collectionName}:`, err);
     return false;
   }
 }
@@ -282,8 +322,8 @@ export async function purgeAllFirestoreData(): Promise<{ success: boolean; count
 
 /**
  * Approve a member in Firestore:
- * 1. Updates the submission record in 'submissions' collection
- * 2. Creates/updates a permanent record in 'members' collection
+ * 1. Updates the submission record in 'submissions' and 'document_leads' collections
+ * 2. Creates/updates a permanent record in 'members' collection (Website Member Directory)
  */
 export async function approveMemberInFirestore(lead: any): Promise<{ success: boolean; memberId: string; error?: any }> {
   try {
@@ -291,44 +331,95 @@ export async function approveMemberInFirestore(lead: any): Promise<{ success: bo
     const docId = lead.firestoreDocId || (lead.id && String(lead.id).length > 15 ? lead.id : null);
     const memberCode = lead.membershipCode || lead.applicationId || lead.id || `BBSP-${cleanEmail.slice(0, 4).toUpperCase()}`;
 
-    // 1. Update in 'submissions' collection
+    let updatedSubmissions = false;
+
+    // 1. Direct update if docId is available
     if (docId) {
-      await updateDoc(doc(db, 'submissions', docId), {
-        status: 'Approved',
-        isApproved: true,
-        approvedAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      });
-    } else {
-      // Find submission by email or membershipCode if docId is missing
-      const subCol = collection(db, 'submissions');
-      if (cleanEmail) {
-        const qEmail = query(subCol, where('email', '==', cleanEmail));
-        const snap = await getDocs(qEmail);
-        snap.forEach(async (d) => {
-          await updateDoc(d.ref, {
-            status: 'Approved',
-            isApproved: true,
-            approvedAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
-          });
+      try {
+        await updateDoc(doc(db, 'submissions', docId), {
+          status: 'Approved',
+          isApproved: true,
+          approvedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
         });
-      }
-      if (lead.membershipCode) {
-        const qCode = query(subCol, where('membershipCode', '==', lead.membershipCode));
-        const snap = await getDocs(qCode);
-        snap.forEach(async (d) => {
-          await updateDoc(d.ref, {
-            status: 'Approved',
-            isApproved: true,
-            approvedAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
-          });
-        });
+        updatedSubmissions = true;
+      } catch (err) {
+        console.warn(`Direct updateDoc on submissions/${docId} failed, querying fallback:`, err);
       }
     }
 
-    // 2. Add to dedicated 'members' collection indexed by clean email
+    // 2. Query and update all matching records in 'submissions' by email or membershipCode
+    const subCol = collection(db, 'submissions');
+    if (cleanEmail) {
+      try {
+        const qEmail = query(subCol, where('email', '==', cleanEmail));
+        const snap = await getDocs(qEmail);
+        for (const d of snap.docs) {
+          await updateDoc(d.ref, {
+            status: 'Approved',
+            isApproved: true,
+            approvedAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          updatedSubmissions = true;
+        }
+      } catch (e) {
+        console.warn('Submissions email query update failed:', e);
+      }
+    }
+
+    if (lead.membershipCode) {
+      try {
+        const qCode = query(subCol, where('membershipCode', '==', lead.membershipCode));
+        const snap = await getDocs(qCode);
+        for (const d of snap.docs) {
+          await updateDoc(d.ref, {
+            status: 'Approved',
+            isApproved: true,
+            approvedAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          updatedSubmissions = true;
+        }
+      } catch (e) {
+        console.warn('Submissions membershipCode query update failed:', e);
+      }
+    }
+
+    // 3. Also update 'document_leads' if present
+    if (cleanEmail) {
+      try {
+        const docLeadsCol = collection(db, 'document_leads');
+        const snapDoc = await getDocs(query(docLeadsCol, where('email', '==', cleanEmail)));
+        for (const d of snapDoc.docs) {
+          await updateDoc(d.ref, {
+            status: 'Approved',
+            isApproved: true,
+            approvedAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+        }
+      } catch (e) {}
+    }
+
+    // 4. If record did not exist in cloud submissions, create it as Approved
+    if (!updatedSubmissions && !docId) {
+      try {
+        await addDoc(subCol, {
+          ...lead,
+          status: 'Approved',
+          isApproved: true,
+          membershipCode: memberCode,
+          submittedAt: lead.submittedAt || new Date().toISOString(),
+          approvedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      } catch (e) {
+        console.warn('Could not insert fallback submission doc:', e);
+      }
+    }
+
+    // 5. Add to dedicated 'members' collection indexed by clean email (Website Member Directory)
     if (cleanEmail) {
       const memberRef = doc(db, 'members', cleanEmail);
       await setDoc(memberRef, {
@@ -342,6 +433,7 @@ export async function approveMemberInFirestore(lead: any): Promise<{ success: bo
         cadre: lead.cadre || lead.membershipCadre || 'District Cadre Syndicate Partner',
         status: 'Approved',
         isApproved: true,
+        loginAccess: true,
         bankName: lead.bankName || '',
         accountNumber: lead.accountNumber || '',
         ifscCode: lead.ifscCode || '',
